@@ -3,6 +3,9 @@
 This is a multiplayer social deduction game branded as **TikJogos**. Players join game rooms and try to identify who among them is the impostor through various game modes involving secret words, locations, roles, and questions. The application is built as a full-stack web application with real-time multiplayer capabilities.
 
 ## Recent Changes (November 2025)
+- Added Replit Auth for user authentication (Google, GitHub, Apple, email/password login)
+- Created users and sessions tables in schema for auth storage
+- Added auth hooks and utilities for client-side authentication
 - Rebranded to TikJogos with new logo
 - Added donation button with PIX payment modal
 - PIX Key: `48492456-23f1-4edc-b739-4e36547ef90e`
@@ -140,10 +143,18 @@ Preferred communication style: Simple, everyday language.
 - **TypeScript**: Full type safety across client, server, and shared code
 - **ESBuild**: Fast JavaScript bundler for server code
 
+## Authentication
+- **Replit Auth**: OpenID Connect authentication using Replit as identity provider
+- Login routes: `/api/login`, `/api/callback`, `/api/logout`
+- User endpoint: `/api/auth/user` (protected with isAuthenticated middleware)
+- Supports: Google, GitHub, Apple, and email/password login
+- Session storage: PostgreSQL via connect-pg-simple (when DATABASE_URL is set)
+- Token refresh: Automatic via isAuthenticated middleware
+
 ## Session Management
-- In-memory session storage currently implemented
-- Dependencies included for PostgreSQL session storage (connect-pg-simple)
-- Session middleware prepared but not actively used in current implementation
+- PostgreSQL session storage (connect-pg-simple) when DATABASE_URL is configured
+- In-memory fallback when no database is available
+- 7-day session TTL with secure cookies in production
 
 ## Validation
 - **Zod**: Schema validation for API requests and database operations

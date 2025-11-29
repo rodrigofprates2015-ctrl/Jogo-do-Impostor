@@ -5,6 +5,7 @@ import { storage, type Room } from "./storage";
 import { type Player, type GameModeType, type GameData } from "@shared/schema";
 import { z } from "zod";
 import { randomBytes } from "crypto";
+import { setupAuth, isAuthenticated } from "./replitAuth";
 
 const GAME_MODES = {
   palavraSecreta: {
@@ -139,6 +140,10 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+
+  if (process.env.DATABASE_URL) {
+    await setupAuth(app);
+  }
   
   const wss = new WebSocketServer({ noServer: true });
   const roomConnections = new Map<string, Set<WebSocket>>();
@@ -200,6 +205,20 @@ export async function registerRoutes(
         }
       }
     });
+  });
+
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub;
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
   });
 
   app.get("/api/game-modes", (_req, res) => {

@@ -7,8 +7,11 @@ import NotFound from "@/pages/not-found";
 import ImpostorGame from "@/pages/ImpostorGame";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfUse from "@/pages/TermsOfUse";
+import { useAuth } from "@/hooks/useAuth";
 
 function Router() {
+  const { user, isLoading, isAuthenticated } = useAuth();
+
   return (
     <Switch>
       <Route path="/" component={ImpostorGame} />
