@@ -5,7 +5,7 @@ import { storage, type Room } from "./storage";
 import { type Player, type GameModeType, type GameData } from "@shared/schema";
 import { z } from "zod";
 import { randomBytes } from "crypto";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { setupAuth, isAuthenticated } from "./githubAuth";
 
 const GAME_MODES = {
   palavraSecreta: {
