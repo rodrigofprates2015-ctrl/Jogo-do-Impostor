@@ -7,14 +7,25 @@ import { storage } from "./storage";
 
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000;
+  const isProduction = process.env.NODE_ENV === "production";
+  
+  let sessionSecret = process.env.SESSION_SECRET;
+  
+  if (!sessionSecret) {
+    if (isProduction) {
+      throw new Error("SESSION_SECRET environment variable is required in production");
+    }
+    console.warn("SESSION_SECRET not set. Using development-only fallback.");
+    sessionSecret = "dev-only-secret-not-for-production";
+  }
   
   const sessionConfig: session.SessionOptions = {
-    secret: process.env.SESSION_SECRET || "tikjogos-secret-key-change-in-production",
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: isProduction,
       maxAge: sessionTtl,
     },
   };

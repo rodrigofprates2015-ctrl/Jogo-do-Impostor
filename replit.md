@@ -3,12 +3,34 @@
 This is a multiplayer social deduction game branded as **TikJogos**. Players join game rooms and try to identify who among them is the impostor through various game modes involving secret words, locations, roles, and questions. The application is built as a full-stack web application with real-time multiplayer capabilities.
 
 ## Recent Changes (November 2025)
-- Added Replit Auth for user authentication (Google, GitHub, Apple, email/password login)
+- **Replaced Replit Auth with GitHub OAuth** - Now works on Railway and other platforms
 - Created users and sessions tables in schema for auth storage
 - Added auth hooks and utilities for client-side authentication
 - Rebranded to TikJogos with new logo
 - Added donation button with PIX payment modal
 - PIX Key: `48492456-23f1-4edc-b739-4e36547ef90e`
+
+## Environment Variables for Deployment (Railway, etc.)
+
+**Required Variables:**
+| Variable | Description |
+|----------|-------------|
+| `NODE_ENV` | Set to `production` for production builds |
+| `PORT` | Port number (Railway sets automatically) |
+| `DATABASE_URL` | PostgreSQL connection string |
+| `SESSION_SECRET` | Random secret for session encryption (generate with: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`) |
+| `GITHUB_CLIENT_ID` | GitHub OAuth App Client ID |
+| `GITHUB_CLIENT_SECRET` | GitHub OAuth App Client Secret |
+| `GITHUB_CALLBACK_URL` | Full callback URL (e.g., `https://your-app.railway.app/api/auth/github/callback`) |
+
+**How to Create GitHub OAuth App:**
+1. Go to https://github.com/settings/developers
+2. Click "New OAuth App"
+3. Fill in:
+   - Application name: TikJogos
+   - Homepage URL: https://your-app.railway.app
+   - Authorization callback URL: https://your-app.railway.app/api/auth/github/callback
+4. Copy Client ID and Client Secret to Railway variables
 
 # User Preferences
 
@@ -144,12 +166,12 @@ Preferred communication style: Simple, everyday language.
 - **ESBuild**: Fast JavaScript bundler for server code
 
 ## Authentication
-- **Replit Auth**: OpenID Connect authentication using Replit as identity provider
-- Login routes: `/api/login`, `/api/callback`, `/api/logout`
-- User endpoint: `/api/auth/user` (protected with isAuthenticated middleware)
-- Supports: Google, GitHub, Apple, and email/password login
+- **GitHub OAuth**: OAuth2 authentication using GitHub as identity provider
+- Login routes: `/api/login`, `/api/auth/github/callback`, `/api/logout`
+- User endpoint: `/api/auth/user` (returns current user info)
+- Graceful degradation: Works without OAuth configured (shows warning)
 - Session storage: PostgreSQL via connect-pg-simple (when DATABASE_URL is set)
-- Token refresh: Automatic via isAuthenticated middleware
+- Fallback: In-memory session storage when no database available
 
 ## Session Management
 - PostgreSQL session storage (connect-pg-simple) when DATABASE_URL is configured
