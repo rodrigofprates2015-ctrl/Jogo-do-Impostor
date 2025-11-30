@@ -141,6 +141,11 @@ export async function registerRoutes(
   app: Express
 ): Promise<Server> {
 
+  // Serve ads.txt for Google AdSense verification
+  app.get("/ads.txt", (_req, res) => {
+    res.type("text/plain").send("google.com, pub-4854252788330308, DIRECT, f08c47fec0942fa0");
+  });
+
   await setupAuth(app);
   
   const wss = new WebSocketServer({ noServer: true });
