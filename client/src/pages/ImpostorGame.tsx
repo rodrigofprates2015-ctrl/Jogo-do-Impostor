@@ -36,6 +36,7 @@ import { cn } from "@/lib/utils";
 import backgroundImg from "@assets/background_1764616571362.png";
 import logoTikjogos from "@assets/logo tikjogos_1764616571363.png";
 import logoImpostor from "@assets/logo_1764616571363.png";
+import logoImpostorMobile from "@assets/logo2_1764619562643.png";
 import tripulanteImg from "@assets/Tripulante_1764616571363.png";
 import impostorImg from "@assets/impostor_1764616571362.png";
 
@@ -294,29 +295,28 @@ const HomeScreen = () => {
         <img src={logoTikjogos} alt="TikJogos" className="h-8 md:h-10" />
       </div>
 
-      {/* Tripulante character - left side (desktop) / top-left (mobile) */}
+      {/* Tripulante character - left side (desktop only) */}
       <img 
         src={tripulanteImg} 
         alt="Tripulante" 
-        className="absolute object-contain z-10
-          top-4 left-0 h-[120px] w-auto
-          md:top-auto md:bottom-0 md:left-4 lg:left-16 md:h-[50vh] md:max-h-[500px]"
+        className="hidden md:block absolute bottom-0 left-4 lg:left-16 h-[50vh] max-h-[500px] object-contain z-10"
       />
 
-      {/* Impostor character - right side (desktop) / bottom-right (mobile) */}
+      {/* Impostor character - right side (desktop only) */}
       <img 
         src={impostorImg} 
         alt="Impostor" 
-        className="absolute object-contain z-10
-          bottom-4 right-0 h-[120px] w-auto
-          md:bottom-0 md:right-4 lg:right-16 md:h-[50vh] md:max-h-[500px]"
+        className="hidden md:block absolute bottom-0 right-4 lg:right-16 h-[50vh] max-h-[500px] object-contain z-10"
       />
 
       {/* Main card */}
       <div className="main-card w-[90%] max-w-md p-6 md:p-8 z-20 animate-fade-in">
-        {/* Impostor logo */}
+        {/* Impostor logo - mobile version with characters, desktop version without */}
         <div className="flex justify-center mb-6">
-          <img src={logoImpostor} alt="Impostor" className="h-20 md:h-24 object-contain" />
+          {/* Mobile: logo with characters */}
+          <img src={logoImpostorMobile} alt="Impostor" className="md:hidden h-24 object-contain" />
+          {/* Desktop: logo without characters */}
+          <img src={logoImpostor} alt="Impostor" className="hidden md:block h-24 object-contain" />
         </div>
 
         {/* Form */}
