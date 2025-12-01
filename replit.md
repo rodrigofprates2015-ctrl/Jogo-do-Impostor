@@ -3,9 +3,11 @@
 This is a multiplayer social deduction game branded as **TikJogos**. Players join game rooms and try to identify who among them is the impostor through various game modes involving secret words, locations, roles, and questions. The application is built as a full-stack web application with real-time multiplayer capabilities.
 
 ## Recent Changes (December 2025)
-- **Added Palavra Secreta Submode Selection** - New screen for choosing themed categories before game starts
+- **Added Palavra Secreta Submode Selection with Theme Images** - New screen for choosing themed categories with visual cards
 - Five submodes: Clássico, Clash Royale, Animes, Marvel, Stranger Things
 - Each submode has 20-30 themed words for variety
+- Added brand images for each theme (except Clássico)
+- Submode cards feature image preview with rounded corners
 - Fixed "Nova Rodada" button and host back-to-lobby broadcast
 - All players automatically return to lobby when host clicks back
 - Google AdSense auto ads enabled and working
@@ -109,12 +111,15 @@ Preferred communication style: Simple, everyday language.
 
 **Five Distinct Game Types**
 1. **Palavra Secreta**: Everyone gets same word except impostor
-   - **Submodes** (new feature):
-     - Clássico: 20 random words
-     - Clash Royale: 20 game cards/characters
-     - Animes: 20 anime characters/titles/powers
-     - Marvel: 20 characters/items/movies
-     - Stranger Things: 30 characters/items/locations
+   - **Submodes** (with visual theme selection):
+     - Clássico: 20 random words (gradient placeholder card)
+     - Clash Royale: 20 game cards/characters (with theme image)
+     - Animes: 20 anime characters/titles/powers (with theme image)
+     - Marvel: 20 characters/items/movies (with theme image)
+     - Stranger Things: 30 characters/items/locations (with theme image)
+   - Visual submode selection screen with image previews
+   - Images have rounded borders and hover zoom effect
+   - Each theme stores its own curated word list
 2. **Locais & Funções**: Players receive location and role assignments
 3. **Duas Facções**: Two teams with different words, impostor knows neither
 4. **Categoria + Item**: Category revealed to all, specific item hidden from impostor
@@ -125,7 +130,8 @@ Preferred communication style: Simple, everyday language.
 - Server randomly selects and assigns based on mode rules
 - Game data stored flexibly in JSONB to accommodate varying structures
 - Client receives role-specific information based on player assignment
-- Palavra Secreta submodes stored in `client/src/lib/palavra-secreta-submodes.ts`
+- Palavra Secreta submodes stored in `client/src/lib/palavra-secreta-submodes.ts` with images
+- Submode component in `client/src/pages/PalavraSuperSecretaSubmodeScreen.tsx`
 
 ## Build and Deployment
 

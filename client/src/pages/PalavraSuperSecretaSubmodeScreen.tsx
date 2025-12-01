@@ -37,22 +37,38 @@ const PalavraSuperSecretaSubmodeScreen = () => {
             key={submodeId}
             onClick={() => handleSelectSubmode(submodeId)}
             disabled={!isHost}
-            className="group relative p-4 rounded-lg border border-gray-700 bg-[#0f0f1e] hover:border-[#00f2ea] hover:bg-[#1a1a2e] transition-all duration-300 text-left disabled:opacity-50 disabled:cursor-not-allowed"
+            className="group relative flex flex-col rounded-xl border border-gray-700 bg-[#0f0f1e] hover:border-[#00f2ea] hover:bg-[#1a1a2e] transition-all duration-300 text-left disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
             style={{
               boxShadow: 'inset 0 0 20px rgba(0, 0, 0, 0.5)',
             }}
             data-testid={`button-submode-${submodeId}`}
           >
-            <div className="space-y-2">
+            {/* Image Container */}
+            {submode.image ? (
+              <div className="w-full h-40 overflow-hidden bg-black/50 flex items-center justify-center">
+                <img 
+                  src={submode.image} 
+                  alt={submode.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+            ) : (
+              <div className="w-full h-40 bg-gradient-to-br from-[#00f2ea]/20 to-[#ff0050]/20 flex items-center justify-center">
+                <span className="text-gray-400 font-medium">{submode.title}</span>
+              </div>
+            )}
+
+            {/* Content Container */}
+            <div className="p-4 space-y-2 flex-1 flex flex-col">
               <h3 className="text-lg font-bold text-[#00f2ea] group-hover:text-[#ff0050] transition-colors">
                 {submode.title}
               </h3>
-              <p className="text-sm text-gray-400">{submode.desc}</p>
+              <p className="text-sm text-gray-400 flex-1">{submode.desc}</p>
               <p className="text-xs text-gray-600">{submode.words.length} palavras</p>
             </div>
 
             {!isHost && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-lg">
+              <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-xl">
                 <p className="text-gray-300 text-sm font-medium">Aguardando o host...</p>
               </div>
             )}
