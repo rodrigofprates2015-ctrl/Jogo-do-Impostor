@@ -38,6 +38,15 @@ async function pushToGitHub() {
     const token = await getAccessToken();
     console.log('✅ Token obtained from GitHub integration');
     
+    // Reset workflow files that require special OAuth scope
+    console.log('🔄 Resetting workflow files...');
+    try {
+      execSync('git reset HEAD .github/workflows/', { cwd: process.cwd() });
+      execSync('git checkout -- .github/workflows/', { cwd: process.cwd() });
+    } catch (e) {
+      // If they don't exist or other issue, continue anyway
+    }
+    
     // Execute git push using the token
     const pushUrl = `https://rodrigofprates2015-ctrl:${token}@github.com/rodrigofprates2015-ctrl/Dessavez.git`;
     execSync(`git push "${pushUrl}" main`, { stdio: 'inherit', cwd: process.cwd() });
