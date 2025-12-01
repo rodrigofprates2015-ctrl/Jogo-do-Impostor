@@ -529,26 +529,15 @@ const ModeSelectScreen = () => {
     setIsStarting(true);
     setShowSpeakingOrderWheel(true);
     
-    // Esperar a animação completar antes de chamar startGame
+    // Esperar a roleta completar (3 segundos) e depois iniciar o jogo
     setTimeout(async () => {
       try {
-        const response = await fetch(`/api/rooms/${room.code}/speaking-order`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-        });
-        
-        if (response.ok) {
-          const data = await response.json();
-          setSpeakingOrder(data.speakingOrder);
-        }
+        await startGame();
       } catch (error) {
-        console.error('Erro ao sortear ordem de fala:', error);
+        console.error('Erro ao iniciar jogo:', error);
       }
-      
-      // Depois sortear, chamar startGame
-      await startGame();
       setIsStarting(false);
-    }, 100);
+    }, 4000); // 3s da roleta + 1s de buffer
   };
 
   const handleBackClick = () => {
