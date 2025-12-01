@@ -192,6 +192,22 @@ export async function registerRoutes(
             ws.send(JSON.stringify({ type: 'room-update', room }));
           }
         }
+        
+        // Handle host back-to-lobby - broadcast to all players in room
+        if (data.type === 'host-back-to-lobby' && data.roomCode) {
+          const roomCode = data.roomCode as string;
+          const updatedRoom = await storage.updateRoom(roomCode, {
+            status: 'waiting',
+            gameMode: null,
+            impostorId: null,
+            gameData: null
+          });
+          
+          if (updatedRoom) {
+            // Broadcast room update to all players
+            broadcastToRoom(roomCode, { type: 'room-update', room: updatedRoom });
+          }
+        }
       } catch (error) {
         console.error('WebSocket error:', error);
       }

@@ -455,11 +455,21 @@ const LobbyScreen = () => {
 };
 
 const ModeSelectScreen = () => {
-  const { room, gameModes, selectedMode, selectMode, startGame, backToLobby, fetchGameModes } = useGameStore();
+  const { room, user, gameModes, selectedMode, selectMode, startGame, backToLobby, fetchGameModes } = useGameStore();
+  const { toast } = useToast();
+
+  const isHost = room && user && room.hostId === user.uid;
 
   useEffect(() => {
     fetchGameModes();
   }, [fetchGameModes]);
+
+  const handleBackClick = () => {
+    backToLobby();
+    if (isHost) {
+      toast({ title: "Retornando ao lobby...", description: "Todos os jogadores foram levados de volta." });
+    }
+  };
 
   if (!room) return null;
 
@@ -469,8 +479,10 @@ const ModeSelectScreen = () => {
         <Button 
           variant="ghost" 
           size="icon"
-          onClick={backToLobby}
+          onClick={handleBackClick}
           className="w-10 h-10 rounded-lg border border-gray-800 hover:border-[#00f2ea] text-gray-400 hover:text-[#00f2ea] transition-all"
+          data-testid="button-back-to-lobby"
+          title={isHost ? "Voltar ao lobby (todos os jogadores serão levados)" : "Voltar ao lobby"}
         >
           <ArrowLeft className="w-5 h-5" />
         </Button>

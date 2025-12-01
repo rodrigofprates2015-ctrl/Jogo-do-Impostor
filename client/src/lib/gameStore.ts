@@ -111,7 +111,16 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   backToLobby: () => {
+    const { user, room, ws } = get();
     set({ status: 'lobby', selectedMode: null });
+    
+    // If host, broadcast to all players
+    if (room && user && room.hostId === user.uid && ws && ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ 
+        type: 'host-back-to-lobby',
+        roomCode: room.code
+      }));
+    }
   },
 
   connectWebSocket: (code: string) => {
