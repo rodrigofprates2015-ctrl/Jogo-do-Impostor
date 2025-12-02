@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import PalavraSuperSecretaSubmodeScreen from "@/pages/PalavraSuperSecretaSubmodeScreen";
 import { SpeakingOrderWheel } from "@/components/SpeakingOrderWheel";
 import { NotificationCenter } from "@/components/NotificationCenter";
+import { SiDiscord } from "react-icons/si";
 import { 
   User, 
   Zap, 
@@ -231,16 +232,27 @@ const GameNavButtons = ({
 
 const TopRightButtons = ({ onDonateClick }: { onDonateClick: () => void }) => (
   <>
-    {/* Mobile: Como Jogar on left */}
-    <Link 
-      href="/comojogar"
-      className="sm:hidden fixed top-4 left-4 z-40 flex items-center gap-2 px-3 py-2 bg-[#4a90a4] border-2 border-[#3a7084] rounded-xl text-white hover:bg-[#5aa0b4] transition-all font-semibold shadow-lg"
-      data-testid="button-how-to-play-mobile"
-    >
-      <HelpCircle className="w-4 h-4" />
-    </Link>
+    {/* Mobile: Como Jogar and Discord on left */}
+    <div className="sm:hidden fixed top-4 left-4 z-40 flex items-center gap-2">
+      <Link 
+        href="/comojogar"
+        className="flex items-center gap-2 px-3 py-2 bg-[#4a90a4] border-2 border-[#3a7084] rounded-xl text-white hover:bg-[#5aa0b4] transition-all font-semibold shadow-lg"
+        data-testid="button-how-to-play-mobile"
+      >
+        <HelpCircle className="w-4 h-4" />
+      </Link>
+      <a
+        href="https://discord.gg/rhZxA2ha"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center gap-2 px-3 py-2 bg-[#5865F2] border-2 border-[#4752C4] rounded-xl text-white hover:bg-[#6875F3] transition-all font-semibold shadow-lg"
+        data-testid="button-discord-mobile"
+      >
+        <SiDiscord className="w-4 h-4" />
+      </a>
+    </div>
     
-    {/* Desktop: Both buttons on right */}
+    {/* Desktop: All buttons on right */}
     <div className="hidden sm:flex fixed top-4 right-4 z-40 items-center gap-2">
       <Link 
         href="/comojogar"
@@ -250,6 +262,16 @@ const TopRightButtons = ({ onDonateClick }: { onDonateClick: () => void }) => (
         <HelpCircle className="w-4 h-4" />
         <span className="text-sm font-medium">Como Jogar</span>
       </Link>
+      <a
+        href="https://discord.gg/rhZxA2ha"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center gap-2 px-4 py-2 bg-[#5865F2] border-2 border-[#4752C4] rounded-xl text-white hover:bg-[#6875F3] transition-all font-semibold shadow-lg"
+        data-testid="button-discord"
+      >
+        <SiDiscord className="w-4 h-4" />
+        <span className="text-sm font-medium">Encontrar Nave</span>
+      </a>
       <button
         onClick={onDonateClick}
         className="flex items-center gap-2 px-4 py-2 bg-[#c44536] border-2 border-[#a33526] rounded-xl text-white hover:bg-[#d45546] transition-all font-semibold shadow-lg"
