@@ -444,11 +444,6 @@ const HomeScreen = () => {
         />
       </div>
 
-      {/* Logo TikJogos at top */}
-      <div className="absolute top-6 left-1/2 transform -translate-x-1/2 z-20">
-        <img src={logoTikjogos} alt="TikJogos" className="h-8 md:h-10" />
-      </div>
-
       {/* Tripulante character - left side (desktop only) */}
       <img 
         src={tripulanteImg} 
@@ -548,6 +543,7 @@ const HomeScreen = () => {
 
       {/* Footer */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center z-20">
+        <img src={logoTikjogos} alt="TikJogos" className="h-6 md:h-8 mx-auto mb-2" />
         <p className="text-[#6a8aaa] text-xs">
           Desenvolvido com <Heart className="inline w-3 h-3 text-red-400 fill-current" /> por <span className="text-[#8aa0b0]">Rodrigo Freitas</span>
         </p>
