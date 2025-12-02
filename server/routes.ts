@@ -570,6 +570,141 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/rooms/:code/reveal-crew-question", async (req, res) => {
+    try {
+      const { code } = req.params;
+      
+      const room = await storage.getRoom(code.toUpperCase());
+      if (!room) {
+        return res.status(404).json({ error: "Room not found" });
+      }
+
+      if (!room.gameData) {
+        return res.status(400).json({ error: "No game in progress" });
+      }
+
+      const updatedRoom = await storage.updateRoom(code.toUpperCase(), {
+        gameData: {
+          ...room.gameData,
+          crewQuestionRevealed: true
+        }
+      });
+
+      if (updatedRoom) {
+        broadcastToRoom(code.toUpperCase(), { type: 'room-update', room: updatedRoom });
+      }
+
+      res.json(updatedRoom);
+    } catch (error) {
+      res.status(400).json({ error: "Failed to reveal crew question" });
+    }
+  });
+
+  app.post("/api/rooms/:code/start-voting", async (req, res) => {
+    try {
+      const { code } = req.params;
+      
+      const room = await storage.getRoom(code.toUpperCase());
+      if (!room) {
+        return res.status(404).json({ error: "Room not found" });
+      }
+
+      if (!room.gameData) {
+        return res.status(400).json({ error: "No game in progress" });
+      }
+
+      const updatedRoom = await storage.updateRoom(code.toUpperCase(), {
+        gameData: {
+          ...room.gameData,
+          votingStarted: true,
+          votes: []
+        }
+      });
+
+      if (updatedRoom) {
+        broadcastToRoom(code.toUpperCase(), { type: 'room-update', room: updatedRoom });
+      }
+
+      res.json(updatedRoom);
+    } catch (error) {
+      res.status(400).json({ error: "Failed to start voting" });
+    }
+  });
+
+  app.post("/api/rooms/:code/submit-vote", async (req, res) => {
+    try {
+      const { code } = req.params;
+      const { playerId, playerName, targetId, targetName } = req.body;
+      
+      const room = await storage.getRoom(code.toUpperCase());
+      if (!room) {
+        return res.status(404).json({ error: "Room not found" });
+      }
+
+      if (!room.gameData) {
+        return res.status(400).json({ error: "No game in progress" });
+      }
+
+      if (!room.gameData.votingStarted) {
+        return res.status(400).json({ error: "Voting has not started" });
+      }
+
+      const existingVotes = room.gameData.votes || [];
+      const alreadyVoted = existingVotes.some(v => v.playerId === playerId);
+      
+      if (alreadyVoted) {
+        return res.status(400).json({ error: "Already submitted vote" });
+      }
+
+      const newVotes = [...existingVotes, { playerId, playerName, targetId, targetName }];
+      
+      const updatedRoom = await storage.updateRoom(code.toUpperCase(), {
+        gameData: {
+          ...room.gameData,
+          votes: newVotes
+        }
+      });
+
+      if (updatedRoom) {
+        broadcastToRoom(code.toUpperCase(), { type: 'room-update', room: updatedRoom });
+      }
+
+      res.json(updatedRoom);
+    } catch (error) {
+      res.status(400).json({ error: "Failed to submit vote" });
+    }
+  });
+
+  app.post("/api/rooms/:code/reveal-impostor", async (req, res) => {
+    try {
+      const { code } = req.params;
+      
+      const room = await storage.getRoom(code.toUpperCase());
+      if (!room) {
+        return res.status(404).json({ error: "Room not found" });
+      }
+
+      if (!room.gameData) {
+        return res.status(400).json({ error: "No game in progress" });
+      }
+
+      const updatedRoom = await storage.updateRoom(code.toUpperCase(), {
+        gameData: {
+          ...room.gameData,
+          votesRevealed: true
+        }
+      });
+
+      if (updatedRoom) {
+        broadcastToRoom(code.toUpperCase(), { type: 'room-update', room: updatedRoom });
+      }
+
+      res.json(updatedRoom);
+    } catch (error) {
+      res.status(400).json({ error: "Failed to reveal impostor" });
+    }
+  });
+
   app.post("/api/rooms/:code/leave-game", async (req, res) => {
     try {
       const { code } = req.params;
