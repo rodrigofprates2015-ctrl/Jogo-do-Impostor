@@ -49,6 +49,7 @@ export type Room = typeof rooms.$inferSelect;
 export type Player = {
   uid: string;
   name: string;
+  waitingForGame?: boolean;
 };
 
 export type RoomStatus = "waiting" | "playing";

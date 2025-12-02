@@ -3,6 +3,7 @@ import { create } from 'zustand';
 export type Player = {
   uid: string;
   name: string;
+  waitingForGame?: boolean;
 };
 
 export type GameStatus = 'home' | 'lobby' | 'modeSelect' | 'submodeSelect' | 'spinning' | 'playing';
