@@ -442,14 +442,14 @@ const HomeScreen = () => {
       />
 
       {/* Main card */}
-      <div className="main-card w-[90%] max-w-md p-6 md:p-8 z-20 animate-fade-in">
+      <div className="main-card w-[90%] max-w-md p-5 md:p-6 z-20 animate-fade-in">
         {/* Impostor logo with characters */}
-        <div className="flex justify-center mb-6">
-          <img src={logoImpostor} alt="Impostor" className="h-36 md:h-48 object-contain" />
+        <div className="flex justify-center mb-3">
+          <img src={logoImpostor} alt="Impostor" className="h-28 md:h-36 object-contain" />
         </div>
 
         {/* Form */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           {/* Nickname input */}
           <input
             type="text"
