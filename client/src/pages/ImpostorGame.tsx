@@ -445,7 +445,7 @@ const HomeScreen = () => {
       <div className="main-card w-[90%] max-w-md p-6 md:p-8 z-20 animate-fade-in">
         {/* Impostor logo with characters */}
         <div className="flex justify-center mb-6">
-          <img src={logoImpostor} alt="Impostor" className="h-24 md:h-32 object-contain" />
+          <img src={logoImpostor} alt="Impostor" className="h-36 md:h-48 object-contain" />
         </div>
 
         {/* Form */}
