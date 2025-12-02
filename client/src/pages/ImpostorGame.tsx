@@ -422,6 +422,28 @@ const HomeScreen = () => {
         backgroundRepeat: 'no-repeat'
       }}
     >
+      {/* Left AdSense Banner - 160x600 */}
+      <div className="hidden xl:block fixed left-2 top-1/2 -translate-y-1/2 z-30">
+        <ins 
+          className="adsbygoogle"
+          style={{ display: 'block', width: '160px', height: '600px' }}
+          data-ad-client="ca-pub-4854252788330308"
+          data-ad-slot="auto"
+          data-ad-format="vertical"
+        />
+      </div>
+
+      {/* Right AdSense Banner - 160x600 */}
+      <div className="hidden xl:block fixed right-2 top-1/2 -translate-y-1/2 z-30">
+        <ins 
+          className="adsbygoogle"
+          style={{ display: 'block', width: '160px', height: '600px' }}
+          data-ad-client="ca-pub-4854252788330308"
+          data-ad-slot="auto"
+          data-ad-format="vertical"
+        />
+      </div>
+
       {/* Logo TikJogos at top */}
       <div className="absolute top-6 left-1/2 transform -translate-x-1/2 z-20">
         <img src={logoTikjogos} alt="TikJogos" className="h-8 md:h-10" />
