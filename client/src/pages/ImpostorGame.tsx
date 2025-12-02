@@ -909,7 +909,7 @@ const PerguntasDiferentesScreen = () => {
           {/* Overlay escuro para contraste */}
           <div className="absolute inset-0 bg-[#0a1628]/90 -z-10 rounded-2xl"></div>
           
-          <GameNavButtons onBackToLobby={handleNewRound} isImpostor={isImpostor} />
+          <GameNavButtons onBackToLobby={handleNewRound} isImpostor={false} />
           <div 
             className={cn(
               "w-full aspect-[3/4] max-h-[500px] rounded-2xl p-8 flex flex-col items-center justify-center text-center relative transition-all duration-500 cursor-pointer overflow-hidden",
@@ -988,7 +988,7 @@ const PerguntasDiferentesScreen = () => {
           {/* Overlay escuro para contraste */}
           <div className="absolute inset-0 bg-[#0a1628]/90 -z-10 rounded-2xl"></div>
           
-          <GameNavButtons onBackToLobby={handleNewRound} isImpostor={isImpostor} />
+          <GameNavButtons onBackToLobby={handleNewRound} isImpostor={false} />
           <div className="w-full bg-[#16213e]/80 rounded-2xl p-6 border border-[#3d4a5c] space-y-6">
             <div className="text-center space-y-2">
               <p className="text-[#4a90a4] text-sm uppercase tracking-widest font-bold">Sua Pergunta</p>
@@ -1085,7 +1085,7 @@ const PerguntasDiferentesScreen = () => {
           {/* Overlay escuro para contraste */}
           <div className="absolute inset-0 bg-[#0a1628]/90 -z-10 rounded-2xl"></div>
           
-          <GameNavButtons onBackToLobby={handleNewRound} isImpostor={isImpostor} />
+          <GameNavButtons onBackToLobby={handleNewRound} isImpostor={false} />
           <div className="w-full bg-[#16213e]/80 rounded-2xl p-6 border border-[#3d4a5c] space-y-4">
             <div className="text-center space-y-2">
               <p className="text-gray-300 text-xs uppercase tracking-widest">Sua Resposta</p>
