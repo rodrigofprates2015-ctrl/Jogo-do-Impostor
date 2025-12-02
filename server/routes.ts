@@ -205,6 +205,11 @@ export async function registerRoutes(
       try {
         const data = JSON.parse(message.toString());
         
+        if (data.type === 'ping') {
+          ws.send(JSON.stringify({ type: 'pong' }));
+          return;
+        }
+        
         if (data.type === 'join-room' && data.roomCode && data.playerId) {
           currentRoomCode = data.roomCode as string;
           currentPlayerId = data.playerId as string;

@@ -3,6 +3,10 @@
 This is a multiplayer social deduction game branded as **TikJogos**. Players join game rooms and try to identify who among them is the impostor through various game modes involving secret words, locations, roles, and questions. The application is built as a full-stack web application with real-time multiplayer capabilities.
 
 ## Recent Changes (December 2025)
+- **Fixed WebSocket Disconnection Bug** - Added ping/pong keepalive (every 25s) and automatic reconnection (up to 10 attempts) to fix "Nova Rodada" not working after long games
+  - Root cause: WebSocket connections were timing out during long matches
+  - When host clicked "Nova Rodada", broadcast wasn't reaching disconnected players
+  - Now connections stay alive and automatically reconnect if dropped
 - **Differential Lobby Return Behavior** - Different behavior when returning to lobby based on player role:
   - When host/captain returns to lobby: ALL players return to lobby (game ends for everyone)
   - When crew member (non-host) returns to lobby: Only they return, others continue playing

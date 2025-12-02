@@ -181,14 +181,49 @@ export const useGameStore = create<GameState>((set, get) => ({
     const user = get().user;
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const newWs = new WebSocket(`${protocol}//${window.location.host}/game-ws`);
+    
+    let pingInterval: ReturnType<typeof setInterval> | null = null;
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 10;
+    const reconnectDelay = 2000;
+
+    const startPing = () => {
+      if (pingInterval) clearInterval(pingInterval);
+      pingInterval = setInterval(() => {
+        if (newWs.readyState === WebSocket.OPEN) {
+          newWs.send(JSON.stringify({ type: 'ping' }));
+        }
+      }, 25000);
+    };
+
+    const attemptReconnect = () => {
+      if (reconnectAttempts >= maxReconnectAttempts) {
+        console.log('Max reconnect attempts reached');
+        return;
+      }
+      
+      const currentRoom = get().room;
+      if (!currentRoom) return;
+      
+      reconnectAttempts++;
+      console.log(`Attempting to reconnect (${reconnectAttempts}/${maxReconnectAttempts})...`);
+      
+      setTimeout(() => {
+        get().connectWebSocket(currentRoom.code);
+      }, reconnectDelay);
+    };
 
     newWs.onopen = () => {
+      console.log('WebSocket connected');
+      reconnectAttempts = 0;
       newWs.send(JSON.stringify({ type: 'join-room', roomCode: code, playerId: user?.uid }));
+      startPing();
     };
 
     newWs.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
+        if (data.type === 'pong') return;
         console.log('WebSocket message received:', data.type);
         if (data.type === 'room-update' && data.room) {
           console.log('WebSocket room-update, room status:', data.room.status);
@@ -208,7 +243,6 @@ export const useGameStore = create<GameState>((set, get) => ({
           });
         }
         if (data.type === 'start-speaking-order-wheel') {
-          // Store the server-generated speaking order so all clients show the same result
           if (data.speakingOrder) {
             set({ speakingOrder: data.speakingOrder });
           }
@@ -221,6 +255,16 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     newWs.onerror = (error) => {
       console.error('WebSocket error:', error);
+    };
+
+    newWs.onclose = (event) => {
+      console.log('WebSocket closed:', event.code, event.reason);
+      if (pingInterval) clearInterval(pingInterval);
+      
+      const currentRoom = get().room;
+      if (currentRoom && event.code !== 1000) {
+        attemptReconnect();
+      }
     };
 
     set({ ws: newWs });
