@@ -274,11 +274,38 @@ export async function registerRoutes(
         const room = await storage.getRoom(currentRoomCode);
         if (!room || !currentPlayerId) return;
 
-        // Remove player from room
         const disconnectedPlayer = room.players.find(p => p.uid === currentPlayerId);
-        const updatedRoomAfterRemoval = await storage.removePlayerFromRoom(currentRoomCode, currentPlayerId);
+        const wasHost = room.hostId === currentPlayerId;
+        const hasRemainingPlayers = room.players.length > 1;
 
-        // Notify remaining players that someone left
+        // Remove player from room first
+        let currentRoom = await storage.removePlayerFromRoom(currentRoomCode, currentPlayerId);
+        if (!currentRoom) return;
+
+        // If disconnected player was the host and there are remaining players, transfer host FIRST
+        let newHostName: string | undefined;
+        if (wasHost && hasRemainingPlayers && currentRoom.players.length > 0) {
+          // Always use the first remaining player as the new host (most reliable method)
+          const newHostId = currentRoom.players[0].uid;
+          
+          // Update room with new host immediately
+          currentRoom = await storage.updateRoom(currentRoomCode, {
+            hostId: newHostId
+          }) || currentRoom;
+          
+          newHostName = currentRoom.players.find(p => p.uid === newHostId)?.name;
+          
+          // Broadcast host change notification
+          if (connections && connections.size > 0) {
+            broadcastToRoom(currentRoomCode, { 
+              type: 'host-changed',
+              newHostId,
+              newHostName
+            });
+          }
+        }
+
+        // Now broadcast player left and room update with the FINAL room state (including new host)
         if (disconnectedPlayer && connections && connections.size > 0) {
           broadcastToRoom(currentRoomCode, {
             type: 'player-left',
@@ -286,56 +313,11 @@ export async function registerRoutes(
             playerName: disconnectedPlayer.name
           });
           
-          // Broadcast updated room list
-          if (updatedRoomAfterRemoval) {
-            broadcastToRoom(currentRoomCode, {
-              type: 'room-update',
-              room: updatedRoomAfterRemoval
-            });
-          }
-        }
-
-        // Check if disconnected player was the host
-        if (room.hostId === currentPlayerId && connections && connections.size > 0 && updatedRoomAfterRemoval) {
-          // Host disconnected and there are still players in the room
-          // Find the first remaining player to be the new host
-          let newHostId: string | null = null;
-          
-          for (const connection of connections) {
-            const connInfo = playerConnections.get(connection as any);
-            if (connInfo && connInfo.playerId && connInfo.playerId !== currentPlayerId) {
-              newHostId = connInfo.playerId;
-              break;
-            }
-          }
-
-          // If we couldn't find by tracking connections, use the first player in room that isn't the old host
-          if (!newHostId && updatedRoomAfterRemoval.players.length > 0) {
-            newHostId = updatedRoomAfterRemoval.players[0].uid;
-          }
-
-          if (newHostId) {
-            // Transfer host to the new player
-            const finalRoom = await storage.updateRoom(currentRoomCode, {
-              hostId: newHostId
-            });
-
-            if (finalRoom) {
-              const newHost = finalRoom.players.find(p => p.uid === newHostId);
-              // Broadcast the room update to all remaining players
-              broadcastToRoom(currentRoomCode, { 
-                type: 'host-changed',
-                newHostId,
-                newHostName: newHost?.name
-              });
-              
-              // Broadcast final room state
-              broadcastToRoom(currentRoomCode, {
-                type: 'room-update',
-                room: finalRoom
-              });
-            }
-          }
+          // Broadcast the final room state with correct hostId
+          broadcastToRoom(currentRoomCode, {
+            type: 'room-update',
+            room: currentRoom
+          });
         }
       }
     });

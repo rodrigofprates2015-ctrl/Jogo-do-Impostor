@@ -235,7 +235,16 @@ export const useGameStore = create<GameState>((set, get) => ({
       return;
     }
 
-    const currentPlayer = room.players.find(p => p.uid === currentUser.uid);
+    // Validate hostId - ensure it points to an existing player
+    // If hostId is invalid (player not in list), use first player as host
+    const hostExists = room.players.some(p => p.uid === room.hostId);
+    let validatedRoom = room;
+    if (!hostExists && room.players.length > 0) {
+      console.log('updateRoom: hostId is invalid, correcting to first player');
+      validatedRoom = { ...room, hostId: room.players[0].uid };
+    }
+
+    const currentPlayer = validatedRoom.players.find(p => p.uid === currentUser.uid);
     const isWaitingForGame = currentPlayer?.waitingForGame === true;
     console.log('updateRoom: isWaitingForGame:', isWaitingForGame);
 
@@ -244,27 +253,27 @@ export const useGameStore = create<GameState>((set, get) => ({
     let selectedMode = get().selectedMode;
     
     // If player is waiting for game to end, keep them in lobby
-    if (isWaitingForGame && room.status === 'playing') {
+    if (isWaitingForGame && validatedRoom.status === 'playing') {
       console.log('updateRoom: Player is waiting for game to end, staying in lobby');
       newStatus = 'lobby';
     }
     // Check if player just entered a room that's already playing
-    else if (room.status === 'playing' && (!currentRoom || currentRoom.code !== room.code)) {
+    else if (validatedRoom.status === 'playing' && (!currentRoom || currentRoom.code !== validatedRoom.code)) {
       enteredDuringGame = true;
       newStatus = 'lobby';
-    } else if (room.status === 'playing') {
+    } else if (validatedRoom.status === 'playing') {
       newStatus = 'playing';
     }
     
     // Reset selectedMode when room is reset to waiting (Nova Rodada)
-    if (room.status === 'waiting') {
+    if (validatedRoom.status === 'waiting') {
       selectedMode = null;
       console.log('updateRoom: Room reset to waiting, setting status to lobby');
     }
 
     console.log('updateRoom: Setting new status to:', newStatus);
     set({ 
-      room,
+      room: validatedRoom,
       status: newStatus,
       enteredDuringGame,
       selectedMode,
