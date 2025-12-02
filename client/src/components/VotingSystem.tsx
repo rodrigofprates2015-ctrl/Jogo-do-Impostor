@@ -272,72 +272,69 @@ export function VotingSystem({
     const crewWins = votesForImpostor > totalPlayers / 2;
     
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
-        <div className="w-full max-w-md bg-[#0a1628]/95 rounded-2xl p-4 space-y-4 max-h-[90vh] overflow-y-auto">
-          <div className={cn(
-            "w-full rounded-xl p-4 border-2 space-y-4 text-center",
-            crewWins 
-              ? "bg-gradient-to-br from-[#3d8b5f]/20 to-[#3d8b5f]/5 border-[#3d8b5f]"
-              : "bg-gradient-to-br from-[#c44536]/20 to-[#c44536]/5 border-[#c44536]"
-          )}>
-            <div className="space-y-3">
-              <div className={cn(
-                "w-16 h-16 rounded-full flex items-center justify-center mx-auto",
-                crewWins ? "bg-[#3d8b5f]" : "bg-[#c44536]"
-              )}>
-                {crewWins ? (
-                  <Trophy className="w-8 h-8 text-white" />
-                ) : (
-                  <Skull className="w-8 h-8 text-white" />
-                )}
-              </div>
-              
-              <h2 className={cn(
-                "text-2xl font-bold",
-                crewWins ? "text-[#3d8b5f]" : "text-[#c44536]"
-              )}>
-                {crewWins ? "TRIPULACAO VENCEU!" : "IMPOSTOR VENCEU!"}
-              </h2>
-              
-              <p className="text-gray-300">
-                O impostor era: <span className="text-[#c44536] font-bold">{impostorName}</span>
-              </p>
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div className={cn(
+          "w-full max-w-md rounded-2xl p-6 space-y-5 border-2 max-h-[90vh] overflow-y-auto",
+          "bg-[#16213e]/95 backdrop-blur-md",
+          crewWins ? "border-[#3d8b5f]" : "border-[#c44536]"
+        )}>
+          <div className="space-y-3 text-center">
+            <div className={cn(
+              "w-16 h-16 rounded-full flex items-center justify-center mx-auto",
+              crewWins ? "bg-[#3d8b5f]" : "bg-[#c44536]"
+            )}>
+              {crewWins ? (
+                <Trophy className="w-8 h-8 text-white" />
+              ) : (
+                <Skull className="w-8 h-8 text-white" />
+              )}
             </div>
             
-            <div className="w-full h-[1px] bg-gray-700"></div>
+            <h2 className={cn(
+              "text-2xl font-bold",
+              crewWins ? "text-[#3d8b5f]" : "text-[#c44536]"
+            )}>
+              {crewWins ? "TRIPULACAO VENCEU!" : "IMPOSTOR VENCEU!"}
+            </h2>
             
-            <div className="space-y-3">
-              <p className="text-[#e9c46a] text-xs uppercase tracking-widest font-bold">Resultados da Votacao</p>
-              
-              <div className="space-y-2 max-h-[150px] overflow-y-auto">
-                {activePlayers.map(player => {
-                  const votesReceived = votes.filter((v: PlayerVote) => v.targetId === player.uid).length;
-                  const isTheImpostor = player.uid === impostorId;
-                  return (
-                    <div 
-                      key={player.uid}
-                      className={cn(
-                        "w-full p-2.5 rounded-lg flex items-center justify-between",
-                        isTheImpostor 
-                          ? "bg-[#c44536]/20 border border-[#c44536]/50"
-                          : "bg-[#16213e]/50"
-                      )}
-                    >
-                      <span className={cn(
-                        "font-bold text-sm",
-                        isTheImpostor ? "text-[#c44536]" : "text-gray-300"
-                      )}>
-                        {player.name}
-                        {isTheImpostor && " (Impostor)"}
-                      </span>
-                      <div className="flex items-center gap-1">
-                        <span className="text-[#e9c46a] font-bold">{votesReceived}</span>
-                        <span className="text-gray-500 text-xs">votos</span>
-                      </div>
+            <p className="text-gray-300">
+              O impostor era: <span className="text-[#c44536] font-bold">{impostorName}</span>
+            </p>
+          </div>
+          
+          <div className="w-full h-[1px] bg-[#3d4a5c]"></div>
+          
+          <div className="space-y-3">
+            <p className="text-[#e9c46a] text-xs uppercase tracking-widest font-bold text-center">Resultados da Votacao</p>
+            
+            <div className="space-y-2 max-h-[180px] overflow-y-auto">
+              {activePlayers.map(player => {
+                const votesReceived = votes.filter((v: PlayerVote) => v.targetId === player.uid).length;
+                const isTheImpostor = player.uid === impostorId;
+                return (
+                  <div 
+                    key={player.uid}
+                    className={cn(
+                      "w-full p-3 rounded-lg flex items-center justify-between",
+                      isTheImpostor 
+                        ? "bg-[#c44536]/20 border border-[#c44536]/50"
+                        : "bg-[#0a1628]/50"
+                    )}
+                  >
+                    <span className={cn(
+                      "font-bold text-sm",
+                      isTheImpostor ? "text-[#c44536]" : "text-gray-300"
+                    )}>
+                      {player.name}
+                      {isTheImpostor && " (Impostor)"}
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-[#e9c46a] font-bold">{votesReceived}</span>
+                      <span className="text-gray-500 text-xs">votos</span>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
