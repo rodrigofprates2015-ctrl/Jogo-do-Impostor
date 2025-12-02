@@ -883,7 +883,6 @@ const PerguntasDiferentesScreen = () => {
   const [isRevealed, setIsRevealed] = useState(false);
   const [answer, setAnswer] = useState('');
   const [savedAnswer, setSavedAnswer] = useState('');
-  const [showAdPopup, setShowAdPopup] = useState(false);
   const [hideOverlay, setHideOverlay] = useState(false);
 
   if (!room || !room.gameData) return null;
@@ -896,19 +895,14 @@ const PerguntasDiferentesScreen = () => {
   const myQuestion = isImpostor ? gameData.impostorQuestion : gameData.question;
   const crewQuestion = gameData.question || '';
 
-  const handleNewRound = () => {
-    setShowAdPopup(true);
-  };
-
-  const handleCloseAd = async () => {
-    console.log('PerguntasDiferentes handleCloseAd called, room:', room?.code);
+  const handleNewRound = async () => {
+    console.log('PerguntasDiferentes handleNewRound called, room:', room?.code);
     try {
       await returnToLobby();
       console.log('PerguntasDiferentes returnToLobby completed');
     } catch (error) {
       console.error('Error in returnToLobby:', error);
     }
-    setShowAdPopup(false);
   };
 
   const handleSubmitAnswer = () => {
@@ -998,7 +992,6 @@ const PerguntasDiferentesScreen = () => {
             onClose={() => setHideOverlay(true)}
           />
         )}
-        <AdPopup isOpen={showAdPopup} onClose={handleCloseAd} />
       </>
     );
   }
@@ -1048,7 +1041,6 @@ const PerguntasDiferentesScreen = () => {
             onClose={() => setHideOverlay(true)}
           />
         )}
-        <AdPopup isOpen={showAdPopup} onClose={handleCloseAd} />
       </>
     );
   }
@@ -1095,7 +1087,6 @@ const PerguntasDiferentesScreen = () => {
             onClose={() => setHideOverlay(true)}
           />
         )}
-        <AdPopup isOpen={showAdPopup} onClose={handleCloseAd} />
       </>
     );
   }
@@ -1167,7 +1158,6 @@ const PerguntasDiferentesScreen = () => {
             onClose={() => setHideOverlay(true)}
           />
         )}
-        <AdPopup isOpen={showAdPopup} onClose={handleCloseAd} />
       </>
     );
   }
