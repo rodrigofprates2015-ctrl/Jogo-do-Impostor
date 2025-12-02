@@ -3,6 +3,7 @@ import { useGameStore, type GameModeType } from "@/lib/gameStore";
 import { Link } from "wouter";
 import PalavraSuperSecretaSubmodeScreen from "@/pages/PalavraSuperSecretaSubmodeScreen";
 import { SpeakingOrderWheel } from "@/components/SpeakingOrderWheel";
+import { VotingSystem } from "@/components/VotingSystem";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { SiDiscord } from "react-icons/si";
 import { 
@@ -1628,6 +1629,11 @@ const GameScreen = () => {
   const isHost = room.hostId === user?.uid;
   const isImpostor = user?.uid === room.impostorId;
   const gameData = room.gameData;
+  
+  const activePlayers = room.players.filter(p => !p.waitingForGame);
+  const votes = gameData?.votes || [];
+  const votingStarted = gameData?.votingStarted === true;
+  const votesRevealed = gameData?.votesRevealed === true;
 
   if (gameMode === 'perguntasDiferentes') {
     return <PerguntasDiferentesScreen />;
@@ -1858,7 +1864,7 @@ const GameScreen = () => {
       </div>
 
       {/* Host Buttons */}
-      {isHost && (
+      {isHost && !votesRevealed && (
         <div className="w-full space-y-2 mt-2">
           <Button 
             onClick={handleStartSorteio}
@@ -1875,6 +1881,23 @@ const GameScreen = () => {
             <ArrowLeft className="mr-2 w-4 h-4" /> Nova Rodada
           </Button>
         </div>
+      )}
+
+      {/* Voting System */}
+      {user && room.impostorId && (
+        <VotingSystem
+          key={room.code + (gameData?.votingStarted ? '-voting' : '')}
+          roomCode={room.code}
+          userId={user.uid}
+          userName={user.name}
+          isHost={isHost}
+          activePlayers={activePlayers}
+          impostorId={room.impostorId}
+          votes={votes}
+          votingStarted={votingStarted}
+          votesRevealed={votesRevealed}
+          onNewRound={handleNewRound}
+        />
       )}
 
       {showSpeakingOrderWheel && room && (
