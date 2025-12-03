@@ -204,6 +204,9 @@ export function SpeakingOrderWithVotingStage({
           <p className="text-center text-gray-400 text-xs font-bold uppercase tracking-wider">
             Ordem Definida
           </p>
+          <p className="text-center text-[#e9c46a] text-xs">
+            Vote em quem você acha ser o impostor
+          </p>
           <div className="space-y-1.5">
             {displayOrder.map(({ uid, name }, idx) => {
               const isMe = uid === userId;
@@ -221,7 +224,7 @@ export function SpeakingOrderWithVotingStage({
                       ? "bg-white/15 border-2 border-white/40"
                       : "bg-gray-900/40 border border-gray-700/50",
                     canVote && !isSelected && "hover:border-white/30",
-                    isMe && "opacity-60 cursor-not-allowed"
+                    isMe && "opacity-50 cursor-not-allowed"
                   )}
                   style={{ animation: `stageSlideIn 0.3s ease-out ${idx * 0.08}s backwards` }}
                   data-testid={`button-vote-order-${uid}`}

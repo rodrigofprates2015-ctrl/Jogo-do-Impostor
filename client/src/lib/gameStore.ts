@@ -76,8 +76,9 @@ export type GameState = {
   gameModes: GameMode[];
   selectedMode: GameModeType | null;
   submodeSelect: boolean;
-  notifications: Array<{ id: string; type: 'player-left' | 'host-changed'; message: string }>;
+  notifications: Array<{ id: string; type: 'player-left' | 'host-changed' | 'disconnected'; message: string }>;
   enteredDuringGame: boolean;
+  isDisconnected: boolean;
   savedNickname: string | null;
   speakingOrder: string[] | null;
   showSpeakingOrderWheel: boolean;
@@ -102,8 +103,9 @@ export type GameState = {
   setSpeakingOrder: (order: string[]) => void;
   setShowSpeakingOrderWheel: (show: boolean) => void;
   triggerSpeakingOrderWheel: () => void;
-  addNotification: (notification: { type: 'player-left' | 'host-changed'; message: string }) => void;
+  addNotification: (notification: { type: 'player-left' | 'host-changed' | 'disconnected'; message: string }) => void;
   removeNotification: (id: string) => void;
+  setDisconnected: (disconnected: boolean) => void;
 };
 
 function generateUID(): string {
@@ -121,6 +123,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   submodeSelect: false,
   notifications: [],
   enteredDuringGame: false,
+  isDisconnected: false,
   savedNickname: null,
   speakingOrder: null,
   showSpeakingOrderWheel: false,
@@ -218,6 +221,11 @@ export const useGameStore = create<GameState>((set, get) => ({
     const attemptReconnect = () => {
       if (reconnectAttempts >= maxReconnectAttempts) {
         console.log('Max reconnect attempts reached');
+        get().setDisconnected(true);
+        get().addNotification({
+          type: 'disconnected',
+          message: 'Conexão perdida. Recarregue a página para reconectar.'
+        });
         return;
       }
       
@@ -235,6 +243,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     newWs.onopen = () => {
       console.log('WebSocket connected');
       reconnectAttempts = 0;
+      get().setDisconnected(false);
       newWs.send(JSON.stringify({ type: 'join-room', roomCode: code, playerId: user?.uid }));
       startPing();
     };
@@ -533,14 +542,15 @@ export const useGameStore = create<GameState>((set, get) => ({
     });
   },
 
-  addNotification: (notification: { type: 'player-left' | 'host-changed'; message: string }) => {
+  addNotification: (notification: { type: 'player-left' | 'host-changed' | 'disconnected'; message: string }) => {
     const id = Date.now().toString();
     set((state) => ({
       notifications: [...state.notifications, { id, ...notification }]
     }));
+    const timeout = notification.type === 'disconnected' ? 10000 : 4000;
     setTimeout(() => {
       get().removeNotification(id);
-    }, 4000);
+    }, timeout);
   },
 
   removeNotification: (id: string) => {
@@ -586,5 +596,9 @@ export const useGameStore = create<GameState>((set, get) => ({
       type: 'trigger-speaking-order',
       roomCode: room.code
     }));
+  },
+
+  setDisconnected: (disconnected: boolean) => {
+    set({ isDisconnected: disconnected });
   }
 }));

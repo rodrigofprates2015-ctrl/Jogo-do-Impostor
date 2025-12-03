@@ -284,79 +284,6 @@ const TopRightButtons = ({ onDonateClick }: { onDonateClick: () => void }) => (
   </>
 );
 
-const AdPopup = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-  const [countdown, setCountdown] = useState(5);
-  const [canClose, setCanClose] = useState(false);
-
-  useEffect(() => {
-    if (!isOpen) {
-      setCountdown(5);
-      setCanClose(false);
-      return;
-    }
-
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          setCanClose(true);
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [isOpen]);
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-[#16213e]/90 backdrop-blur-sm"></div>
-      <div className="relative card-retro w-full max-w-md p-6 animate-fade-in">
-        <div className="absolute top-4 right-4">
-          {canClose ? (
-            <button 
-              onClick={onClose}
-              className="flex items-center gap-2 px-3 py-1 bg-[#3d8b5f] text-white text-sm font-bold rounded-lg hover:bg-[#3d8b5f]/80 transition-all"
-            >
-              <X className="w-4 h-4" />
-              Fechar
-            </button>
-          ) : (
-            <span className="flex items-center gap-2 px-3 py-1 bg-[#3d4a5c] text-gray-400 text-sm font-bold rounded-lg">
-              Aguarde {countdown}s
-            </span>
-          )}
-        </div>
-        
-        <div className="text-center space-y-4 pt-8">
-          <p className="text-gray-400 text-xs uppercase tracking-widest">Patrocinado</p>
-          
-          <div className="bg-[#0f0f23] border border-[#3d4a5c] rounded-xl p-6 min-h-[250px] flex flex-col items-center justify-center">
-            <div 
-              className="w-full h-full flex items-center justify-center"
-              id="ad-container-popup"
-            >
-              <div className="text-center space-y-3">
-                <div className="w-16 h-16 mx-auto rounded-xl bg-gradient-to-br from-[#e07b39]/20 to-[#4a90a4]/20 flex items-center justify-center border border-[#3d4a5c]">
-                  <img src="/tikjogos-logo.png" alt="TikJogos" className="w-12 h-auto" />
-                </div>
-                <p className="text-gray-500 text-sm">Espaco para anúncio</p>
-                <p className="text-gray-600 text-xs">Google AdSense</p>
-              </div>
-            </div>
-          </div>
-
-          <p className="text-gray-600 text-xs">
-            Os anúncios ajudam a manter o TikJogos gratuito!
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const getModeEmoji = (modeId: string) => {
   switch (modeId) {
@@ -1573,22 +1500,14 @@ type RoundStage = 'WORD_REVEAL' | 'SPEAKING_ORDER' | 'VOTING' | 'VOTING_FEEDBACK
 const GameScreen = () => {
   const { user, room, returnToLobby, speakingOrder, setSpeakingOrder, showSpeakingOrderWheel, setShowSpeakingOrderWheel, triggerSpeakingOrderWheel } = useGameStore();
   const [isRevealed, setIsRevealed] = useState(true);
-  const [showAdPopup, setShowAdPopup] = useState(false);
   const [isSubmittingVote, setIsSubmittingVote] = useState(false);
 
-  const handleNewRound = () => {
-    setShowAdPopup(true);
-  };
-
-  const handleCloseAd = async () => {
-    console.log('handleCloseAd called, room:', room?.code);
+  const handleNewRound = async () => {
     try {
       await returnToLobby();
-      console.log('returnToLobby completed');
     } catch (error) {
       console.error('Error in returnToLobby:', error);
     }
-    setShowAdPopup(false);
   };
 
   const handleStartSorteio = () => {
@@ -1790,8 +1709,12 @@ const GameScreen = () => {
     }
   };
 
-  const handleBackToLobby = () => {
-    setShowAdPopup(true);
+  const handleBackToLobby = async () => {
+    try {
+      await returnToLobby();
+    } catch (error) {
+      console.error('Error in returnToLobby:', error);
+    }
   };
 
   const renderStageContent = () => {
@@ -2093,7 +2016,6 @@ const GameScreen = () => {
         {renderStageContent()}
       </div>
 
-      <AdPopup isOpen={showAdPopup} onClose={handleCloseAd} />
     </div>
   );
 };
