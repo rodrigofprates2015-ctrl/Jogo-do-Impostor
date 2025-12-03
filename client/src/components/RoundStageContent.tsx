@@ -6,6 +6,7 @@ import {
   Zap, Crown, ArrowRight 
 } from 'lucide-react';
 import { Player, PlayerVote } from '@shared/schema';
+import { OrderWheelIcon } from './OrderWheelIcon';
 
 export type RoundStage = 
   | 'WORD_REVEAL' 
@@ -71,31 +72,18 @@ export function SpeakingOrderStage({ players, serverOrder, onComplete }: Speakin
         </div>
       </div>
 
-      <div className="relative w-48 h-48">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1 z-10">
-          <div className="w-0 h-0 border-l-3 border-r-3 border-t-6 border-l-transparent border-r-transparent border-t-[#00f2ea]" 
-               style={{ filter: 'drop-shadow(0 0 8px rgba(0, 242, 234, 0.8))' }}>
-          </div>
+      {!showResults && (
+        <div className="relative w-32 h-32">
+          <OrderWheelIcon 
+            className="w-full h-full drop-shadow-lg"
+            rotation={rotation}
+          />
         </div>
-
-        <div
-          className="w-full h-full rounded-full border-4 border-[#00f2ea]/50 flex items-center justify-center transition-transform"
-          style={{
-            transform: `rotate(${rotation}deg)`,
-            background: 'conic-gradient(from 0deg, #ff0050 0%, #00f2ea 25%, #ff0050 50%, #00f2ea 75%, #ff0050 100%)',
-            boxShadow: '0 0 30px rgba(0, 242, 234, 0.4), inset 0 0 30px rgba(255, 0, 80, 0.2)'
-          }}
-        >
-          <div className="absolute w-16 h-16 rounded-full bg-[#0a1628] border-3 border-[#00f2ea] flex items-center justify-center"
-               style={{ boxShadow: '0 0 15px rgba(0, 242, 234, 0.4)' }}>
-            <Zap className="w-8 h-8 text-[#00f2ea]" />
-          </div>
-        </div>
-      </div>
+      )}
 
       {!showResults && (
         <p className="text-gray-400 text-sm animate-pulse">
-          Sorteando ordem para {players.length} jogadores...
+          Sorteando ordem...
         </p>
       )}
 
@@ -118,6 +106,179 @@ export function SpeakingOrderStage({ players, serverOrder, onComplete }: Speakin
                 {idx === 0 && <Crown className="w-5 h-5 text-[#e9c46a]" />}
               </div>
             ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+interface SpeakingOrderWithVotingStageProps {
+  players: Player[];
+  serverOrder?: string[] | null;
+  userId: string;
+  isHost: boolean;
+  onStartVoting: () => void;
+  onSubmitVote: (targetId: string) => void;
+  isSubmitting: boolean;
+  onNewRound: () => void;
+}
+
+export function SpeakingOrderWithVotingStage({ 
+  players, 
+  serverOrder, 
+  userId,
+  isHost,
+  onStartVoting,
+  onSubmitVote,
+  isSubmitting,
+  onNewRound
+}: SpeakingOrderWithVotingStageProps) {
+  const [rotation, setRotation] = useState(0);
+  const [isSpinComplete, setIsSpinComplete] = useState(false);
+  const [speakingOrder, setSpeakingOrder] = useState<string[]>([]);
+  const [showResults, setShowResults] = useState(false);
+  const [selectedVote, setSelectedVote] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isSpinComplete) return;
+
+    let currentRotation = 0;
+    const interval = setInterval(() => {
+      currentRotation += 15;
+      setRotation(currentRotation);
+    }, 30);
+
+    const timeout = setTimeout(() => {
+      clearInterval(interval);
+      
+      const order = serverOrder && serverOrder.length > 0 
+        ? serverOrder 
+        : [...players].sort(() => Math.random() - 0.5).map(p => p.uid);
+      
+      setSpeakingOrder(order);
+      setIsSpinComplete(true);
+      setRotation(0);
+      
+      setTimeout(() => setShowResults(true), 300);
+    }, 2500);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [isSpinComplete, players, serverOrder]);
+
+  const displayOrder = speakingOrder.map(uid => {
+    const player = players.find(p => p.uid === uid);
+    return { uid, name: player?.name || 'Desconhecido' };
+  });
+
+  return (
+    <div className="animate-stage-fade-in w-full flex flex-col items-center gap-4 py-4">
+      <div className="text-center space-y-2">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#00f2ea]/10 border border-[#00f2ea]/30">
+          <Zap className="w-4 h-4 text-[#00f2ea]" />
+          <span className="text-[#00f2ea] text-xs uppercase tracking-widest font-bold">
+            Ordem de Fala
+          </span>
+        </div>
+      </div>
+
+      {!showResults && (
+        <>
+          <div className="relative w-24 h-24">
+            <OrderWheelIcon 
+              className="w-full h-full drop-shadow-lg"
+              rotation={rotation}
+            />
+          </div>
+          <p className="text-gray-400 text-sm animate-pulse">
+            Sorteando ordem...
+          </p>
+        </>
+      )}
+
+      {showResults && displayOrder.length > 0 && (
+        <div className="animate-stage-fade-in w-full space-y-3">
+          <p className="text-center text-[#00f2ea] text-xs font-bold uppercase tracking-wider">
+            Ordem Definida
+          </p>
+          <div className="space-y-1.5">
+            {displayOrder.map(({ uid, name }, idx) => {
+              const isMe = uid === userId;
+              const canVote = !isMe;
+              const isSelected = selectedVote === uid;
+              
+              return (
+                <button
+                  key={uid}
+                  onClick={() => canVote && setSelectedVote(uid)}
+                  disabled={isMe}
+                  className={cn(
+                    "w-full flex items-center gap-2 px-3 py-2.5 rounded-xl transition-all text-left",
+                    isSelected
+                      ? "bg-[#e9c46a]/20 border-2 border-[#e9c46a]"
+                      : "bg-gradient-to-r from-[#00f2ea]/10 to-[#ff0050]/10 border border-[#00f2ea]/30",
+                    canVote && !isSelected && "hover:border-[#e9c46a]/50",
+                    isMe && "opacity-60 cursor-not-allowed"
+                  )}
+                  style={{ animation: `stageSlideIn 0.3s ease-out ${idx * 0.08}s backwards` }}
+                  data-testid={`button-vote-order-${uid}`}
+                >
+                  <div className={cn(
+                    "w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0",
+                    isSelected 
+                      ? "bg-[#e9c46a] text-black" 
+                      : "bg-[#00f2ea]/20 border border-[#00f2ea]"
+                  )}>
+                    <span className={cn(
+                      "font-bold text-xs",
+                      isSelected ? "text-black" : "text-[#00f2ea]"
+                    )}>{idx + 1}</span>
+                  </div>
+                  <span className={cn(
+                    "font-medium text-sm flex-1",
+                    isSelected ? "text-[#e9c46a]" : "text-white"
+                  )}>
+                    {name} {isMe && "(Você)"}
+                  </span>
+                  {idx === 0 && <Crown className="w-4 h-4 text-[#e9c46a] flex-shrink-0" />}
+                  {isSelected && <Check className="w-4 h-4 text-[#e9c46a] flex-shrink-0" />}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="w-full h-[1px] bg-[#3d4a5c] my-2"></div>
+
+          <div className="space-y-2">
+            <Button 
+              onClick={() => {
+                if (selectedVote) {
+                  onStartVoting();
+                  onSubmitVote(selectedVote);
+                }
+              }}
+              disabled={!selectedVote || isSubmitting}
+              className="w-full h-11 bg-[#e9c46a] hover:bg-[#e9c46a]/80 text-black font-bold text-sm rounded-xl transition-all disabled:opacity-30"
+              style={{ boxShadow: '0 4px 0 rgba(233, 196, 106, 0.4)' }}
+              data-testid="button-vote-from-order"
+            >
+              <Vote className="mr-2 w-4 h-4" /> 
+              {isSubmitting ? 'Votando...' : selectedVote ? 'Votar no Impostor' : 'Selecione o Impostor'}
+            </Button>
+            
+            {isHost && (
+              <Button 
+                onClick={onNewRound}
+                variant="ghost"
+                className="w-full h-9 text-gray-400 hover:text-gray-200 rounded-xl text-sm"
+                data-testid="button-skip-to-lobby"
+              >
+                <ArrowRight className="mr-2 w-4 h-4" /> Pular para Nova Rodada
+              </Button>
+            )}
           </div>
         </div>
       )}

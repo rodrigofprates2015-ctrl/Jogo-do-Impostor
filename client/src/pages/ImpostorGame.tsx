@@ -3,6 +3,7 @@ import { useGameStore, type GameModeType, type PlayerVote, type PlayerAnswer } f
 import { Link } from "wouter";
 import PalavraSuperSecretaSubmodeScreen from "@/pages/PalavraSuperSecretaSubmodeScreen";
 import { NotificationCenter } from "@/components/NotificationCenter";
+import { SpeakingOrderWithVotingStage } from "@/components/RoundStageContent";
 import { SiDiscord } from "react-icons/si";
 import { 
   User, 
@@ -1823,61 +1824,16 @@ const GameScreen = () => {
     switch (currentStage) {
       case 'SPEAKING_ORDER':
         return (
-          <div className="animate-stage-fade-in w-full flex flex-col items-center gap-4 py-4">
-            <div className="text-center space-y-2">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#00f2ea]/10 border border-[#00f2ea]/30">
-                <Zap className="w-4 h-4 text-[#00f2ea]" />
-                <span className="text-[#00f2ea] text-xs uppercase tracking-widest font-bold">
-                  Ordem de Fala
-                </span>
-              </div>
-            </div>
-
-            <div className="relative w-32 h-32">
-              <div
-                className="w-full h-full rounded-full border-4 border-[#00f2ea]/50 flex items-center justify-center animate-spin"
-                style={{
-                  background: 'conic-gradient(from 0deg, #ff0050 0%, #00f2ea 25%, #ff0050 50%, #00f2ea 75%, #ff0050 100%)',
-                  boxShadow: '0 0 20px rgba(0, 242, 234, 0.3)',
-                  animationDuration: '1s'
-                }}
-              >
-                <div className="absolute w-12 h-12 rounded-full bg-[#0a1628] border-2 border-[#00f2ea] flex items-center justify-center">
-                  <Zap className="w-6 h-6 text-[#00f2ea]" />
-                </div>
-              </div>
-            </div>
-
-            <p className="text-gray-400 text-sm animate-pulse">
-              Sorteando ordem...
-            </p>
-
-            {speakingOrder && speakingOrder.length > 0 && (
-              <div className="w-full space-y-2 mt-2">
-                <p className="text-center text-[#00f2ea] text-xs font-bold uppercase tracking-wider">
-                  Ordem Definida
-                </p>
-                <div className="space-y-1">
-                  {speakingOrder.map((uid, idx) => {
-                    const player = room.players.find(p => p.uid === uid);
-                    return (
-                      <div
-                        key={uid}
-                        className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-[#00f2ea]/10 to-[#ff0050]/10 border border-[#00f2ea]/30 rounded-lg"
-                        style={{ animation: `stageSlideIn 0.3s ease-out ${idx * 0.1}s backwards` }}
-                      >
-                        <div className="w-6 h-6 rounded-full bg-[#00f2ea]/20 border border-[#00f2ea] flex items-center justify-center">
-                          <span className="text-[#00f2ea] font-bold text-xs">{idx + 1}</span>
-                        </div>
-                        <span className="text-white font-medium text-sm flex-1">{player?.name || 'Desconhecido'}</span>
-                        {idx === 0 && <Crown className="w-4 h-4 text-[#e9c46a]" />}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-          </div>
+          <SpeakingOrderWithVotingStage
+            players={activePlayers}
+            serverOrder={speakingOrder}
+            userId={user?.uid || ''}
+            isHost={isHost}
+            onStartVoting={handleStartVoting}
+            onSubmitVote={handleSubmitVote}
+            isSubmitting={isSubmittingVote}
+            onNewRound={handleNewRound}
+          />
         );
 
       case 'VOTING':
