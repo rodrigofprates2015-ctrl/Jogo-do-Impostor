@@ -568,6 +568,16 @@ export async function registerRoutes(
           return;
         }
         
+        // Handle disconnect_notice - client is about to close (browser exit detection)
+        if (data.type === 'disconnect_notice') {
+          const info = playerConnections.get(ws);
+          if (info?.roomCode && info?.playerId) {
+            console.log(`[Disconnect Notice] Player ${info.playerId} notified disconnect in room ${info.roomCode}`);
+            await markPlayerDisconnected(ws, info.roomCode, info.playerId);
+          }
+          return;
+        }
+
         // Handle sync_request - send current room state to client
         if (data.type === 'sync_request') {
           const info = playerConnections.get(ws);
@@ -680,6 +690,70 @@ export async function registerRoutes(
         // Players remain in the room until they manually leave
       }
     });
+  });
+
+  // HTTP endpoint for disconnect notice via sendBeacon (more reliable for browser close)
+  app.post("/api/rooms/:code/disconnect-notice", async (req, res) => {
+    try {
+      const { code } = req.params;
+      const { playerId } = z.object({
+        playerId: z.string()
+      }).parse(req.body);
+      
+      const roomCode = code.toUpperCase();
+      const room = await storage.getRoom(roomCode);
+      if (!room) {
+        return res.status(404).json({ error: "Room not found" });
+      }
+
+      // Find and close any existing WebSocket connection for this player
+      // Collect promises to await them all before responding
+      const disconnectPromises: Promise<void>[] = [];
+      playerConnections.forEach((info, ws) => {
+        if (info.playerId === playerId && info.roomCode === roomCode) {
+          console.log(`[Disconnect Beacon] Marking player ${playerId} as disconnected in room ${roomCode}`);
+          disconnectPromises.push(markPlayerDisconnected(ws, roomCode, playerId));
+        }
+      });
+
+      // Wait for all WebSocket-based disconnects to complete
+      if (disconnectPromises.length > 0) {
+        try {
+          await Promise.all(disconnectPromises);
+          console.log(`[Disconnect Beacon] Successfully marked player ${playerId} as disconnected via WebSocket`);
+        } catch (e) {
+          console.error(`[Disconnect Beacon] Error marking player disconnected via WebSocket:`, e);
+        }
+      }
+
+      // If no WebSocket found, still update player status directly
+      // Re-fetch room to get current state after any WebSocket disconnects
+      const currentRoom = await storage.getRoom(roomCode);
+      if (currentRoom) {
+        const existingPlayer = currentRoom.players.find(p => p.uid === playerId);
+        if (existingPlayer && existingPlayer.connected !== false) {
+          const updatedPlayers = currentRoom.players.map(p => 
+            p.uid === playerId ? { ...p, connected: false } : p
+          );
+          
+          const updatedRoom = await storage.updateRoom(roomCode, { players: updatedPlayers });
+          if (updatedRoom) {
+            broadcastToRoom(roomCode, { 
+              type: 'player-disconnected', 
+              playerId, 
+              playerName: existingPlayer.name 
+            });
+            broadcastToRoom(roomCode, { type: 'room-update', room: updatedRoom });
+            console.log(`[Disconnect Beacon] Successfully marked player ${playerId} as disconnected directly`);
+          }
+        }
+      }
+
+      res.status(204).send();
+    } catch (error) {
+      console.error('[Disconnect Beacon] Error:', error);
+      res.status(400).json({ error: "Failed to process disconnect notice" });
+    }
   });
 
   app.get("/api/game-modes", (_req, res) => {

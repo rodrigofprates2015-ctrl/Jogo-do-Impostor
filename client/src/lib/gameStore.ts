@@ -262,6 +262,61 @@ export const useGameStore = create<GameState>((set, get) => ({
     };
     window.addEventListener('focus', focusHandler);
 
+    // Send disconnect_notice when browser/tab is being closed (hard exit detection)
+    // This notifies the server IMMEDIATELY so other players see the disconnect right away
+    const sendDisconnectNotice = () => {
+      if (newWs.readyState === WebSocket.OPEN) {
+        try {
+          newWs.send(JSON.stringify({ type: 'disconnect_notice' }));
+          console.log('[Disconnect] Sent disconnect_notice via WebSocket');
+        } catch (e) {
+          console.error('[Disconnect] Failed to send disconnect_notice:', e);
+        }
+      }
+    };
+
+    // sendBeacon with proper JSON content type for reliable delivery during page unload
+    const sendDisconnectBeacon = () => {
+      const currentUser = get().user;
+      const currentRoom = get().room;
+      if (currentUser && currentRoom && navigator.sendBeacon) {
+        try {
+          const blob = new Blob(
+            [JSON.stringify({ playerId: currentUser.uid })],
+            { type: 'application/json' }
+          );
+          const sent = navigator.sendBeacon(
+            `/api/rooms/${currentRoom.code}/disconnect-notice`,
+            blob
+          );
+          console.log('[Disconnect] Sent beacon disconnect notice, success:', sent);
+        } catch (e) {
+          console.error('[Disconnect] Failed to send beacon:', e);
+        }
+      }
+    };
+
+    // beforeunload - fires when user closes tab/browser or navigates away
+    // Note: This event has limited time to execute, WebSocket message may not complete
+    const beforeUnloadHandler = () => {
+      console.log('[Disconnect] beforeunload triggered');
+      sendDisconnectNotice();
+    };
+    window.addEventListener('beforeunload', beforeUnloadHandler);
+
+    // pagehide - more reliable on mobile and some browsers for actual page unload
+    // Only fire if page is NOT being cached (persisted = false means true unload)
+    const pageHideHandler = (event: PageTransitionEvent) => {
+      console.log('[Disconnect] pagehide triggered, persisted:', event.persisted);
+      // persisted = true means the page is going into bfcache (back-forward cache)
+      // persisted = false means the page is truly being unloaded/closed
+      if (!event.persisted) {
+        // Use sendBeacon for reliable delivery during actual unload
+        sendDisconnectBeacon();
+      }
+    };
+    window.addEventListener('pagehide', pageHideHandler);
+
     newWs.onopen = () => {
       console.log('WebSocket connected');
       reconnectAttempts = 0;
@@ -336,6 +391,8 @@ export const useGameStore = create<GameState>((set, get) => ({
         document.removeEventListener('visibilitychange', visibilityHandler);
       }
       window.removeEventListener('focus', focusHandler);
+      window.removeEventListener('beforeunload', beforeUnloadHandler);
+      window.removeEventListener('pagehide', pageHideHandler);
       
       const currentRoom = get().room;
       if (currentRoom && event.code !== 1000) {

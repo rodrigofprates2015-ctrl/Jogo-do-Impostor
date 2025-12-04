@@ -1,0 +1,108 @@
+Quero que você ajuste e melhore um sistema WebSocket multiplayer, utilizando o que já está implementado anteriormente.
+Existem dois grandes blocos de requisitos, e você deve garantir que nenhum ajuste apague o que já está funcionando.
+Seu trabalho é completar o que falta e corrigir o novo erro, sem retroceder no sistema.
+
+🧩 Parte 1 — O que JÁ está implementado parcialmente (manter e melhorar)
+Objetivo principal:
+
+Nenhum jogador deve ser expulso por inatividade.
+Jogadores não podem virar ghost.
+Conexão deve se manter ativa e recuperar automaticamente.
+
+Mantenha e finalize corretamente os itens abaixo:
+1. Heartbeat (ping/pong) — deve permanecer
+
+Servidor envia ping periodicamente para verificar vida do socket
+
+Cliente responde pong
+
+Se não houver resposta → não remover player
+
+Apenas marcar como connected: false e aguardar reconexão
+
+2. Reconexão automática
+
+Se socket.onclose ou perda de conexão → cliente deve reconectar sozinho
+
+Reconexão deve utilizar a mesma sessionID
+
+Após reconectar → enviar sync_request
+
+3. Sync quando a janela volta ao foco
+
+Se visibilitychange === visible → enviar sync_request
+
+Servidor retorna estado completo do lobby e força atualização no cliente
+
+Isso corrige ghosts quando aba volta
+
+4. Anti-Ghost (sem expulsão)
+
+Jogadores só podem sair se clicarem explicitamente em "sair"
+
+Quedas, tela desligada ou aba inativa não removem do servidor
+
+Reconexão restaura o mesmo jogador com mesmo ID
+
+5. Iniciar partida apenas com players sincronizados
+const activePlayers = players.filter(p => p.connected === true);
+// NÃO deletar desconectados
+
+
+✔ Isso já está parcialmente funcional e não deve ser descartado.
+
+🧩 Parte 2 — NOVO PROBLEMA CRÍTICO (corrigir sem quebrar o restante)
+
+Apesar de tudo acima estar quase pronto, ainda existe um bug grave:
+
+❗ Quando o jogador fecha o navegador (hard-exit) o servidor NÃO detecta a saída
+
+Ele permanece no lobby como se estivesse ativo, ficando como ghost permanente.
+
+O que deve ser feito:
+
+Detectar fechamento real de navegador → onbeforeunload, visibilitychange, pagehide, unload
+
+Enviar disconnect_notice antes do WebSocket morrer, quando possível
+
+Caso o cliente caia abruptamente sem aviso, atualizar status automaticamente:
+
+📌 Regras obrigatórias:
+
+Situação	O que deve acontecer
+Jogador fecha aba / navegador	Marcar connected = false, não remover
+Jogador volta mais tarde	Reconectar com MESMO ID e reativar
+Jogador não volta nunca	Fica na sala (host pode expulsar manualmente se quiser)
+Timeout NÃO pode limpar usuário	PROIBIDO expulsar
+
+⚠ Repetindo — o servidor NUNCA deve apagar o jogador automaticamente.
+
+O que você deve entregar no final
+
+Código servidor WebSocket atualizado com:
+
+heartbeat
+
+sync_on_focus
+
+reconexão salva por sessionID
+
+status persistente mesmo desconectado
+
+detecção de hard-exit
+
+Código do cliente que:
+
+reconecta sozinho sempre
+
+envia sync ao voltar foco
+
+avisa ao servidor quando o navegador fecha (se possível)
+
+mantém sessionID contínuo
+
+Garantir que o que já estava funcionando NÃO seja removido.
+
+Corrigir APENAS o que falta — principalmente o ghost ao fechar navegador.
+
+📢 Se qualquer solução envolver timeout para expulsão → está ERRADO.
