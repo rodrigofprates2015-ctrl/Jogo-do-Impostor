@@ -61,14 +61,6 @@ const PIX_KEY = "48492456-23f1-4edc-b739-4e36547ef90e";
 
 type ThemeWorkshopTab = 'galeria' | 'criar';
 
-type PublicTheme = {
-  id: string;
-  titulo: string;
-  autor: string;
-  palavrasCount: number;
-  createdAt: string;
-};
-
 type PaymentState = {
   status: 'idle' | 'loading' | 'awaiting_payment' | 'success' | 'error';
   paymentId?: string;
@@ -735,7 +727,6 @@ const HomeScreen = () => {
   const [code, setCodeInput] = useState("");
   const [saveNicknameChecked, setSaveNicknameChecked] = useState(false);
   const [isDonationOpen, setIsDonationOpen] = useState(false);
-  const [isThemeWorkshopOpen, setIsThemeWorkshopOpen] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -796,15 +787,15 @@ const HomeScreen = () => {
       }}
     >
       {/* Hero Banner - Oficina de Temas */}
-      <div 
+      <Link 
+        href="/criar-tema"
         className="hero-banner"
-        onClick={() => setIsThemeWorkshopOpen(true)}
         data-testid="hero-banner-theme-workshop"
       >
         <p className="hero-banner-text-small">Divirta-se com os amigos</p>
         <p className="hero-banner-text-main">Gere seu próprio tema</p>
         <p className="hero-banner-text-price">Por apenas R$ 3,00</p>
-      </div>
+      </Link>
 
       {/* Left AdSense Banner - 160x600 */}
       <div className="hidden xl:block fixed left-2 top-1/2 -translate-y-1/2 z-30">
@@ -946,7 +937,102 @@ const HomeScreen = () => {
       {/* Donation Button and Modal */}
       <TopRightButtons onDonateClick={() => setIsDonationOpen(true)} />
       <DonationModal isOpen={isDonationOpen} onClose={() => setIsDonationOpen(false)} />
-      <ThemeWorkshopModal isOpen={isThemeWorkshopOpen} onClose={() => setIsThemeWorkshopOpen(false)} />
+    </div>
+  );
+};
+
+type PublicTheme = {
+  id: string;
+  titulo: string;
+  autor: string;
+  palavrasCount: number;
+  createdAt: string;
+};
+
+const CommunityThemesModal = ({ isOpen, onClose, onSelectTheme }: { isOpen: boolean; onClose: () => void; onSelectTheme: (themeId: string) => void }) => {
+  const { toast } = useToast();
+  const [publicThemes, setPublicThemes] = useState<PublicTheme[]>([]);
+  const [isLoadingThemes, setIsLoadingThemes] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      loadPublicThemes();
+    }
+  }, [isOpen]);
+
+  const loadPublicThemes = async () => {
+    setIsLoadingThemes(true);
+    try {
+      const res = await fetch('/api/themes/public');
+      if (res.ok) {
+        const themes = await res.json();
+        setPublicThemes(themes);
+      }
+    } catch (err) {
+      console.error('Failed to load themes:', err);
+      toast({ title: "Erro", description: "Falha ao carregar temas", variant: "destructive" });
+    } finally {
+      setIsLoadingThemes(false);
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose}></div>
+      <div className="relative card-retro w-full max-w-lg max-h-[75vh] overflow-hidden animate-fade-in flex flex-col">
+        <div className="p-4 border-b border-[#3d4a5c] flex items-center justify-between">
+          <h2 className="text-xl font-bold text-[#6b4ba3] flex items-center gap-2">
+            <FileText className="w-5 h-5" />
+            Temas da Comunidade
+          </h2>
+          <button 
+            onClick={onClose}
+            className="text-gray-400 hover:text-white transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+        
+        <div className="flex-1 overflow-y-auto p-4">
+          <div className="space-y-3">
+            {isLoadingThemes ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-6 h-6 animate-spin text-[#6b4ba3]" />
+              </div>
+            ) : publicThemes.length === 0 ? (
+              <div className="text-center py-8 text-gray-400">
+                <p>Nenhum tema disponível ainda.</p>
+                <p className="text-sm mt-2">Seja o primeiro a criar um!</p>
+              </div>
+            ) : (
+              publicThemes.map((theme) => (
+                <button 
+                  key={theme.id}
+                  onClick={() => {
+                    onSelectTheme(theme.id);
+                    onClose();
+                    toast({ title: "Tema selecionado!", description: `"${theme.titulo}" será usado na partida.` });
+                  }}
+                  className="w-full p-3 rounded-xl bg-[#16213e]/80 border border-[#3d4a5c] hover:border-[#6b4ba3] transition-colors text-left"
+                  data-testid={`theme-select-${theme.id}`}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-semibold text-white truncate">{theme.titulo}</h3>
+                      <p className="text-xs text-gray-400">por {theme.autor}</p>
+                    </div>
+                    <span className="text-xs text-[#6b4ba3] bg-[#6b4ba3]/10 px-2 py-1 rounded whitespace-nowrap">
+                      {theme.palavrasCount} palavras
+                    </span>
+                  </div>
+                </button>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
@@ -954,6 +1040,8 @@ const HomeScreen = () => {
 const LobbyScreen = () => {
   const { room, user, goToModeSelect, leaveGame, kickPlayer } = useGameStore();
   const { toast } = useToast();
+  const [isCommunityThemesOpen, setIsCommunityThemesOpen] = useState(false);
+  const [selectedCommunityTheme, setSelectedCommunityTheme] = useState<string | null>(null);
 
   if (!room) return null;
 
@@ -1065,7 +1153,7 @@ const LobbyScreen = () => {
           <p className="text-xs text-gray-300">Você entrará quando a rodada começar</p>
         </div>
       ) : isHost ? (
-        <div className="w-full animate-fade-in">
+        <div className="w-full animate-fade-in space-y-3">
           <Button 
             onClick={goToModeSelect}
             disabled={players.length < 3}
@@ -1077,6 +1165,14 @@ const LobbyScreen = () => {
           {players.length < 3 && (
             <p className="text-center text-xs text-[#c44536] mt-3">Mínimo de 3 tripulantes</p>
           )}
+          <Button 
+            onClick={() => setIsCommunityThemesOpen(true)}
+            variant="outline"
+            className="w-full h-12 border-2 border-[#6b4ba3] text-[#6b4ba3] hover:bg-[#6b4ba3]/10 font-semibold"
+            data-testid="button-community-themes"
+          >
+            <FileText className="mr-2 w-4 h-4" /> Carregar Tema da Comunidade
+          </Button>
         </div>
       ) : (
         <div className="w-full text-center text-gray-300 py-4 flex flex-col items-center gap-3">
@@ -1088,6 +1184,15 @@ const LobbyScreen = () => {
           <p className="text-sm">Aguardando o capitão iniciar...</p>
         </div>
       )}
+
+      <CommunityThemesModal 
+        isOpen={isCommunityThemesOpen} 
+        onClose={() => setIsCommunityThemesOpen(false)}
+        onSelectTheme={(themeId) => {
+          setSelectedCommunityTheme(themeId);
+          setIsCommunityThemesOpen(false);
+        }}
+      />
     </div>
   );
 };
