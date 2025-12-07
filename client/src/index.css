@@ -471,9 +471,10 @@
   }
 
   .hero-banner-text-price {
-    font-family: var(--font-poppins);
+    font-family: var(--font-gt-america-medium);
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 500;
+    font-style: italic;
     color: white;
     margin-top: 0.25rem;
     text-transform: uppercase;
