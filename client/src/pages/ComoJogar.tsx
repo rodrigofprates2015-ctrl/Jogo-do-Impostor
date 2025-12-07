@@ -12,9 +12,9 @@ import {
   CheckCircle,
   Lightbulb
 } from "lucide-react";
-import backgroundImg from "@assets/background_natal_1764991979853.webp";
+import backgroundImg from "@assets/background_natal_1765071997985.png";
 import logoTikjogos from "@assets/logo tikjogos_1764616571363.png";
-import logoImpostorMobile from "@assets/logo2_1764619562643.png";
+import logoImpostorMobile from "@assets/logo_site_impostor_1765071990526.png";
 
 const gameModes = [
   {

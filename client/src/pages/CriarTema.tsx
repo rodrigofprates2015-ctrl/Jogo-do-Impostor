@@ -9,8 +9,8 @@ import {
   Check,
   FileText
 } from "lucide-react";
-import backgroundImg from "@assets/background_natal_1764991979853.webp";
-import logoImpostor from "@assets/logo3_1764640096962.png";
+import backgroundImg from "@assets/background_natal_1765071997985.png";
+import logoImpostor from "@assets/logo_site_impostor_1765071990526.png";
 
 type PaymentState = {
   status: 'idle' | 'loading' | 'awaiting_payment' | 'success' | 'error';
