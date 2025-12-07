@@ -9,6 +9,26 @@ import { setupAuth, isAuthenticated } from "./githubAuth";
 import { createPayment, getPaymentStatus, type ThemeData } from "./paymentController";
 import { randomBytes as cryptoRandomBytes } from "crypto";
 
+// Store pending theme data by paymentId (in-memory cache for when MP metadata is unavailable)
+interface PendingTheme {
+  titulo: string;
+  autor: string;
+  palavras: string[];
+  isPublic: boolean;
+  createdAt: Date;
+}
+const pendingThemes: Map<number, PendingTheme> = new Map();
+
+// Cleanup old pending themes (older than 1 hour)
+setInterval(() => {
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+  for (const [paymentId, theme] of pendingThemes.entries()) {
+    if (theme.createdAt < oneHourAgo) {
+      pendingThemes.delete(paymentId);
+    }
+  }
+}, 5 * 60 * 1000); // Run every 5 minutes
+
 const GAME_MODES = {
   palavraSecreta: {
     title: "Palavra Secreta",
@@ -1520,6 +1540,18 @@ export async function registerRoutes(
         });
       }
       
+      // Store pending theme data for when MP metadata is unavailable
+      if (paymentResult.paymentId) {
+        pendingThemes.set(paymentResult.paymentId, {
+          titulo: validatedData.titulo,
+          autor: validatedData.autor,
+          palavras: validatedData.palavras,
+          isPublic: validatedData.isPublic,
+          createdAt: new Date()
+        });
+        console.log('[Payment] Stored pending theme for paymentId:', paymentResult.paymentId);
+      }
+      
       res.json({
         success: true,
         paymentId: paymentResult.paymentId,
@@ -1686,35 +1718,46 @@ export async function registerRoutes(
       }
       
       const paymentInfo = await getPaymentStatus(paymentId);
+      console.log('[Payment Status] Checking payment:', paymentId, 'status:', paymentInfo.status);
       
       if (paymentInfo.status === 'approved') {
-        // Check if theme was created for this payment
-        const metadata = paymentInfo.metadata;
-        if (metadata) {
-          const titulo = metadata.titulo;
-          const autor = metadata.autor;
-          
-          // Try to find the theme that was created
+        // First, try to get theme data from our stored pendingThemes (most reliable)
+        const pendingTheme = pendingThemes.get(paymentId);
+        
+        // Determine theme data source: pendingThemes (preferred) or MP metadata (fallback)
+        let titulo: string | undefined;
+        let autor: string | undefined;
+        let palavras: string[] = [];
+        let isPublic = true;
+        
+        if (pendingTheme) {
+          console.log('[Payment Status] Using stored pending theme data for payment:', paymentId);
+          titulo = pendingTheme.titulo;
+          autor = pendingTheme.autor;
+          palavras = pendingTheme.palavras;
+          isPublic = pendingTheme.isPublic;
+        } else if (paymentInfo.metadata) {
+          console.log('[Payment Status] Using MP metadata for payment:', paymentId);
+          titulo = paymentInfo.metadata.titulo;
+          autor = paymentInfo.metadata.autor;
+          isPublic = paymentInfo.metadata.isPublic === true || paymentInfo.metadata.isPublic === 'true';
+          try {
+            palavras = JSON.parse(paymentInfo.metadata.palavras || '[]');
+          } catch (e) {
+            console.error('[Payment Status] Failed to parse palavras from metadata:', e);
+          }
+        }
+        
+        if (titulo && autor && palavras.length > 0) {
+          // Try to find existing theme
           let existingTheme = await storage.getThemeByPaymentMetadata(titulo, autor);
           
-          // If theme doesn't exist yet (webhook didn't fire), create it as fallback
+          // If theme doesn't exist yet, create it
           if (!existingTheme) {
-            console.log('[Payment Status] Theme not found, creating as fallback for payment:', paymentId);
+            console.log('[Payment Status] Creating theme for payment:', paymentId);
             
-            // Parse palavras from metadata
-            let palavras: string[] = [];
-            try {
-              palavras = JSON.parse(metadata.palavras || '[]');
-            } catch (e) {
-              console.error('[Payment Status] Failed to parse palavras:', e);
-            }
-            
-            const isPublic = metadata.isPublic === true || metadata.isPublic === 'true';
-            
-            // Generate access code
             const accessCode = cryptoRandomBytes(3).toString('hex').toUpperCase();
             
-            // Create the theme
             existingTheme = await storage.createTheme({
               titulo,
               autor,
@@ -1725,11 +1768,14 @@ export async function registerRoutes(
               approved: true
             });
             
-            console.log('[Payment Status] Theme created via fallback:', {
+            console.log('[Payment Status] Theme created:', {
               id: existingTheme.id,
               titulo: existingTheme.titulo,
               accessCode: existingTheme.accessCode
             });
+            
+            // Clean up pending theme after successful creation
+            pendingThemes.delete(paymentId);
           }
           
           if (existingTheme && existingTheme.paymentStatus === 'approved') {
@@ -1738,6 +1784,8 @@ export async function registerRoutes(
               accessCode: existingTheme.accessCode
             });
           }
+        } else {
+          console.log('[Payment Status] No theme data available for payment:', paymentId, { pendingTheme: !!pendingTheme, metadata: !!paymentInfo.metadata });
         }
       }
       
