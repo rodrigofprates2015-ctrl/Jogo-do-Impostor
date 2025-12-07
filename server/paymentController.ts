@@ -57,8 +57,8 @@ export async function createPayment(themeData: ThemeData): Promise<PaymentRespon
     const idempotencyKey = `theme-${Date.now()}-${Math.random().toString(36).substring(7)}`;
     
     // Get the webhook URL for notifications
-    // Priority: APP_URL env var > RAILWAY_PUBLIC_DOMAIN > default
-    let webhookUrl = process.env.APP_URL || process.env.RAILWAY_PUBLIC_DOMAIN;
+    // Priority: APP_URL env var > RAILWAY_PUBLIC_DOMAIN > REPLIT_DEV_DOMAIN
+    let webhookUrl = process.env.APP_URL || process.env.RAILWAY_PUBLIC_DOMAIN || process.env.REPLIT_DEV_DOMAIN;
     if (webhookUrl && !webhookUrl.startsWith('http')) {
       webhookUrl = `https://${webhookUrl}`;
     }
