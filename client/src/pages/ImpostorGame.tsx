@@ -317,7 +317,7 @@ const ThemeWorkshopModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                       Crie seu proprio tema com {MIN_PALAVRAS} a {MAX_PALAVRAS} palavras personalizadas!
                     </p>
                     <p className="text-xs text-[#e9c46a]">
-                      Valor: R$ 3,00 via PIX
+                      Valor: R$ 1,50 via PIX
                     </p>
                   </div>
                   
@@ -393,7 +393,7 @@ const ThemeWorkshopModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
                     ) : (
                       <>
                         <Zap size={20} />
-                        GERAR PIX (R$ 3,00)
+                        GERAR PIX (R$ 1,50)
                       </>
                     )}
                   </button>
@@ -810,7 +810,7 @@ const HomeScreen = () => {
       >
         <p className="hero-banner-text-small">Divirta-se com os amigos</p>
         <p className="hero-banner-text-main">Crie seu próprio tema</p>
-        <p className="hero-banner-text-price">Por apenas R$ 3,00</p>
+        <p className="hero-banner-text-price">Por apenas R$ 1,50</p>
       </Link>
 
       {/* Left AdSense Banner - 160x600 */}

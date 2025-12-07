@@ -45,7 +45,7 @@ export async function createPayment(themeData: ThemeData): Promise<PaymentRespon
     const idempotencyKey = `theme-${Date.now()}-${Math.random().toString(36).substring(7)}`;
     
     const paymentData = {
-      transaction_amount: 3.00,
+      transaction_amount: 1.50,
       description: `Tema Personalizado: ${themeData.titulo}`,
       payment_method_id: 'pix',
       payer: {

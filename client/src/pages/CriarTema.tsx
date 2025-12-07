@@ -173,7 +173,7 @@ export default function CriarTema() {
               Crie seu próprio tema com {MIN_PALAVRAS} a {MAX_PALAVRAS} palavras personalizadas!
             </p>
             <p className="text-xs text-[#e9c46a] mt-1">
-              Valor: R$ 3,00 via PIX
+              Valor: R$ 1,50 via PIX
             </p>
           </div>
 
@@ -251,7 +251,7 @@ export default function CriarTema() {
                 ) : (
                   <>
                     <Zap size={20} />
-                    GERAR PIX (R$ 3,00)
+                    GERAR PIX (R$ 1,50)
                   </>
                 )}
               </button>
