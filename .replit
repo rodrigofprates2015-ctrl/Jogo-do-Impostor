@@ -1,7 +1,6 @@
-modules = ["nodejs-20", "web", "python-3.11"]
+modules = ["nodejs-20", "web"]
 [agent]
 expertMode = true
-integrations = ["github:1.0.0"]
 
 [nix]
 channel = "stable-25_05"
@@ -22,23 +21,28 @@ args = "Start application"
 name = "Start application"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd ASD && npm run dev"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+waitForPort = 5000
 
 [[ports]]
 localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 39647
-externalPort = 3000
+localPort = 37323
+externalPort = 3001
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["bash", "-c", "cd ASD && npm run start"]
-build = ["bash", "-c", "cd ASD && npm run build"]
+run = ["npm", "run", "start"]
+build = ["npm", "run", "build"]
+
+[userenv]
+
+[userenv.production]
+APP_URL = "https://tikjogos.com.br"
