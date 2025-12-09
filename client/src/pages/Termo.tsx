@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, Delete, CornerDownLeft, Share2, Trophy, Clock, Settings, BarChart2, HelpCircle } from "lucide-react";
+import { ArrowLeft, Delete, CornerDownLeft, Share2, Trophy, Clock, HelpCircle } from "lucide-react";
 import logoTikjogos from "@assets/logo tikjogos_1764616571363.png";
+import logoTermo from "@/assets/Termo_Logo_58x58_1765323385999.png";
 import { useToast } from "@/hooks/use-toast";
 
 const WORD_LENGTH = 5;
@@ -255,10 +256,10 @@ export default function Termo() {
 
   const getKeyStyle = (key: string) => {
     const state = keyboardState[key];
-    if (state === "correct") return "bg-emerald-600 text-white border-emerald-600";
-    if (state === "present") return "bg-amber-500 text-white border-amber-500";
-    if (state === "absent") return "bg-slate-700 text-slate-300 border-slate-700";
-    return "bg-slate-600 text-white border-slate-600";
+    if (state === "correct") return "bg-[#538d4e] text-white";
+    if (state === "present") return "bg-[#b59f3b] text-white";
+    if (state === "absent") return "bg-[#3a3a3c] text-[#818384]";
+    return "bg-[#818384] text-white";
   };
 
   const renderGrid = () => {
@@ -281,16 +282,16 @@ export default function Termo() {
           letter = currentGuess[j] || "";
         }
         
-        let cellClass = "flex items-center justify-center text-3xl font-bold uppercase transition-all duration-300 transform select-none rounded-sm border-2";
+        let cellClass = "flex items-center justify-center text-2xl font-bold uppercase transition-all duration-300 transform select-none rounded border-2";
         
         if (state === "correct") {
-          cellClass += " bg-emerald-600 border-emerald-600 text-white shadow-[0_0_15px_rgba(5,150,105,0.4)]";
+          cellClass += " bg-[#538d4e] border-[#538d4e] text-white";
         } else if (state === "present") {
-          cellClass += " bg-amber-500 border-amber-500 text-white";
+          cellClass += " bg-[#b59f3b] border-[#b59f3b] text-white";
         } else if (state === "absent") {
-          cellClass += " bg-slate-700 border-slate-700 text-slate-300";
+          cellClass += " bg-[#3a3a3c] border-[#3a3a3c] text-white";
         } else {
-          cellClass += " border-slate-700 bg-slate-800/30 text-white";
+          cellClass += " border-[#3a3a3c] bg-transparent text-white";
         }
         
         if (isCurrentRow && shake) {
@@ -319,18 +320,18 @@ export default function Termo() {
       <div key={i} className="flex justify-center gap-1.5">
         {row.map((key) => {
           const isSpecial = key === "ENTER" || key === "⌫";
-          const baseStyle = "flex items-center justify-center rounded font-bold text-sm select-none transition-all active:scale-95 shadow-sm active:translate-y-0.5";
-          const sizeStyle = isSpecial ? "px-2 py-3 w-14 sm:w-16" : "w-8 h-12 flex-1 max-w-[42px] sm:h-14";
+          const baseStyle = "flex items-center justify-center rounded font-bold text-sm select-none transition-all active:scale-95";
+          const sizeStyle = isSpecial ? "px-3 py-3 min-w-[52px]" : "w-9 h-14 flex-1 max-w-[44px]";
           
           let content: React.ReactNode = key;
-          if (key === "ENTER") content = <CornerDownLeft size={18} />;
-          if (key === "⌫") content = <Delete size={18} />;
+          if (key === "ENTER") content = <CornerDownLeft size={20} />;
+          if (key === "⌫") content = <Delete size={20} />;
 
           return (
             <button 
               key={key} 
               onClick={() => handleKeyPress(key)}
-              className={`${baseStyle} ${sizeStyle} ${!isSpecial ? getKeyStyle(key) : 'bg-slate-600 text-white border-slate-600'}`}
+              className={`${baseStyle} ${sizeStyle} ${!isSpecial ? getKeyStyle(key) : 'bg-[#818384] text-white'}`}
               data-testid={`key-${key}`}
             >
               {content}
@@ -342,35 +343,32 @@ export default function Termo() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col items-center font-sans antialiased selection:bg-emerald-500/30">
+    <div className="min-h-screen bg-[#121213] text-white flex flex-col items-center font-sans antialiased">
       
       {/* Header */}
-      <header className="w-full max-w-lg pt-6 pb-6 px-4 flex flex-col items-center relative border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm z-10">
+      <header className="w-full max-w-lg pt-4 pb-4 px-4 flex flex-col items-center relative border-b border-[#3a3a3c]">
         
         {/* Navigation Icons */}
-        <div className="absolute top-6 left-4 flex gap-3">
+        <div className="absolute top-4 left-4 flex gap-3">
           <Link href="/outros-jogos">
-            <ArrowLeft className="w-6 h-6 text-slate-400 cursor-pointer hover:text-emerald-400 transition-colors" data-testid="button-back" />
+            <ArrowLeft className="w-6 h-6 text-white cursor-pointer hover:text-emerald-400 transition-colors" data-testid="button-back" />
           </Link>
-          <HelpCircle className="w-6 h-6 text-slate-400 cursor-pointer hover:text-emerald-400 transition-colors" data-testid="button-help" />
-        </div>
-        <div className="absolute top-6 right-4 flex gap-3">
-          <BarChart2 className="w-6 h-6 text-slate-400 cursor-pointer hover:text-emerald-400 transition-colors" data-testid="button-stats" />
+          <HelpCircle className="w-6 h-6 text-white cursor-pointer hover:text-emerald-400 transition-colors" data-testid="button-help" />
         </div>
 
         {/* Title with Logo */}
         <div className="flex flex-col items-center">
-          <div className="flex items-center gap-3 mb-1">
-            <div className="w-8 h-8 bg-emerald-500 rounded shadow-[0_0_15px_rgba(16,185,129,0.4)] border border-emerald-400 flex-shrink-0"></div>
-            <h1 className="text-4xl font-extrabold text-white tracking-tight">Termo</h1>
+          <div className="flex items-center gap-3 mb-2">
+            <img src={logoTermo} alt="Termo" className="w-10 h-10 rounded-lg" />
+            <h1 className="text-3xl font-bold text-white tracking-tight">Termo</h1>
           </div>
           
-          <p className="text-slate-400 font-medium text-sm mb-3">Descubra a palavra do dia</p>
+          <p className="text-gray-300 text-sm mb-3">Descubra a palavra do dia</p>
           
           {/* Timer */}
-          <div className="flex items-center gap-2 text-xs font-medium text-emerald-400 bg-slate-800/80 px-4 py-1.5 rounded-full border border-slate-700/50 shadow-inner">
-            <Clock size={14} className="text-emerald-500" />
-            <span>Próxima palavra em: <span className="font-mono font-bold text-emerald-300 text-sm ml-1">{String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}</span></span>
+          <div className="flex items-center gap-2 text-sm text-white bg-[#3a3a3c] px-4 py-2 rounded-full">
+            <Clock size={16} className="text-emerald-400" />
+            <span>Próxima palavra em: <span className="font-mono font-bold text-emerald-400 ml-1">{String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}</span></span>
           </div>
         </div>
       </header>
@@ -385,9 +383,9 @@ export default function Termo() {
 
         {/* Victory/Loss Message */}
         {gameStatus !== "playing" && (
-          <div className="bg-slate-800 border border-emerald-500/30 px-6 py-3 rounded-lg shadow-xl flex flex-col items-center gap-2 w-full max-w-[320px]">
+          <div className="bg-[#1a1a1b] border border-[#3a3a3c] px-6 py-4 rounded-lg flex flex-col items-center gap-3 w-full max-w-[320px]">
             {gameStatus === "won" ? (
-              <span className="text-emerald-400 font-bold text-lg tracking-wide uppercase flex items-center gap-2">
+              <span className="text-[#538d4e] font-bold text-lg tracking-wide uppercase flex items-center gap-2">
                 <Trophy className="w-5 h-5" />
                 Parabéns!
               </span>
@@ -396,15 +394,13 @@ export default function Termo() {
                 A palavra era: {targetWord}
               </span>
             )}
-            <div className="flex gap-3 mt-1 w-full justify-center">
-               <button 
-                 onClick={shareResult}
-                 className="flex-1 flex items-center justify-center gap-2 bg-emerald-600 text-white text-sm font-bold py-2 px-4 rounded transition-all shadow-lg"
-                 data-testid="button-share"
-               >
-                  <Share2 size={16} /> Compartilhar
-               </button>
-            </div>
+            <button 
+              onClick={shareResult}
+              className="w-full flex items-center justify-center gap-2 bg-[#538d4e] text-white text-sm font-bold py-3 px-4 rounded transition-all"
+              data-testid="button-share"
+            >
+              <Share2 size={16} /> Compartilhar
+            </button>
           </div>
         )}
 
@@ -418,17 +414,17 @@ export default function Termo() {
       </div>
 
       {/* Legend */}
-      <div className="pb-4 text-center text-slate-500 text-xs max-w-sm flex flex-wrap justify-center gap-4">
-        <div className="flex items-center gap-1">
-          <div className="w-4 h-4 bg-emerald-600 rounded-sm"></div>
+      <div className="pb-4 text-center text-gray-300 text-xs max-w-sm flex flex-wrap justify-center gap-4">
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-[#538d4e] rounded"></div>
           <span>Correta</span>
         </div>
-        <div className="flex items-center gap-1">
-          <div className="w-4 h-4 bg-amber-500 rounded-sm"></div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-[#b59f3b] rounded"></div>
           <span>Posição errada</span>
         </div>
-        <div className="flex items-center gap-1">
-          <div className="w-4 h-4 bg-slate-700 rounded-sm"></div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 bg-[#3a3a3c] rounded"></div>
           <span>Não está</span>
         </div>
       </div>
