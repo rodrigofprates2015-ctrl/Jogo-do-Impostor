@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "wouter";
-import { ArrowLeft, Delete, CornerDownLeft, RotateCcw, Share2, Trophy, Clock } from "lucide-react";
-import backgroundImg from "@assets/background_natal_1765071997985.png";
+import { ArrowLeft, Delete, CornerDownLeft, Share2, Trophy, Clock, Settings, BarChart2, HelpCircle } from "lucide-react";
 import logoTikjogos from "@assets/logo tikjogos_1764616571363.png";
 import { useToast } from "@/hooks/use-toast";
 
@@ -254,6 +253,14 @@ export default function Termo() {
     }
   };
 
+  const getKeyStyle = (key: string) => {
+    const state = keyboardState[key];
+    if (state === "correct") return "bg-emerald-600 text-white border-emerald-600";
+    if (state === "present") return "bg-amber-500 text-white border-amber-500";
+    if (state === "absent") return "bg-slate-700 text-slate-300 border-slate-700";
+    return "bg-slate-600 text-white border-slate-600";
+  };
+
   const renderGrid = () => {
     const rows = [];
     
@@ -274,25 +281,31 @@ export default function Termo() {
           letter = currentGuess[j] || "";
         }
         
-        const bgColor = {
-          correct: "bg-green-600 border-green-600",
-          present: "bg-yellow-600 border-yellow-600",
-          absent: "bg-gray-700 border-gray-700",
-          empty: "bg-transparent border-[#3a5a7a]"
-        }[state];
+        let cellClass = "flex items-center justify-center text-3xl font-bold uppercase transition-all duration-300 transform select-none rounded-sm border-2";
+        
+        if (state === "correct") {
+          cellClass += " bg-emerald-600 border-emerald-600 text-white shadow-[0_0_15px_rgba(5,150,105,0.4)]";
+        } else if (state === "present") {
+          cellClass += " bg-amber-500 border-amber-500 text-white";
+        } else if (state === "absent") {
+          cellClass += " bg-slate-700 border-slate-700 text-slate-300";
+        } else {
+          cellClass += " border-slate-700 bg-slate-800/30 text-white";
+        }
+        
+        if (isCurrentRow && shake) {
+          cellClass += " animate-shake";
+        }
         
         cells.push(
-          <div
-            key={j}
-            className={`w-12 h-12 md:w-14 md:h-14 flex items-center justify-center text-2xl font-bold text-white border-2 rounded-lg ${bgColor} ${isCurrentRow && shake ? "animate-shake" : ""} transition-all duration-200`}
-          >
+          <div key={j} className={cellClass}>
             {letter}
           </div>
         );
       }
       
       rows.push(
-        <div key={i} className="flex gap-1.5 justify-center">
+        <div key={i} className="grid grid-cols-5 gap-2">
           {cells}
         </div>
       );
@@ -303,23 +316,24 @@ export default function Termo() {
 
   const renderKeyboard = () => {
     return VALID_KEYS.map((row, i) => (
-      <div key={i} className="flex gap-1 justify-center">
+      <div key={i} className="flex justify-center gap-1.5">
         {row.map((key) => {
-          const state = keyboardState[key];
           const isSpecial = key === "ENTER" || key === "⌫";
+          const baseStyle = "flex items-center justify-center rounded font-bold text-sm select-none transition-all active:scale-95 shadow-sm active:translate-y-0.5";
+          const sizeStyle = isSpecial ? "px-2 py-3 w-14 sm:w-16" : "w-8 h-12 flex-1 max-w-[42px] sm:h-14";
           
-          const bgColor = state === "correct" ? "bg-green-600" 
-            : state === "present" ? "bg-yellow-600" 
-            : state === "absent" ? "bg-gray-700" 
-            : "bg-[#2a3a4a]";
-          
+          let content: React.ReactNode = key;
+          if (key === "ENTER") content = <CornerDownLeft size={18} />;
+          if (key === "⌫") content = <Delete size={18} />;
+
           return (
-            <button
-              key={key}
+            <button 
+              key={key} 
               onClick={() => handleKeyPress(key)}
-              className={`${isSpecial ? "px-3 md:px-4" : "w-8 md:w-10"} h-12 md:h-14 rounded-lg font-bold text-white ${bgColor} hover:opacity-80 transition-opacity flex items-center justify-center text-sm md:text-base`}
+              className={`${baseStyle} ${sizeStyle} ${!isSpecial ? getKeyStyle(key) : 'bg-slate-600 text-white border-slate-600'}`}
+              data-testid={`key-${key}`}
             >
-              {key === "⌫" ? <Delete className="w-5 h-5" /> : key === "ENTER" ? <CornerDownLeft className="w-5 h-5" /> : key}
+              {content}
             </button>
           );
         })}
@@ -328,72 +342,113 @@ export default function Termo() {
   };
 
   return (
-    <div 
-      className="min-h-screen w-full flex flex-col items-center relative py-4 px-2"
-      style={{
-        backgroundImage: `url(${backgroundImg})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
-      }}
-    >
-      <Link 
-        href="/outros-jogos"
-        className="fixed top-4 left-4 z-50 flex items-center gap-2 px-4 py-2 bg-[#1a2a3a] border-2 border-[#3a5a7a] rounded-xl text-white hover:bg-[#2a3a4a] transition-all font-semibold shadow-lg"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        <span className="text-sm font-medium">Voltar</span>
-      </Link>
+    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col items-center font-sans antialiased selection:bg-emerald-500/30">
+      
+      {/* Header */}
+      <header className="w-full max-w-lg pt-6 pb-6 px-4 flex flex-col items-center relative border-b border-slate-800 bg-slate-900/50 backdrop-blur-sm z-10">
+        
+        {/* Navigation Icons */}
+        <div className="absolute top-6 left-4 flex gap-3">
+          <Link href="/outros-jogos">
+            <ArrowLeft className="w-6 h-6 text-slate-400 cursor-pointer hover:text-emerald-400 transition-colors" data-testid="button-back" />
+          </Link>
+          <HelpCircle className="w-6 h-6 text-slate-400 cursor-pointer hover:text-emerald-400 transition-colors" data-testid="button-help" />
+        </div>
+        <div className="absolute top-6 right-4 flex gap-3">
+          <BarChart2 className="w-6 h-6 text-slate-400 cursor-pointer hover:text-emerald-400 transition-colors" data-testid="button-stats" />
+        </div>
 
-      <div className="mt-16 mb-4 text-center">
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-1">🟩 Termo</h1>
-        <p className="text-[#8aa0b0] text-sm">Descubra a palavra do dia</p>
-      </div>
+        {/* Title with Logo */}
+        <div className="flex flex-col items-center">
+          <div className="flex items-center gap-3 mb-1">
+            <div className="w-8 h-8 bg-emerald-500 rounded shadow-[0_0_15px_rgba(16,185,129,0.4)] border border-emerald-400 flex-shrink-0"></div>
+            <h1 className="text-4xl font-extrabold text-white tracking-tight">Termo</h1>
+          </div>
+          
+          <p className="text-slate-400 font-medium text-sm mb-3">Descubra a palavra do dia</p>
+          
+          {/* Timer */}
+          <div className="flex items-center gap-2 text-xs font-medium text-emerald-400 bg-slate-800/80 px-4 py-1.5 rounded-full border border-slate-700/50 shadow-inner">
+            <Clock size={14} className="text-emerald-500" />
+            <span>Próxima palavra em: <span className="font-mono font-bold text-emerald-300 text-sm ml-1">{String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}</span></span>
+          </div>
+        </div>
+      </header>
 
-      <div className="flex items-center gap-2 text-[#8aa0b0] text-sm mb-4">
-        <Clock className="w-4 h-4" />
-        <span>Próxima palavra em: {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}</span>
-      </div>
-
-      <div className="bg-[#1a2a3a]/80 backdrop-blur-sm rounded-2xl border-2 border-[#3a5a7a] p-4 md:p-6 mb-4">
-        <div className="flex flex-col gap-1.5">
+      {/* Game Area */}
+      <main className="flex-1 flex flex-col justify-center items-center w-full max-w-lg px-2 py-4 gap-6">
+        
+        {/* Word Grid */}
+        <div className="grid grid-rows-6 gap-2 w-full max-w-[320px] aspect-[5/6]">
           {renderGrid()}
         </div>
-      </div>
 
-      {gameStatus !== "playing" && (
-        <div className="flex gap-3 mb-4">
-          {gameStatus === "won" && (
-            <div className="flex items-center gap-2 px-4 py-2 bg-green-600/20 border border-green-600 rounded-xl text-green-400">
-              <Trophy className="w-5 h-5" />
-              <span className="font-bold">Vitória!</span>
+        {/* Victory/Loss Message */}
+        {gameStatus !== "playing" && (
+          <div className="bg-slate-800 border border-emerald-500/30 px-6 py-3 rounded-lg shadow-xl flex flex-col items-center gap-2 w-full max-w-[320px]">
+            {gameStatus === "won" ? (
+              <span className="text-emerald-400 font-bold text-lg tracking-wide uppercase flex items-center gap-2">
+                <Trophy className="w-5 h-5" />
+                Parabéns!
+              </span>
+            ) : (
+              <span className="text-red-400 font-bold text-lg tracking-wide uppercase">
+                A palavra era: {targetWord}
+              </span>
+            )}
+            <div className="flex gap-3 mt-1 w-full justify-center">
+               <button 
+                 onClick={shareResult}
+                 className="flex-1 flex items-center justify-center gap-2 bg-emerald-600 text-white text-sm font-bold py-2 px-4 rounded transition-all shadow-lg"
+                 data-testid="button-share"
+               >
+                  <Share2 size={16} /> Compartilhar
+               </button>
             </div>
-          )}
-          <button
-            onClick={shareResult}
-            className="flex items-center gap-2 px-4 py-2 bg-[#e8a045] rounded-xl text-white font-bold hover:bg-[#d89035] transition-colors"
-          >
-            <Share2 className="w-4 h-4" />
-            Compartilhar
-          </button>
-        </div>
-      )}
+          </div>
+        )}
 
-      <div className="bg-[#1a2a3a]/80 backdrop-blur-sm rounded-2xl border-2 border-[#3a5a7a] p-3 md:p-4">
-        <div className="flex flex-col gap-1.5">
+      </main>
+
+      {/* Keyboard */}
+      <div className="w-full max-w-lg px-2 pb-6 pt-2">
+        <div className="flex flex-col gap-2 w-full">
           {renderKeyboard()}
         </div>
       </div>
 
-      <div className="mt-6 text-center text-[#6a8aaa] text-xs max-w-sm">
-        <p>🟩 Letra correta na posição certa</p>
-        <p>🟨 Letra correta na posição errada</p>
-        <p>⬛ Letra não está na palavra</p>
+      {/* Legend */}
+      <div className="pb-4 text-center text-slate-500 text-xs max-w-sm flex flex-wrap justify-center gap-4">
+        <div className="flex items-center gap-1">
+          <div className="w-4 h-4 bg-emerald-600 rounded-sm"></div>
+          <span>Correta</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="w-4 h-4 bg-amber-500 rounded-sm"></div>
+          <span>Posição errada</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="w-4 h-4 bg-slate-700 rounded-sm"></div>
+          <span>Não está</span>
+        </div>
       </div>
 
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center z-20">
-        <img src={logoTikjogos} alt="TikJogos" className="h-4 md:h-5 mx-auto mb-2" />
+      {/* Logo */}
+      <div className="pb-4 text-center">
+        <img src={logoTikjogos} alt="TikJogos" className="h-4 md:h-5 mx-auto" />
       </div>
+
+      <style>{`
+        .animate-shake {
+          animation: shake 0.5s ease-out;
+        }
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-5px); }
+          50% { transform: translateX(5px); }
+          75% { transform: translateX(-5px); }
+        }
+      `}</style>
     </div>
   );
 }
