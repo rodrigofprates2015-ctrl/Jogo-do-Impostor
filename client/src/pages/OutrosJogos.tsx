@@ -15,7 +15,7 @@ const games = [
 
 export default function OutrosJogos() {
   return (
-    <div className="min-h-screen w-full flex flex-col items-center bg-[#121213] py-8 px-4">
+    <div className="min-h-screen w-full flex flex-col items-center bg-[#121a31] py-8 px-4">
       <Link 
         href="/"
         className="fixed top-4 left-4 z-50 flex items-center gap-2 px-4 py-2 bg-[#3a3a3c] rounded-lg text-white transition-all font-semibold"
