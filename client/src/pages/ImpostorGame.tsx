@@ -57,7 +57,6 @@ import logoTikjogos from "@assets/logo tikjogos_1764616571363.png";
 import logoImpostor from "@assets/logo_site_impostor_1765071990526.png";
 import tripulanteImg from "@assets/tripulante_natal_1765071995242.png";
 import impostorImg from "@assets/impostor_natal_1765071992843.png";
-import heroBannerImg from "@assets/friends_playing_mobile_game_christmas.png";
 
 const PIX_KEY = "48492456-23f1-4edc-b739-4e36547ef90e";
 
@@ -821,11 +820,6 @@ const HomeScreen = () => {
       <Link 
         href="/criar-tema"
         className="hero-banner"
-        style={{
-          backgroundImage: `url(${heroBannerImg})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
         data-testid="hero-banner-theme-workshop"
       >
         <div className="hero-banner-overlay">
