@@ -1311,8 +1311,8 @@ const ModeSelectScreen = () => {
           <ArrowLeft className="w-5 h-5" />
         </Button>
         <div>
-          <h2 className="text-2xl font-bold text-white">Escolha o Modo</h2>
-          <p className="text-gray-300 text-sm">Selecione como jogar</p>
+          <h2 className="text-2xl font-bold text-white drop-shadow-lg">Escolha o Modo</h2>
+          <p className="text-gray-200 text-sm">Selecione como jogar</p>
         </div>
       </div>
 
@@ -1339,7 +1339,7 @@ const ModeSelectScreen = () => {
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="text-white font-bold text-lg">{mode.title}</h3>
-                  <p className="text-gray-300 text-sm mt-1">{mode.desc}</p>
+                  <p className="text-gray-200 text-sm mt-1">{mode.desc}</p>
                 </div>
                 {selectedMode === mode.id && (
                   <div className="w-6 h-6 rounded-full bg-[#4a90a4] flex items-center justify-center shrink-0"

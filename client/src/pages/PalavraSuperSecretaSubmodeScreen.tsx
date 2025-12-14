@@ -26,13 +26,13 @@ const PalavraSuperSecretaSubmodeScreen = () => {
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-6 space-y-6">
-      <div className="text-center space-y-2">
-        <div className="flex items-center justify-center gap-2 text-[#f5a623] mb-4">
-          <Sparkles className="w-5 h-5" />
-          <h1 className="text-3xl font-bold">Escolha um Tema</h1>
-          <Sparkles className="w-5 h-5" />
+      <div className="text-center space-y-2 bg-[#0a1628]/95 rounded-xl py-4 px-6">
+        <div className="flex items-center justify-center gap-2 text-white mb-2">
+          <Sparkles className="w-5 h-5 text-[#f5a623]" />
+          <h1 className="text-3xl font-bold text-white drop-shadow-lg">Escolha um Tema</h1>
+          <Sparkles className="w-5 h-5 text-[#f5a623]" />
         </div>
-        <p className="text-gray-400 text-sm">Selecione a categoria de palavras para jogar</p>
+        <p className="text-gray-200 text-sm">Selecione a categoria de palavras para jogar</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -67,8 +67,8 @@ const PalavraSuperSecretaSubmodeScreen = () => {
               <h3 className="text-lg font-bold text-[#f5a623] group-hover:text-[#ff6b35] transition-colors">
                 {submode.title}
               </h3>
-              <p className="text-sm text-gray-400 flex-1">{submode.desc}</p>
-              <p className="text-xs text-gray-600">{submode.words.length} palavras</p>
+              <p className="text-sm text-gray-300 flex-1">{submode.desc}</p>
+              <p className="text-xs text-gray-400">{submode.words.length} palavras</p>
             </div>
 
             {!isHost && (
@@ -105,7 +105,7 @@ const PalavraSuperSecretaSubmodeScreen = () => {
               Jogar
             </Button>
           </div>
-          <p className="text-xs text-gray-500 text-center">
+          <p className="text-xs text-gray-400 text-center">
             Adquira temas personalizados na Oficina de Temas
           </p>
         </div>
