@@ -537,6 +537,9 @@ export async function registerRoutes(
     // Cancel any pending hard exit timer for this player
     cancelHardExitRemoval(roomCode, playerId);
     
+    // Cancel any pending empty room deletion since someone is reconnecting
+    cancelEmptyRoomDeletion(roomCode);
+    
     const room = await storage.getRoom(roomCode);
     if (!room) return null;
 
@@ -568,6 +571,53 @@ export async function registerRoutes(
 
   // Track pending hard exit timers
   const hardExitTimers = new Map<string, NodeJS.Timeout>();
+
+  // Track pending empty room deletion timers
+  const emptyRoomTimers = new Map<string, NodeJS.Timeout>();
+  const EMPTY_ROOM_CLEANUP_DELAY = 10000; // 10 seconds
+
+  // Schedule room deletion when it becomes empty
+  function scheduleEmptyRoomDeletion(roomCode: string) {
+    // Clear any existing timer for this room
+    const existingTimer = emptyRoomTimers.get(roomCode);
+    if (existingTimer) {
+      clearTimeout(existingTimer);
+    }
+
+    console.log(`[Empty Room] Scheduling deletion for room ${roomCode} in ${EMPTY_ROOM_CLEANUP_DELAY}ms`);
+    
+    const timer = setTimeout(async () => {
+      emptyRoomTimers.delete(roomCode);
+      
+      // Double-check the room is still empty before deleting
+      const room = await storage.getRoom(roomCode);
+      if (room && room.players.length === 0) {
+        console.log(`[Empty Room] Deleting empty room ${roomCode}`);
+        await storage.deleteRoom(roomCode);
+        
+        // Clean up any remaining WebSocket connections for this room
+        const connections = roomConnections.get(roomCode);
+        if (connections) {
+          connections.clear();
+          roomConnections.delete(roomCode);
+        }
+      } else if (room) {
+        console.log(`[Empty Room] Room ${roomCode} is no longer empty, skipping deletion`);
+      }
+    }, EMPTY_ROOM_CLEANUP_DELAY);
+
+    emptyRoomTimers.set(roomCode, timer);
+  }
+
+  // Cancel scheduled room deletion (e.g., when someone joins)
+  function cancelEmptyRoomDeletion(roomCode: string) {
+    const existingTimer = emptyRoomTimers.get(roomCode);
+    if (existingTimer) {
+      clearTimeout(existingTimer);
+      emptyRoomTimers.delete(roomCode);
+      console.log(`[Empty Room] Cancelled scheduled deletion for room ${roomCode}`);
+    }
+  }
 
   // Remove player from room and handle host transfer if needed
   async function handlePlayerHardExit(roomCode: string, playerId: string, reason: string = 'hard_exit') {
@@ -633,6 +683,12 @@ export async function registerRoutes(
       }
 
       broadcastToRoom(roomCode, { type: 'room-update', room: updatedRoom });
+
+      // If room is now empty, schedule its deletion
+      if (updatedPlayers.length === 0) {
+        console.log(`[Empty Room] Room ${roomCode} is now empty, scheduling deletion`);
+        scheduleEmptyRoomDeletion(roomCode);
+      }
     }
   }
 
@@ -1072,6 +1128,9 @@ export async function registerRoutes(
       if (!room) {
         return res.status(404).json({ error: "Room not found" });
       }
+
+      // Cancel any pending empty room deletion since someone is joining
+      cancelEmptyRoomDeletion(code.toUpperCase());
 
       // If room is already playing, mark new player as waiting for game to end
       const isGameInProgress = room.status === 'playing';
