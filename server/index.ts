@@ -2,6 +2,8 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
+import fs from "fs";
+import path from "path";
 
 const app = express();
 const httpServer = createServer(app);
@@ -21,6 +23,17 @@ app.use(
 );
 
 app.use(express.urlencoded({ extended: false }));
+
+// Serve Ezoic verification file
+app.get(/^\/ezoic-[a-zA-Z0-9]+\.html$/, (req, res) => {
+  const filePath = path.resolve(import.meta.dirname, "..", "public", req.path.substring(1));
+  
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).send("Not found");
+  }
+});
 
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
