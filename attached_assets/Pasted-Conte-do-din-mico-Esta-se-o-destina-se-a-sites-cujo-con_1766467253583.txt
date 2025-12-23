@@ -1,0 +1,87 @@
+Conteúdo dinâmico
+Esta seção destina-se a sites cujo conteúdo carrega ou muda dinamicamente.
+
+Mudando de Página 🔗
+Ao alternar dinamicamente entre visualizações de página, é importante relembrar
+
+ezstandalone.showAds();
+javascript
+ezstandalone.showAds()Chamar essa função após uma alteração na URL forçará a atualização dos anúncios na nova página.
+
+Novo conteúdo 🔗
+Para adicionar espaços reservados adicionais na mesma visualização de página, você pode usar a ezstandalone.showAdsfunção.
+
+Se um usuário rolar a página para baixo, novo conteúdo será carregado e espaços reservados (placeholders) 104serão 105adicionados ezstandalone.showAdspara exibi-lo.
+
+<script>
+    ezstandalone.cmd.push(function () {
+        // call new placeholders
+        ezstandalone.showAds(104, 105);
+    });
+</script>
+html
+Alterando conteúdo 🔗
+Se o conteúdo for alterado na mesma visualização de página e um espaço reservado não for mais necessário ou visível, o espaço reservado precisa ser devidamente removido usando o método `cleanup()` ezstandalone.destroyPlaceholders. Isso permite que o espaço reservado seja carregado novamente, ezstandalone.showAdsse necessário.
+
+<script>
+    window.ezstandalone.cmd.push(function () {
+        // destroy placeholders
+        ezstandalone.destroyPlaceholders(104, 105);
+    });
+</script>
+html
+Rolagem infinita 🔗
+Para sites que implementam rolagem infinita, uma combinação de chamadas ezstandalone.destroyPlaceholdersseguida de ezstandalone.showAdspode ser necessária para reutilizar espaços reservados dentro da mesma visualização de página.
+
+Recomenda-se criar um conjunto de in-contentmarcadores específicos para rolagem infinita.
+Exemplo 🔗
+O exemplo abaixo mostra como seria o fluxo de rolagem infinita em um site com vários artigos.
+
+Comece por chamar o espaço reservado para o primeiro artigo ao carregar a página.
+
+<script>
+    window.ezstandalone = window.ezstandalone || {};
+    ezstandalone.cmd = ezstandalone.cmd || [];
+    ezstandalone.cmd.push(function () {
+        ezstandalone.showAds(102, 103, 104);
+    });
+</script>
+html
+O usuário então rola a página para o próximo artigo, e o próximo conjunto de anúncios é carregado.
+
+<script>
+    window.ezstandalone.cmd.push(function () {
+        // call new placeholders
+        ezstandalone.showAds(105, 106);
+    });
+</script>
+html
+O usuário então rola a página até o terceiro artigo, e os espaços reservados do primeiro artigo precisam ser reutilizados.
+
+<script>
+    window.ezstandalone.cmd.push(function () {
+        // destroy initial placeholders
+        ezstandalone.destroyPlaceholders(102, 103, 104);
+        // call new placeholders
+        ezstandalone.showAds(102, 103, 104);
+    });
+</script>
+html
+Se você deseja reutilizar IDs de espaço reservado, os espaços reservados iniciais devem ser removidos da página. Ter várias instâncias do mesmo ID de espaço reservado em uma página causará comportamento imprevisível dos anúncios.
+Removendo todos os espaços reservados 🔗
+Remova todos os espaços reservados da página usando a destroyAllfunção
+
+<script>
+    window.ezstandalone.cmd.push(function () {
+        ezstandalone.destroyAll();
+    });
+</script>
+html
+Mostrar todos os espaços reservados 🔗
+Você pode exibir anúncios em todos os espaços reservados de uma página usando a showAdsfunção, sem precisar definir nenhum valor.
+
+<script>
+    window.ezstandalone.cmd.push(function () {
+        ezstandalone.showAds();
+    });
+</script>
