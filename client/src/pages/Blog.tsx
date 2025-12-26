@@ -74,40 +74,38 @@ export default function Blog() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {posts?.map((post) => (
-              <Link key={post.id} href={`/blog/${post.slug}`} className="group">
-                <article className="bg-[#16213e]/80 border border-[#3d4a5c] rounded-lg overflow-hidden h-full flex flex-col transition-all hover:border-[#4a90a4]/50 hover:translate-y-[-4px]">
-                  <div className="relative h-48 bg-gradient-to-br from-[#1e293b] to-[#0f172a] flex items-center justify-center p-6 text-center">
-                    <Ghost className="absolute top-4 right-4 text-white/5 w-24 h-24 -rotate-12" />
-                    <h3 className="text-white text-xl font-bold leading-tight z-10">
-                      {post.title}
-                    </h3>
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-[#4a90a4] text-white text-[10px] font-bold uppercase px-2 py-0.5 rounded">
-                        {post.category}
-                      </span>
+              <article 
+                key={post.id} 
+                className="bg-[#16213e]/80 border border-[#3d4a5c] rounded-lg overflow-hidden h-full flex flex-col"
+                data-testid={`card-post-${post.id}`}
+              >
+                <div className="relative h-48 bg-gradient-to-br from-[#1e293b] to-[#0f172a] flex items-center justify-center p-6 text-center">
+                  <Ghost className="absolute top-4 right-4 text-white/5 w-24 h-24 -rotate-12" />
+                  <h3 className="text-white text-xl font-bold leading-tight z-10" data-testid={`text-title-${post.id}`}>
+                    {post.title}
+                  </h3>
+                  <div className="absolute top-4 left-4">
+                    <span className="bg-[#4a90a4] text-white text-[10px] font-bold uppercase px-2 py-0.5 rounded">
+                      {post.category}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-6 flex-grow flex flex-col">
+                  <div className="flex items-center gap-4 text-xs text-gray-400 mb-4 font-medium flex-wrap">
+                    <div className="flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span>{new Date(post.createdAt).toLocaleDateString('pt-BR')}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <User className="w-3.5 h-3.5" />
+                      <span>{post.author}</span>
                     </div>
                   </div>
-                  <div className="p-6 flex-grow flex flex-col">
-                    <div className="flex items-center gap-4 text-xs text-gray-400 mb-4 font-medium">
-                      <div className="flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5" />
-                        <span>{new Date(post.createdAt).toLocaleDateString('pt-BR')}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <User className="w-3.5 h-3.5" />
-                        <span>{post.author}</span>
-                      </div>
-                    </div>
-                    <p className="text-gray-400 text-sm leading-relaxed mb-6 line-clamp-3">
-                      {post.excerpt}
-                    </p>
-                    <div className="mt-auto text-[#4a90a4] font-bold text-sm flex items-center gap-2 group-hover:text-[#5aa0b4] transition-colors">
-                      Ler artigo completo 
-                      <span className="transition-transform group-hover:translate-x-1">→</span>
-                    </div>
-                  </div>
-                </article>
-              </Link>
+                  <p className="text-gray-400 text-sm leading-relaxed line-clamp-4">
+                    {post.excerpt}
+                  </p>
+                </div>
+              </article>
             ))}
           </div>
         )}
