@@ -1926,6 +1926,54 @@ export async function registerRoutes(
     }
   });
 
+  // Admin Theme Management Routes
+  app.get("/api/admin/themes", verifyAdmin, async (_req, res) => {
+    try {
+      // Get all themes (not just public approved ones)
+      const allThemes = await storage.getAllThemes?.() || [];
+      res.json(allThemes);
+    } catch (error) {
+      console.error('[Admin] Error fetching themes:', error);
+      res.status(500).json({ error: "Erro ao buscar temas" });
+    }
+  });
+
+  app.delete("/api/admin/themes/:id", verifyAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      await storage.deleteTheme(id);
+      console.log(`[Admin] Theme ${id} deleted`);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('[Admin] Error deleting theme:', error);
+      res.status(500).json({ error: "Erro ao excluir tema" });
+    }
+  });
+
+  app.post("/api/admin/themes/:id/approve", verifyAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      await storage.updateTheme(id, { approved: true });
+      console.log(`[Admin] Theme ${id} approved`);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('[Admin] Error approving theme:', error);
+      res.status(500).json({ error: "Erro ao aprovar tema" });
+    }
+  });
+
+  app.post("/api/admin/themes/:id/reject", verifyAdmin, async (req, res) => {
+    try {
+      const { id } = req.params;
+      await storage.updateTheme(id, { approved: false });
+      console.log(`[Admin] Theme ${id} rejected`);
+      res.json({ success: true });
+    } catch (error) {
+      console.error('[Admin] Error rejecting theme:', error);
+      res.status(500).json({ error: "Erro ao rejeitar tema" });
+    }
+  });
+
   // Blog Routes
   app.get("/api/posts", async (_req, res) => {
     try {

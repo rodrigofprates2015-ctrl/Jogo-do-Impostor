@@ -33,6 +33,7 @@ export interface IStorage {
   getThemeByPaymentMetadata(titulo: string, autor: string): Promise<Theme | undefined>;
   getThemeByPaymentId(paymentId: string): Promise<Theme | undefined>;
   getPublicApprovedThemes(): Promise<Theme[]>;
+  getAllThemes(): Promise<Theme[]>;
   updateTheme(id: string, updates: Partial<InsertTheme>): Promise<Theme | undefined>;
   deleteTheme(id: string): Promise<void>;
   // Blog storage
@@ -209,6 +210,10 @@ export class MemoryStorage implements IStorage {
     return result;
   }
 
+  async getAllThemes(): Promise<Theme[]> {
+    return Array.from(this.themesMap.values());
+  }
+
   async updateTheme(id: string, updates: Partial<InsertTheme>): Promise<Theme | undefined> {
     const theme = this.themesMap.get(id);
     if (!theme) return undefined;
@@ -365,6 +370,12 @@ export class DatabaseStorage implements IStorage {
     const result = await db.select().from(themes).where(
       and(eq(themes.isPublic, true), eq(themes.approved, true))
     );
+    return result;
+  }
+
+  async getAllThemes(): Promise<Theme[]> {
+    if (!db) throw new Error("Database not initialized");
+    const result = await db.select().from(themes).orderBy(desc(themes.createdAt));
     return result;
   }
 

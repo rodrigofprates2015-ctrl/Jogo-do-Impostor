@@ -27,7 +27,12 @@ import {
   Lock,
   AlertTriangle,
   User,
-  Skull
+  Skull,
+  Trash2,
+  CheckCircle,
+  XCircle,
+  FileText,
+  Search
 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -57,6 +62,19 @@ type Room = {
   createdAt: string;
 };
 
+type Theme = {
+  id: string;
+  titulo: string;
+  autor: string;
+  palavras: string[];
+  isPublic: boolean;
+  accessCode: string | null;
+  paymentStatus: string;
+  paymentId: string | null;
+  approved: boolean;
+  createdAt: string;
+};
+
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState("");
@@ -69,6 +87,13 @@ export default function AdminDashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState<Room | null>(null);
   const [isSpectatorOpen, setIsSpectatorOpen] = useState(false);
+  
+  // Theme management states
+  const [themes, setThemes] = useState<Theme[]>([]);
+  const [isLoadingThemes, setIsLoadingThemes] = useState(false);
+  const [themeSearchQuery, setThemeSearchQuery] = useState("");
+  const [selectedTheme, setSelectedTheme] = useState<Theme | null>(null);
+  const [isThemeDialogOpen, setIsThemeDialogOpen] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -120,6 +145,95 @@ export default function AdminDashboard() {
     }
   };
 
+  const fetchThemes = async () => {
+    if (!isAuthenticated) return;
+    
+    setIsLoadingThemes(true);
+    try {
+      const response = await fetch("/api/admin/themes", {
+        headers: {
+          "Authorization": `Bearer ${token || localStorage.getItem("adminToken")}`
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setThemes(data);
+      }
+    } catch (error) {
+      console.error("Error fetching themes:", error);
+    } finally {
+      setIsLoadingThemes(false);
+    }
+  };
+
+  const deleteTheme = async (themeId: string) => {
+    if (!confirm("Tem certeza que deseja excluir este tema? Esta ação não pode ser desfeita.")) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(`/api/admin/themes/${themeId}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token || localStorage.getItem("adminToken")}`
+        }
+      });
+      
+      if (response.ok) {
+        setThemes(themes.filter(t => t.id !== themeId));
+        alert("Tema excluído com sucesso!");
+      } else {
+        alert("Erro ao excluir tema");
+      }
+    } catch (error) {
+      console.error("Error deleting theme:", error);
+      alert("Erro ao excluir tema");
+    }
+  };
+
+  const approveTheme = async (themeId: string) => {
+    try {
+      const response = await fetch(`/api/admin/themes/${themeId}/approve`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token || localStorage.getItem("adminToken")}`
+        }
+      });
+      
+      if (response.ok) {
+        setThemes(themes.map(t => t.id === themeId ? { ...t, approved: true } : t));
+        alert("Tema aprovado com sucesso!");
+      } else {
+        alert("Erro ao aprovar tema");
+      }
+    } catch (error) {
+      console.error("Error approving theme:", error);
+      alert("Erro ao aprovar tema");
+    }
+  };
+
+  const rejectTheme = async (themeId: string) => {
+    try {
+      const response = await fetch(`/api/admin/themes/${themeId}/reject`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token || localStorage.getItem("adminToken")}`
+        }
+      });
+      
+      if (response.ok) {
+        setThemes(themes.map(t => t.id === themeId ? { ...t, approved: false } : t));
+        alert("Tema rejeitado!");
+      } else {
+        alert("Erro ao rejeitar tema");
+      }
+    } catch (error) {
+      console.error("Error rejecting theme:", error);
+      alert("Erro ao rejeitar tema");
+    }
+  };
+
   const inspectRoom = async (code: string) => {
     try {
       const response = await fetch(`/api/admin/rooms/${code}`, {
@@ -149,6 +263,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (isAuthenticated) {
       fetchRooms();
+      fetchThemes();
       const interval = setInterval(fetchRooms, 5000);
       return () => clearInterval(interval);
     }
@@ -351,6 +466,153 @@ export default function AdminDashboard() {
             )}
           </CardContent>
         </Card>
+
+        {/* Theme Management Section */}
+        <Card className="bg-slate-800 border-slate-700">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-white flex items-center gap-2">
+                <FileText className="w-5 h-5" />
+                Gerenciar Temas da Comunidade
+              </CardTitle>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={fetchThemes}
+                disabled={isLoadingThemes}
+                className="text-slate-300"
+              >
+                <RefreshCw className={`w-5 h-5 ${isLoadingThemes ? "animate-spin" : ""}`} />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {/* Search Bar */}
+            <div className="mb-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <Input
+                  type="text"
+                  placeholder="Buscar por título ou autor..."
+                  value={themeSearchQuery}
+                  onChange={(e) => setThemeSearchQuery(e.target.value)}
+                  className="pl-10 bg-slate-700 border-slate-600 text-white placeholder-slate-400"
+                />
+              </div>
+            </div>
+
+            {isLoadingThemes ? (
+              <div className="text-center py-8 text-slate-400">
+                <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2" />
+                Carregando temas...
+              </div>
+            ) : themes.length === 0 ? (
+              <div className="text-center py-8 text-slate-400">
+                Nenhum tema criado ainda
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-slate-700">
+                      <TableHead className="text-slate-300">Título</TableHead>
+                      <TableHead className="text-slate-300">Autor</TableHead>
+                      <TableHead className="text-slate-300">Palavras</TableHead>
+                      <TableHead className="text-slate-300">Status</TableHead>
+                      <TableHead className="text-slate-300">Pagamento</TableHead>
+                      <TableHead className="text-slate-300">Criado em</TableHead>
+                      <TableHead className="text-slate-300">Ações</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {themes
+                      .filter(theme => 
+                        theme.titulo.toLowerCase().includes(themeSearchQuery.toLowerCase()) ||
+                        theme.autor.toLowerCase().includes(themeSearchQuery.toLowerCase())
+                      )
+                      .map((theme) => (
+                        <TableRow key={theme.id} className="border-slate-700">
+                          <TableCell className="font-semibold text-white">{theme.titulo}</TableCell>
+                          <TableCell className="text-slate-300">{theme.autor}</TableCell>
+                          <TableCell className="text-slate-300">{theme.palavras.length}</TableCell>
+                          <TableCell>
+                            <Badge 
+                              variant={theme.approved ? "default" : "secondary"}
+                              className={theme.approved ? "bg-green-600" : "bg-yellow-600"}
+                            >
+                              {theme.approved ? "Aprovado" : "Pendente"}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Badge 
+                              variant="secondary"
+                              className={
+                                theme.paymentStatus === "approved" ? "bg-green-600" :
+                                theme.paymentStatus === "pending" ? "bg-yellow-600" :
+                                "bg-red-600"
+                              }
+                            >
+                              {theme.paymentStatus}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-slate-400 text-sm">
+                            {new Date(theme.createdAt).toLocaleDateString("pt-BR")}
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => {
+                                  setSelectedTheme(theme);
+                                  setIsThemeDialogOpen(true);
+                                }}
+                                className="text-blue-400 hover:text-blue-300"
+                                title="Ver detalhes"
+                              >
+                                <Eye className="w-4 h-4" />
+                              </Button>
+                              {!theme.approved && (
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => approveTheme(theme.id)}
+                                  className="text-green-400 hover:text-green-300"
+                                  title="Aprovar tema"
+                                >
+                                  <CheckCircle className="w-4 h-4" />
+                                </Button>
+                              )}
+                              {theme.approved && (
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => rejectTheme(theme.id)}
+                                  className="text-yellow-400 hover:text-yellow-300"
+                                  title="Rejeitar tema"
+                                >
+                                  <XCircle className="w-4 h-4" />
+                                </Button>
+                              )}
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => deleteTheme(theme.id)}
+                                className="text-red-400 hover:text-red-300"
+                                title="Excluir tema"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </main>
 
       <Dialog open={isSpectatorOpen} onOpenChange={setIsSpectatorOpen}>
@@ -441,6 +703,114 @@ export default function AdminDashboard() {
                     );
                   })}
                 </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Theme Details Dialog */}
+      <Dialog open={isThemeDialogOpen} onOpenChange={setIsThemeDialogOpen}>
+        <DialogContent className="bg-slate-800 border-slate-700 max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-white flex items-center gap-2">
+              <FileText className="w-5 h-5" />
+              Detalhes do Tema
+            </DialogTitle>
+          </DialogHeader>
+          {selectedTheme && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-slate-400">Título</Label>
+                  <p className="text-white font-semibold">{selectedTheme.titulo}</p>
+                </div>
+                <div>
+                  <Label className="text-slate-400">Autor</Label>
+                  <p className="text-white">{selectedTheme.autor}</p>
+                </div>
+                <div>
+                  <Label className="text-slate-400">Status</Label>
+                  <Badge 
+                    variant={selectedTheme.approved ? "default" : "secondary"}
+                    className={selectedTheme.approved ? "bg-green-600" : "bg-yellow-600"}
+                  >
+                    {selectedTheme.approved ? "Aprovado" : "Pendente"}
+                  </Badge>
+                </div>
+                <div>
+                  <Label className="text-slate-400">Pagamento</Label>
+                  <Badge 
+                    variant="secondary"
+                    className={
+                      selectedTheme.paymentStatus === "approved" ? "bg-green-600" :
+                      selectedTheme.paymentStatus === "pending" ? "bg-yellow-600" :
+                      "bg-red-600"
+                    }
+                  >
+                    {selectedTheme.paymentStatus}
+                  </Badge>
+                </div>
+                <div>
+                  <Label className="text-slate-400">Público</Label>
+                  <p className="text-white">{selectedTheme.isPublic ? "Sim" : "Não"}</p>
+                </div>
+                <div>
+                  <Label className="text-slate-400">Código de Acesso</Label>
+                  <p className="text-white font-mono">{selectedTheme.accessCode || "-"}</p>
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-slate-400">Palavras ({selectedTheme.palavras.length})</Label>
+                <div className="mt-2 p-4 bg-slate-700 rounded-lg max-h-60 overflow-y-auto">
+                  <div className="flex flex-wrap gap-2">
+                    {selectedTheme.palavras.map((palavra, index) => (
+                      <Badge key={index} variant="secondary" className="bg-slate-600">
+                        {palavra}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-4 border-t border-slate-700">
+                {!selectedTheme.approved && (
+                  <Button
+                    onClick={() => {
+                      approveTheme(selectedTheme.id);
+                      setIsThemeDialogOpen(false);
+                    }}
+                    className="bg-green-600 hover:bg-green-700"
+                  >
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Aprovar Tema
+                  </Button>
+                )}
+                {selectedTheme.approved && (
+                  <Button
+                    onClick={() => {
+                      rejectTheme(selectedTheme.id);
+                      setIsThemeDialogOpen(false);
+                    }}
+                    variant="secondary"
+                    className="bg-yellow-600 hover:bg-yellow-700"
+                  >
+                    <XCircle className="w-4 h-4 mr-2" />
+                    Rejeitar Tema
+                  </Button>
+                )}
+                <Button
+                  onClick={() => {
+                    deleteTheme(selectedTheme.id);
+                    setIsThemeDialogOpen(false);
+                  }}
+                  variant="destructive"
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Excluir Tema
+                </Button>
               </div>
             </div>
           )}
