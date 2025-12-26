@@ -464,11 +464,6 @@ export async function registerRoutes(
   app: Express
 ): Promise<Server> {
 
-  // Redirect ads.txt to Ezoic AdsManager
-  app.get("/ads.txt", (_req, res) => {
-    res.redirect(301, "https://srv.adstxtmanager.com/19390/tikjogos.com.br");
-  });
-
   // Serve version info
   app.get("/api/version", (_req, res) => {
     try {

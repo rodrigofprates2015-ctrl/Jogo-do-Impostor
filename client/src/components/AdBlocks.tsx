@@ -1,72 +1,40 @@
 import { useEffect } from "react";
 
 interface AdBlockProps {
-  placeholderId: number;
+  slot: string;
+  format?: string;
+  responsive?: boolean;
+  style?: React.CSSProperties;
 }
 
-export function AdBlock({ placeholderId }: AdBlockProps) {
+export function AdBlock({ slot, format = "auto", responsive = true, style }: AdBlockProps) {
   useEffect(() => {
-    // Retry loading with exponential backoff
-    let attempts = 0;
-    const maxAttempts = 5;
-
-    const tryShowAds = () => {
-      attempts++;
+    try {
       const win = window as any;
-      
-      if (win.ezstandalone?.cmd) {
-        console.log(`[AdBlock ${placeholderId}] Showing ads (attempt ${attempts})`);
-        try {
-          win.ezstandalone.cmd.push(function () {
-            console.log(`[AdBlock ${placeholderId}] Executing showAds`);
-            if (win.ezstandalone.showAds) {
-              win.ezstandalone.showAds(placeholderId);
-            } else {
-              console.warn(`[AdBlock ${placeholderId}] showAds not available`);
-            }
-          });
-        } catch (error) {
-          console.error(`[AdBlock ${placeholderId}] Error:`, error);
-          if (attempts < maxAttempts) {
-            setTimeout(tryShowAds, 1000 * attempts);
-          }
-        }
-      } else if (attempts < maxAttempts) {
-        console.log(`[AdBlock ${placeholderId}] ezstandalone not ready, retrying... (${attempts}/${maxAttempts})`);
-        setTimeout(tryShowAds, 500 * attempts);
-      } else {
-        console.warn(`[AdBlock ${placeholderId}] Max retries reached`);
+      if (win.adsbygoogle && win.adsbygoogle.loaded !== true) {
+        (win.adsbygoogle = win.adsbygoogle || []).push({});
       }
-    };
-
-    tryShowAds();
-  }, [placeholderId]);
+    } catch (error) {
+      console.error('AdSense error:', error);
+    }
+  }, []);
 
   return (
-    <div
-      id={`ezoic-pub-ad-placeholder-${placeholderId}`}
-      className="w-full"
-      data-ad-placeholder={placeholderId}
-      style={{ minHeight: '120px' }}
-    >
-      <div className="w-full min-h-[120px] bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-lg p-6 flex items-center justify-center border-2 border-dashed border-gray-400 dark:border-gray-600">
-        <div className="text-center pointer-events-none">
-          <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-            📢 Espaço de Anúncio #{placeholderId}
-          </p>
-          <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
-            Carregando anúncios...
-          </p>
-        </div>
-      </div>
-    </div>
+    <ins
+      className="adsbygoogle"
+      style={{ display: 'block', ...style }}
+      data-ad-client="ca-pub-XXXXXXXXXXXXXXXXX"
+      data-ad-slot={slot}
+      data-ad-format={format}
+      data-full-width-responsive={responsive ? "true" : "false"}
+    />
   );
 }
 
 export function AdBlockTop() {
   return (
     <div className="w-full py-6 px-4">
-      <AdBlock placeholderId={101} />
+      <AdBlock slot="1234567890" format="horizontal" />
     </div>
   );
 }
@@ -74,7 +42,7 @@ export function AdBlockTop() {
 export function AdBlockBottom() {
   return (
     <div className="w-full py-6 px-4">
-      <AdBlock placeholderId={103} />
+      <AdBlock slot="1234567891" format="horizontal" />
     </div>
   );
 }
@@ -82,7 +50,7 @@ export function AdBlockBottom() {
 export function AdBlockSidebarMiddle() {
   return (
     <div className="w-full py-2">
-      <AdBlock placeholderId={105} />
+      <AdBlock slot="1234567892" format="rectangle" />
     </div>
   );
 }
@@ -90,7 +58,7 @@ export function AdBlockSidebarMiddle() {
 export function AdBlockSidebarBottom() {
   return (
     <div className="w-full py-2">
-      <AdBlock placeholderId={106} />
+      <AdBlock slot="1234567893" format="rectangle" />
     </div>
   );
 }
@@ -98,7 +66,7 @@ export function AdBlockSidebarBottom() {
 export function AdBlockSidebarFloating() {
   return (
     <div className="hidden lg:block fixed right-4 top-20 w-64 z-40">
-      <AdBlock placeholderId={107} />
+      <AdBlock slot="1234567894" format="vertical" responsive={false} style={{ width: '250px', height: '600px' }} />
     </div>
   );
 }
@@ -106,7 +74,7 @@ export function AdBlockSidebarFloating() {
 export function AdBlockInContent() {
   return (
     <div className="w-full py-6 px-4">
-      <AdBlock placeholderId={115} />
+      <AdBlock slot="1234567895" format="fluid" />
     </div>
   );
 }
