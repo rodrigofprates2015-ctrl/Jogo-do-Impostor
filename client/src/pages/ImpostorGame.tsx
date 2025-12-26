@@ -948,6 +948,10 @@ const HomeScreen = () => {
           Desenvolvido com <Heart className="inline w-3 h-3 text-gray-500 fill-current" /> por <span className="text-[#8aa0b0]">Rodrigo Freitas</span>
         </p>
         <div className="flex items-center justify-center gap-2 text-xs mt-1 flex-wrap">
+          <Link href="/blog" className="text-[#6a8aaa] hover:text-white transition-colors" data-testid="link-blog">
+            Blog
+          </Link>
+          <span className="text-[#4a6a8a]">|</span>
           <Link href="/privacidade" className="text-[#6a8aaa] hover:text-white transition-colors">
             Privacidade
           </Link>
