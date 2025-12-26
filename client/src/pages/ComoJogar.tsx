@@ -288,8 +288,6 @@ export default function ComoJogar() {
         <div className="max-w-4xl mx-auto px-4 text-center text-gray-500 text-sm">
           <p>TikJogos Impostor - Jogo de Dedução Social Online</p>
           <p className="mt-2">
-            <Link href="/blog" className="hover:text-gray-300 transition-colors">Blog</Link>
-            {" | "}
             <Link href="/privacidade" className="hover:text-gray-300 transition-colors">Privacidade</Link>
             {" | "}
             <Link href="/termos" className="hover:text-gray-300 transition-colors">Termos</Link>
