@@ -89,9 +89,6 @@ export default function Prototipo() {
 
       {/* Main content area - flex-grow to push footer down */}
       <div className="flex-1 flex flex-col items-center justify-center pt-20 md:pt-24 px-4 relative z-20">
-        {/* BLOCO DE ANÚNCIO - ANTES DO CARD - 300x250 */}
-        <div id="price-comp-300x250-before" className="mb-6" style={{ maxWidth: '300px', width: '100%' }}></div>
-
         {/* Main card */}
         <div className="main-card w-[90%] max-w-md p-5 md:p-6 animate-fade-in">
           {/* Impostor logo with characters */}
@@ -159,9 +156,6 @@ export default function Prototipo() {
 
           </div>
         </div>
-
-        {/* BLOCO DE ANÚNCIO - DEPOIS DO CARD - 300x250 */}
-        <div id="price-comp-300x250-after" className="mt-6" style={{ maxWidth: '300px', width: '100%' }}></div>
       </div>
 
       {/* BLOCO DE ANÚNCIO - RODAPÉ - 728x90 */}
