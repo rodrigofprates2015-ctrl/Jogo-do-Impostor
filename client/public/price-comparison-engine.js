@@ -122,12 +122,15 @@
 
     createLeaderboard(ad) {
       const bestPrice = ad.prices.find(p => p.badge);
+      const imageHTML = ad.product.image.startsWith('http') 
+        ? `<img src="${ad.product.image}" alt="${ad.product.name}" class="pc-product-img" />`
+        : `<span class="pc-icon">${ad.product.image}</span>`;
       
       return `
         <div class="price-comparison-ad format-728x90">
           <div class="pc-header">
             <div class="pc-product">
-              <span class="pc-icon">${ad.product.image}</span>
+              ${imageHTML}
               <div class="pc-product-info">
                 <h3 class="pc-product-name">${ad.product.name}</h3>
                 <p class="pc-product-specs">${ad.product.specs}</p>
@@ -157,11 +160,14 @@
 
     createMediumRectangle(ad) {
       const bestPrice = ad.prices.find(p => p.badge);
+      const imageHTML = ad.product.image.startsWith('http') 
+        ? `<img src="${ad.product.image}" alt="${ad.product.name}" class="pc-product-img-large" />`
+        : `<span class="pc-icon-large">${ad.product.image}</span>`;
       
       return `
         <div class="price-comparison-ad format-300x250">
           <div class="pc-header-vertical">
-            <span class="pc-icon-large">${ad.product.image}</span>
+            ${imageHTML}
             <h3 class="pc-product-name">${ad.product.name}</h3>
             <p class="pc-product-specs">${ad.product.specs}</p>
           </div>
@@ -189,10 +195,14 @@
     }
 
     createWideSkyscraper(ad) {
+      const imageHTML = ad.product.image.startsWith('http') 
+        ? `<img src="${ad.product.image}" alt="${ad.product.name}" class="pc-product-img-medium" />`
+        : `<span class="pc-icon-medium">${ad.product.image}</span>`;
+      
       return `
         <div class="price-comparison-ad format-160x600">
           <div class="pc-header-skyscraper">
-            <span class="pc-icon-medium">${ad.product.image}</span>
+            ${imageHTML}
             <h3 class="pc-product-name-small">${ad.product.name}</h3>
             <p class="pc-product-specs-small">${ad.product.specs}</p>
           </div>
@@ -218,10 +228,14 @@
     }
 
     createHalfPage(ad) {
+      const imageHTML = ad.product.image.startsWith('http') 
+        ? `<img src="${ad.product.image}" alt="${ad.product.name}" class="pc-product-img-xlarge" />`
+        : `<span class="pc-icon-xlarge">${ad.product.image}</span>`;
+      
       return `
         <div class="price-comparison-ad format-300x600">
           <div class="pc-header-halfpage">
-            <span class="pc-icon-xlarge">${ad.product.image}</span>
+            ${imageHTML}
             <h3 class="pc-product-name-large">${ad.product.name}</h3>
             <p class="pc-product-specs-large">${ad.product.specs}</p>
           </div>

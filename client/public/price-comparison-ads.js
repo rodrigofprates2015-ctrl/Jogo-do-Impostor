@@ -13,7 +13,7 @@ const priceComparisonAds = [
     weight: 10,
     product: {
       name: 'Mouse Gamer RGB 7 Botões',
-      image: '🖱️',
+      image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=200&h=200&fit=crop',
       specs: 'DPI ajustável até 12.800'
     },
     prices: [
@@ -32,7 +32,7 @@ const priceComparisonAds = [
     weight: 9,
     product: {
       name: 'Teclado Mecânico RGB Switch Blue',
-      image: '⌨️',
+      image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=200&h=200&fit=crop',
       specs: 'ABNT2, iluminação RGB'
     },
     prices: [
@@ -51,7 +51,7 @@ const priceComparisonAds = [
     weight: 8,
     product: {
       name: 'Headset Gamer 7.1',
-      image: '🎧',
+      image: 'https://images.unsplash.com/photo-1599669454699-248893623440?w=200&h=200&fit=crop',
       specs: 'Surround, mic cancelamento'
     },
     prices: [
@@ -70,7 +70,7 @@ const priceComparisonAds = [
     weight: 7,
     product: {
       name: 'Mousepad Gamer XXL',
-      image: '🖱️',
+      image: 'https://images.unsplash.com/photo-1625948515291-69613efd103f?w=200&h=200&fit=crop',
       specs: '90x40cm, base antiderrapante'
     },
     prices: [
@@ -89,7 +89,7 @@ const priceComparisonAds = [
     weight: 8,
     product: {
       name: 'Cadeira Gamer Pro',
-      image: '🪑',
+      image: 'https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=200&h=200&fit=crop',
       specs: 'Ergonômica, reclinável 180°'
     },
     prices: [
@@ -108,7 +108,7 @@ const priceComparisonAds = [
     weight: 7,
     product: {
       name: 'Webcam Full HD',
-      image: '📷',
+      image: 'https://images.unsplash.com/photo-1587826080692-f439cd0b70da?w=200&h=200&fit=crop',
       specs: '1080p, 60fps, mic integrado'
     },
     prices: [
@@ -127,7 +127,7 @@ const priceComparisonAds = [
     weight: 9,
     product: {
       name: 'Monitor Gamer 24" 144Hz',
-      image: '🖥️',
+      image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=200&h=200&fit=crop',
       specs: 'Full HD, 1ms, FreeSync'
     },
     prices: [
@@ -146,7 +146,7 @@ const priceComparisonAds = [
     weight: 8,
     product: {
       name: 'SSD 480GB SATA',
-      image: '💾',
+      image: 'https://images.unsplash.com/photo-1531492746076-161ca9bcad58?w=200&h=200&fit=crop',
       specs: 'Leitura 550MB/s'
     },
     prices: [
