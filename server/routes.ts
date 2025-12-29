@@ -1442,6 +1442,8 @@ export async function registerRoutes(
       const { code } = req.params;
       const { playerId, playerName, targetId, targetName } = req.body;
       
+      console.log('[VOTE] Received vote:', { playerId, playerName, targetId, targetName });
+      
       const room = await storage.getRoom(code.toUpperCase());
       if (!room) {
         return res.status(404).json({ error: "Room not found" });
@@ -1459,10 +1461,15 @@ export async function registerRoutes(
       const alreadyVoted = existingVotes.some(v => v.playerId === playerId);
       
       if (alreadyVoted) {
+        console.log('[VOTE] Player already voted:', playerId);
         return res.status(400).json({ error: "Already submitted vote" });
       }
 
-      const newVotes = [...existingVotes, { playerId, playerName, targetId, targetName }];
+      const newVote = { playerId, playerName, targetId, targetName };
+      const newVotes = [...existingVotes, newVote];
+      
+      console.log('[VOTE] Adding vote:', newVote);
+      console.log('[VOTE] All votes:', newVotes);
       
       const updatedRoom = await storage.updateRoom(code.toUpperCase(), {
         gameData: {

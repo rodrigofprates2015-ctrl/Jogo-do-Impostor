@@ -65,14 +65,27 @@ export function VotingSystem({
   };
 
   const handleSubmitVote = async () => {
-    if (!selectedVote) return;
+    if (!selectedVote) {
+      console.error('No vote selected');
+      return;
+    }
     
     const targetPlayer = activePlayers.find(p => p.uid === selectedVote);
-    if (!targetPlayer) return;
+    if (!targetPlayer) {
+      console.error('Target player not found:', selectedVote);
+      return;
+    }
+    
+    console.log('Submitting vote:', {
+      playerId: userId,
+      playerName: userName,
+      targetId: selectedVote,
+      targetName: targetPlayer.name
+    });
     
     setIsSubmitting(true);
     try {
-      await fetch(`/api/rooms/${roomCode}/submit-vote`, {
+      const response = await fetch(`/api/rooms/${roomCode}/submit-vote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -82,6 +95,13 @@ export function VotingSystem({
           targetName: targetPlayer.name
         })
       });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        console.error('Vote submission failed:', error);
+      } else {
+        console.log('Vote submitted successfully');
+      }
     } catch (error) {
       console.error('Error submitting vote:', error);
     } finally {
@@ -144,30 +164,36 @@ export function VotingSystem({
           <div className="w-full h-[1px] bg-gray-700"></div>
           
           <div className="space-y-3 max-h-[300px] overflow-y-auto">
-            {activePlayers.filter(p => p.uid !== userId).map(player => (
-              <button
-                key={player.uid}
-                onClick={() => setSelectedVote(player.uid)}
-                className={cn(
-                  "w-full p-4 rounded-xl border-2 transition-all text-left flex items-center gap-3",
-                  selectedVote === player.uid
-                    ? "bg-white/15 border-white/40 text-white"
-                    : "bg-[#16213e] border-[#3d4a5c] text-gray-300 hover:border-white/30"
-                )}
-                data-testid={`button-vote-${player.uid}`}
-              >
-                <div className={cn(
-                  "w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold",
-                  selectedVote === player.uid ? "bg-white/30 text-white" : "bg-gray-600 text-gray-200"
-                )}>
-                  {player.name.charAt(0).toUpperCase()}
-                </div>
-                <span className="font-bold text-lg">{player.name}</span>
-                {selectedVote === player.uid && (
-                  <Check className="w-5 h-5 ml-auto" />
-                )}
-              </button>
-            ))}
+            {activePlayers.filter(p => p.uid !== userId).map(player => {
+              console.log('Rendering vote button for player:', { uid: player.uid, name: player.name });
+              return (
+                <button
+                  key={player.uid}
+                  onClick={() => {
+                    console.log('Vote button clicked for:', { uid: player.uid, name: player.name });
+                    setSelectedVote(player.uid);
+                  }}
+                  className={cn(
+                    "w-full p-4 rounded-xl border-2 transition-all text-left flex items-center gap-3",
+                    selectedVote === player.uid
+                      ? "bg-white/15 border-white/40 text-white"
+                      : "bg-[#16213e] border-[#3d4a5c] text-gray-300 hover:border-white/30"
+                  )}
+                  data-testid={`button-vote-${player.uid}`}
+                >
+                  <div className={cn(
+                    "w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold",
+                    selectedVote === player.uid ? "bg-white/30 text-white" : "bg-gray-600 text-gray-200"
+                  )}>
+                    {player.name.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="font-bold text-lg">{player.name}</span>
+                  {selectedVote === player.uid && (
+                    <Check className="w-5 h-5 ml-auto" />
+                  )}
+                </button>
+              );
+            })}
           </div>
 
           <Button 
