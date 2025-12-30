@@ -1469,73 +1469,77 @@ const PalavraSecretaCategoryModal = ({ isOpen, onClose, onSelectCategory }: { is
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose}></div>
-      <div className="relative card-retro w-full max-w-2xl max-h-[80vh] overflow-hidden animate-fade-in flex flex-col">
-        <div className="p-4 border-b border-[#3d4a5c] flex items-center justify-between">
-          <h2 className="text-xl font-bold text-[#6b4ba3] flex items-center gap-2">
-            <Sparkles className="w-5 h-5" />
-            Categorias - Palavra Secreta
-          </h2>
+      <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose}></div>
+      <div className="relative bg-[#242642] rounded-[3rem] p-6 md:p-8 shadow-2xl border-4 border-[#2f3252] w-full max-w-3xl max-h-[85vh] overflow-hidden animate-fade-in flex flex-col">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-purple-500/10 rounded-xl border-2 border-purple-500/20">
+              <Sparkles className="w-6 h-6 text-purple-400" />
+            </div>
+            <h2 className="text-2xl md:text-3xl font-black text-white">
+              Categorias - Palavra Secreta
+            </h2>
+          </div>
           <button 
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="p-2 bg-slate-800 rounded-xl hover:bg-rose-500 transition-all border-b-3 border-slate-950 hover:border-rose-700 active:border-b-0 active:translate-y-1 text-slate-400 hover:text-white"
           >
-            <X className="w-5 h-5" />
+            <X className="w-6 h-6" strokeWidth={3} />
           </button>
         </div>
 
         {/* Difficulty Filter */}
-        <div className="p-4 border-b border-[#3d4a5c]">
-          <div className="flex gap-2">
+        <div className="mb-6">
+          <div className="flex gap-3">
             <button
               onClick={() => setFilterDifficulty("todos")}
               className={cn(
-                "flex-1 px-3 py-2 rounded-lg text-sm font-bold transition-all",
+                "flex-1 px-4 py-3 rounded-2xl text-sm font-black transition-all duration-200 border-b-4",
                 filterDifficulty === "todos"
-                  ? "bg-[#6b4ba3] text-white"
-                  : "bg-[#16213e] text-gray-400 hover:text-white"
+                  ? "bg-purple-500 border-purple-800 text-white shadow-lg"
+                  : "bg-slate-800 border-slate-900 text-slate-400 hover:text-white hover:bg-slate-700"
               )}
             >
-              Todos
+              TODOS
             </button>
             <button
               onClick={() => setFilterDifficulty("fácil")}
               className={cn(
-                "flex-1 px-3 py-2 rounded-lg text-sm font-bold transition-all",
+                "flex-1 px-4 py-3 rounded-2xl text-sm font-black transition-all duration-200 border-b-4",
                 filterDifficulty === "fácil"
-                  ? "bg-green-600 text-white"
-                  : "bg-[#16213e] text-gray-400 hover:text-white"
+                  ? "bg-green-500 border-green-800 text-white shadow-lg"
+                  : "bg-slate-800 border-slate-900 text-slate-400 hover:text-white hover:bg-slate-700"
               )}
             >
-              Fácil
+              FÁCIL
             </button>
             <button
               onClick={() => setFilterDifficulty("médio")}
               className={cn(
-                "flex-1 px-3 py-2 rounded-lg text-sm font-bold transition-all",
+                "flex-1 px-4 py-3 rounded-2xl text-sm font-black transition-all duration-200 border-b-4",
                 filterDifficulty === "médio"
-                  ? "bg-yellow-600 text-white"
-                  : "bg-[#16213e] text-gray-400 hover:text-white"
+                  ? "bg-yellow-500 border-yellow-800 text-white shadow-lg"
+                  : "bg-slate-800 border-slate-900 text-slate-400 hover:text-white hover:bg-slate-700"
               )}
             >
-              Médio
+              MÉDIO
             </button>
             <button
               onClick={() => setFilterDifficulty("difícil")}
               className={cn(
-                "flex-1 px-3 py-2 rounded-lg text-sm font-bold transition-all",
+                "flex-1 px-4 py-3 rounded-2xl text-sm font-black transition-all duration-200 border-b-4",
                 filterDifficulty === "difícil"
-                  ? "bg-red-600 text-white"
-                  : "bg-[#16213e] text-gray-400 hover:text-white"
+                  ? "bg-rose-500 border-rose-800 text-white shadow-lg"
+                  : "bg-slate-800 border-slate-900 text-slate-400 hover:text-white hover:bg-slate-700"
               )}
             >
-              Difícil
+              DIFÍCIL
             </button>
           </div>
         </div>
         
-        <div className="flex-1 overflow-y-auto p-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="flex-1 overflow-y-auto pr-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {filteredCategories.map((category) => (
               <button
                 key={category.id}
@@ -1544,38 +1548,43 @@ const PalavraSecretaCategoryModal = ({ isOpen, onClose, onSelectCategory }: { is
                   onClose();
                   toast({ title: "Categoria selecionada!", description: `"${category.name}" será usada na partida.` });
                 }}
-                className="group relative p-4 rounded-xl bg-[#16213e]/80 border border-[#3d4a5c] hover:border-[#6b4ba3] hover:-translate-y-1 transition-all duration-300 text-left"
+                className="relative p-5 rounded-3xl bg-slate-800 border-4 border-slate-900 hover:bg-slate-750 hover:-translate-y-1 hover:border-slate-700 transition-all duration-200 text-left shadow-lg group"
               >
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-4">
                   {/* Category Icon/Emoji */}
                   <div className={cn(
-                    "w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0",
-                    category.difficulty === "fácil" && "bg-gradient-to-br from-green-600 to-green-700",
-                    category.difficulty === "médio" && "bg-gradient-to-br from-yellow-600 to-yellow-700",
-                    category.difficulty === "difícil" && "bg-gradient-to-br from-red-600 to-red-700"
+                    "w-14 h-14 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0 border-2 border-black/10",
+                    category.difficulty === "fácil" && "bg-gradient-to-br from-green-500 to-green-600",
+                    category.difficulty === "médio" && "bg-gradient-to-br from-yellow-500 to-yellow-600",
+                    category.difficulty === "difícil" && "bg-gradient-to-br from-rose-500 to-rose-600"
                   )}>
                     {category.emoji}
                   </div>
                   
                   {/* Category Info */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-white group-hover:text-[#6b4ba3] transition-colors truncate">
+                    <h3 className="font-black text-lg text-slate-100 group-hover:text-white transition-colors mb-1">
                       {category.name}
                     </h3>
-                    <p className="text-xs text-gray-400 mb-2 capitalize">
+                    <div className={cn(
+                      "inline-block text-xs font-bold px-2 py-0.5 rounded-full mb-2 capitalize",
+                      category.difficulty === "fácil" && "bg-green-500/20 text-green-400 border border-green-500/30",
+                      category.difficulty === "médio" && "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30",
+                      category.difficulty === "difícil" && "bg-rose-500/20 text-rose-400 border border-rose-500/30"
+                    )}>
                       {category.difficulty}
-                    </p>
+                    </div>
                     
                     {/* Stats */}
-                    <div className="flex items-center gap-3 text-xs">
-                      <div className="flex items-center gap-1 text-gray-400">
+                    <div className="flex items-center gap-3 text-xs text-slate-400">
+                      <div className="flex items-center gap-1">
                         <Sparkles className="w-3 h-3" />
-                        <span>{category.words.length} palavras</span>
+                        <span className="font-medium">{category.words.length} palavras</span>
                       </div>
                       {category.plays !== undefined && (
-                        <div className="flex items-center gap-1 text-gray-400">
-                          <Play className="w-3 h-3 fill-gray-400" />
-                          <span>{category.plays >= 1000 ? (category.plays / 1000).toFixed(1) + "k" : category.plays}</span>
+                        <div className="flex items-center gap-1">
+                          <Play className="w-3 h-3 fill-slate-400" />
+                          <span className="font-medium">{category.plays >= 1000 ? (category.plays / 1000).toFixed(1) + "k" : category.plays}</span>
                         </div>
                       )}
                     </div>
@@ -1583,7 +1592,7 @@ const PalavraSecretaCategoryModal = ({ isOpen, onClose, onSelectCategory }: { is
 
                   {/* Select Arrow */}
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="w-8 h-8 rounded-full bg-[#6b4ba3] flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center border-2 border-purple-700">
                       <Play className="w-4 h-4 fill-white" />
                     </div>
                   </div>
