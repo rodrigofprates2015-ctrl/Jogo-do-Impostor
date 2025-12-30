@@ -1036,6 +1036,14 @@ const HomeScreen = () => {
         backgroundRepeat: 'no-repeat'
       }}
     >
+      {/* Elementos decorativos de fundo */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] animate-pulse"></div>
+        <div className="absolute bottom-[-10%] left-[-5%] w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1000ms' }}></div>
+        <div className="absolute top-20 left-10 text-slate-700/20 animate-bounce" style={{ animationDuration: '3000ms' }}><Gamepad2 size={64} /></div>
+        <div className="absolute bottom-40 right-10 text-slate-700/20 animate-bounce" style={{ animationDuration: '4000ms' }}><Rocket size={56} /></div>
+      </div>
+
       {/* Top Ad Block */}
       <AdBlockTop />
 
@@ -1072,7 +1080,7 @@ const HomeScreen = () => {
         <MobileActionButtons onDonateClick={() => setIsDonationOpen(true)} />
 
         {/* Main card */}
-        <div className="main-card w-[90%] max-w-md p-5 md:p-6 animate-fade-in">
+        <div className="bg-[#242642] rounded-[3rem] p-6 md:p-10 shadow-2xl border-4 border-[#2f3252] w-[90%] max-w-md animate-fade-in">
           {/* Impostor logo with characters */}
           <div className="flex justify-center mb-3">
             <img src={logoImpostor} alt="Impostor" className="h-28 md:h-36 object-contain" />
@@ -1094,10 +1102,15 @@ const HomeScreen = () => {
             <button 
               onClick={handleCreate} 
               disabled={isLoading}
-              className="btn-orange w-full"
+              className={cn(
+                "w-full px-8 py-5 rounded-2xl font-black text-xl tracking-wide flex items-center justify-center gap-3 transition-all duration-300 border-b-[6px] shadow-2xl",
+                !isLoading
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 border-orange-800 text-white hover:brightness-110 active:border-b-0 active:translate-y-2' 
+                  : 'bg-slate-700 border-slate-900 text-slate-500 cursor-not-allowed opacity-50'
+              )}
               data-testid="button-create-room"
             >
-              {isLoading ? <Loader2 className="animate-spin" /> : <Zap size={20} />}
+              {isLoading ? <Loader2 size={28} className="animate-spin" /> : <Zap size={28} className="animate-bounce" />}
               CRIAR SALA
             </button>
 
@@ -1145,7 +1158,12 @@ const HomeScreen = () => {
               <button 
                 onClick={handleJoin}
                 disabled={isLoading}
-                className="btn-green"
+                className={cn(
+                  "px-6 py-4 rounded-2xl font-black text-lg tracking-wide flex items-center justify-center gap-2 transition-all duration-300 border-b-[6px] shadow-2xl whitespace-nowrap",
+                  !isLoading
+                    ? 'bg-gradient-to-r from-green-500 to-emerald-500 border-green-800 text-white hover:brightness-110 active:border-b-0 active:translate-y-2' 
+                    : 'bg-slate-700 border-slate-900 text-slate-500 cursor-not-allowed opacity-50'
+                )}
                 data-testid="button-join-room"
               >
                 ENTRAR
