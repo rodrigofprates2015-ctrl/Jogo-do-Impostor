@@ -43,7 +43,8 @@ import {
   TrendingUp,
   Clock,
   Star,
-  Sparkles
+  Sparkles,
+  Info
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
