@@ -71,8 +71,16 @@ app.use((req, res, next) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
 
-    // Log the error
-    console.error(`Error ${status}:`, message, err);
+    // Log the error with full stack trace
+    console.error(`[Error Handler] ${status} ${req.method} ${req.path}`);
+    console.error(`[Error Handler] Message:`, message);
+    console.error(`[Error Handler] Stack:`, err.stack);
+
+    // Check if response has already been sent
+    if (res.headersSent) {
+      console.error('[Error Handler] Headers already sent, cannot send error response');
+      return;
+    }
 
     // Don't send JSON for non-API routes to avoid download issues on mobile
     if (req.path.startsWith('/api')) {
@@ -168,4 +176,16 @@ app.use((req, res, next) => {
       log(`serving on port ${port}`);
     },
   );
+
+  // Handle uncaught exceptions
+  process.on('uncaughtException', (error) => {
+    console.error('[Uncaught Exception]:', error);
+    console.error('[Uncaught Exception] Stack:', error.stack);
+  });
+
+  // Handle unhandled promise rejections
+  process.on('unhandledRejection', (reason, promise) => {
+    console.error('[Unhandled Rejection] at:', promise);
+    console.error('[Unhandled Rejection] reason:', reason);
+  });
 })();

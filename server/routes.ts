@@ -1020,7 +1020,20 @@ export async function registerRoutes(
           });
         }
       } catch (error) {
-        console.error('WebSocket error:', error);
+        console.error('[WebSocket Message Error]:', error);
+        console.error('[WebSocket Message Error] Stack:', error instanceof Error ? error.stack : 'No stack trace');
+        // Send error back to client
+        try {
+          if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({ 
+              type: 'error', 
+              message: 'Failed to process message',
+              details: error instanceof Error ? error.message : String(error)
+            }));
+          }
+        } catch (sendError) {
+          console.error('[WebSocket] Failed to send error message:', sendError);
+        }
       }
     });
 
@@ -1028,13 +1041,22 @@ export async function registerRoutes(
       console.log(`[Close] WebSocket closed for player ${currentPlayerId} in room ${currentRoomCode}`);
       
       if (currentRoomCode && currentPlayerId) {
-        // Mark player as disconnected_pending first
-        await markPlayerDisconnected(ws, currentRoomCode, currentPlayerId);
-        // Schedule hard exit removal after grace period
-        // This handles cases where connection was lost unexpectedly (not intentional leave)
-        // If player reconnects within grace period, the timer is cancelled
-        scheduleHardExitRemoval(currentRoomCode, currentPlayerId);
+        try {
+          // Mark player as disconnected_pending first
+          await markPlayerDisconnected(ws, currentRoomCode, currentPlayerId);
+          // Schedule hard exit removal after grace period
+          // This handles cases where connection was lost unexpectedly (not intentional leave)
+          // If player reconnects within grace period, the timer is cancelled
+          scheduleHardExitRemoval(currentRoomCode, currentPlayerId);
+        } catch (error) {
+          console.error('[WebSocket Close Error]:', error);
+        }
       }
+    });
+
+    ws.on('error', (error) => {
+      console.error('[WebSocket Error]:', error);
+      console.error('[WebSocket Error] Player:', currentPlayerId, 'Room:', currentRoomCode);
     });
   });
 
@@ -1137,9 +1159,11 @@ export async function registerRoutes(
         gameData: null,
       });
 
+      console.log(`[Room Created] Code: ${code}, Host: ${hostName} (${hostId})`);
       res.json(room);
     } catch (error) {
-      res.status(400).json({ error: "Failed to create room" });
+      console.error('[Room Create Error]:', error);
+      res.status(400).json({ error: "Failed to create room", details: error instanceof Error ? error.message : String(error) });
     }
   });
 
@@ -1151,13 +1175,17 @@ export async function registerRoutes(
         playerName: z.string(),
       }).parse(req.body);
 
-      const room = await storage.getRoom(code.toUpperCase());
+      const roomCode = code.toUpperCase();
+      console.log(`[Room Join] Player ${playerName} (${playerId}) attempting to join room ${roomCode}`);
+
+      const room = await storage.getRoom(roomCode);
       if (!room) {
+        console.log(`[Room Join] Room ${roomCode} not found`);
         return res.status(404).json({ error: "Room not found" });
       }
 
       // Cancel any pending empty room deletion since someone is joining
-      cancelEmptyRoomDeletion(code.toUpperCase());
+      cancelEmptyRoomDeletion(roomCode);
 
       // If room is already playing, mark new player as waiting for game to end
       const isGameInProgress = room.status === 'playing';
@@ -1167,15 +1195,17 @@ export async function registerRoutes(
         waitingForGame: isGameInProgress,
         connected: true  // New players start as connected
       };
-      const updatedRoom = await storage.addPlayerToRoom(code.toUpperCase(), player);
+      const updatedRoom = await storage.addPlayerToRoom(roomCode, player);
 
       if (updatedRoom) {
-        broadcastToRoom(code.toUpperCase(), { type: 'room-update', room: updatedRoom });
+        console.log(`[Room Join] Player ${playerName} successfully joined room ${roomCode}`);
+        broadcastToRoom(roomCode, { type: 'room-update', room: updatedRoom });
       }
 
       res.json(updatedRoom);
     } catch (error) {
-      res.status(400).json({ error: "Failed to join room" });
+      console.error('[Room Join Error]:', error);
+      res.status(400).json({ error: "Failed to join room", details: error instanceof Error ? error.message : String(error) });
     }
   });
 
