@@ -233,14 +233,14 @@ function getFromPool<T>(
 
 // Get word from pool for Palavra Secreta modes
 function getPooledWord(submode: string, roomCode: string): string {
-  const poolKey = `palavra-${submode}`;
+  const poolKey = `palavra-${submode}-${roomCode}`;
   const words = PALAVRA_SECRETA_SUBMODES_DATA[submode] || GAME_MODES.palavraSecreta.data;
   return getFromPool(poolKey, words, wordPools, roomCode);
 }
 
 // Get question from pool for Perguntas Diferentes
 function getPooledQuestion(roomCode: string): { crew: string; imp: string } {
-  const poolKey = `perguntas`;
+  const poolKey = `perguntas-${roomCode}`;
   return getFromPool(poolKey, GAME_MODES.perguntasDiferentes.perguntas, questionPools, roomCode);
 }
 
@@ -398,7 +398,7 @@ function setupGameMode(mode: GameModeType, players: Player[], impostorId: string
     
     case "palavras": {
       // Use pooled location for variety
-      const poolKey = `locais`;
+      const poolKey = `locais-${code}`;
       const location = getFromPool(poolKey, GAME_MODES.palavras.locais, wordPools, code);
       const availableRoles = shuffleArray([...GAME_MODES.palavras.funcoes]);
       const roles: Record<string, string> = {};
@@ -412,7 +412,7 @@ function setupGameMode(mode: GameModeType, players: Player[], impostorId: string
     
     case "duasFaccoes": {
       // Use pooled pairs for variety
-      const poolKey = `faccoes`;
+      const poolKey = `faccoes-${code}`;
       const allPairs = GAME_MODES.duasFaccoes.pares;
       const pair = getFromPool(poolKey, allPairs, pairPools, code);
       const factionA = pair[0];
@@ -428,7 +428,7 @@ function setupGameMode(mode: GameModeType, players: Player[], impostorId: string
     
     case "categoriaItem": {
       // Create combinations of category+item and pool them
-      const poolKey = `categoria-item`;
+      const poolKey = `categoria-item-${code}`;
       const allCombinations: { category: string; item: string }[] = [];
       for (const [cat, items] of Object.entries(GAME_MODES.categoriaItem.categorias)) {
         for (const item of items) {
@@ -1451,6 +1451,14 @@ export async function registerRoutes(
         return res.status(400).json({ error: "No game in progress" });
       }
 
+      // Prevent starting voting if already started
+      if (room.gameData.votingStarted === true) {
+        console.log(`[Start Voting] Voting already started for room ${code}`);
+        return res.json(room); // Return current room state
+      }
+
+      console.log(`[Start Voting] Starting voting for room ${code}`);
+
       const updatedRoom = await storage.updateRoom(code.toUpperCase(), {
         gameData: {
           ...room.gameData,
@@ -1465,6 +1473,7 @@ export async function registerRoutes(
 
       res.json(updatedRoom);
     } catch (error) {
+      console.error('[Start Voting] Error:', error);
       res.status(400).json({ error: "Failed to start voting" });
     }
   });
