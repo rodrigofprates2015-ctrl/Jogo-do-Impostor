@@ -24,9 +24,9 @@ export const PALAVRA_SECRETA_SUBMODES: Record<PalavraSuperSecretaSubmode, { titl
     ]
   },
   estrategia: {
-    title: 'Jogos de Estratégia',
+    title: 'Clash Royale',
     desc: 'Termos do mundo dos games de estratégia',
-    longDesc: 'Teste seu conhecimento e blefe com seus amigos usando termos do mundo dos jogos de estratégia. Nossa lista inclui personagens clássicos, tropas, feitiços e itens de batalha.',
+    longDesc: 'Teste seu conhecimento e blefe com seus amigos usando termos do Clash Royale. Nossa lista inclui personagens clássicos, tropas, feitiços e itens de batalha.',
     image: '/submode-clash-royale.png',
     words: ['Mago', 'Príncipe', 'Mosqueteira', 'Gigante', 'Arqueiras', 'Corredor', 'P.E.K.K.A', 'Golem', 'Dragão Bebê', 'Bruxa', 'Mineiro', 'Cavaleiro', 'Barril de Goblins', 'Tronco', 'Tesla', 'Lava Hound', 'Lenhador', 'Fantasma Real', 'Mago de Gelo', 'Executor']
   },
@@ -45,9 +45,9 @@ export const PALAVRA_SECRETA_SUBMODES: Record<PalavraSuperSecretaSubmode, { titl
     words: ['Homem-Aranha', 'Thor', 'Hulk', 'Capitão América', 'Homem de Ferro', 'Viúva Negra', 'Pantera Negra', 'Doutor Estranho', 'Thanos', 'Loki', 'Ultron', 'Groot', 'Rocket', 'Wanda', 'Visão', 'Escudo', 'Mjölnir', 'Joia do Infinito', 'Hydra', 'Vibranium']
   },
   seriesMisterio: {
-    title: 'Séries de Mistério',
+    title: 'Stranger Things',
     desc: 'Termos do mundo das séries de suspense',
-    longDesc: 'Teste seu conhecimento e blefe com seus amigos usando termos do mundo das séries de mistério e suspense. Nossa lista inclui personagens enigmáticos, locais misteriosos e criaturas sobrenaturais.',
+    longDesc: 'Teste seu conhecimento e blefe com seus amigos usando termos do Stranger Things. Nossa lista inclui personagens enigmáticos, locais misteriosos e criaturas sobrenaturais.',
     image: '/submode-stranger-things.png',
     words: ['Eleven', 'Mike', 'Lucas', 'Dustin', 'Will', 'Max', 'Hopper', 'Joyce', 'Vecna', 'Demogorgon', 'Mind Flayer', 'Hawkins', 'Upside Down', 'Barb', 'Robin', 'Steve', 'Billy', 'Eddie', 'Murray', 'Kali', 'Brenner', 'Suzie', 'Erica', 'Laboratório', 'Neva', 'Walkie-talkie', 'Arcade', 'Starcourt', 'Hellfire', 'Byers']
   },
