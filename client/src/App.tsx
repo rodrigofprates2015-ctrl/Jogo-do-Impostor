@@ -18,6 +18,7 @@ import BlogPost from "@/pages/BlogPost";
 import CommunityThemes from "@/pages/CommunityThemes";
 import Prototipo from "@/pages/Prototipo";
 import AdTest from "@/pages/AdTest";
+import RoomRedirect from "@/pages/RoomRedirect";
 import { useAuth } from "@/hooks/useAuth";
 
 function Router() {
@@ -26,6 +27,7 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={ImpostorGame} />
+      <Route path="/sala/:codigo" component={RoomRedirect} />
       <Route path="/criar-tema" component={CriarTema} />
       <Route path="/oficina" component={CriarTema} />
       <Route path="/temas" component={CommunityThemes} />

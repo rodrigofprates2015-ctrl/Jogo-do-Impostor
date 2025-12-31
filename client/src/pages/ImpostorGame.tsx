@@ -950,7 +950,18 @@ const HomeScreen = () => {
       setNameInput(saved);
       setSaveNicknameChecked(true);
     }
-  }, [loadSavedNickname]);
+
+    // Check if there's a room code from URL redirect
+    const autoJoinCode = sessionStorage.getItem('autoJoinRoomCode');
+    if (autoJoinCode) {
+      setCodeInput(autoJoinCode);
+      sessionStorage.removeItem('autoJoinRoomCode');
+      toast({ 
+        title: "Código da sala preenchido!", 
+        description: `Digite seu nome e clique em "Entrar na Sala" para começar.` 
+      });
+    }
+  }, [loadSavedNickname, toast]);
 
   // Auto-create room when coming from gallery
   useEffect(() => {
@@ -1618,7 +1629,8 @@ const LobbyScreen = () => {
   const isWaitingForNextRound = currentPlayer?.waitingForGame === true && room.status === 'playing';
 
   const copyLink = () => {
-    navigator.clipboard.writeText(window.location.origin + "/#" + room.code);
+    const shareLink = `${window.location.origin}/sala/${room.code}`;
+    navigator.clipboard.writeText(shareLink);
     toast({ title: "Copiado!", description: "Link da sala copiado para a área de transferência." });
   };
 
