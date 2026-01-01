@@ -998,10 +998,16 @@ const HomeScreen = () => {
   }, [loadSavedNickname, setUser, createRoom, toast]);
 
   const handleCreate = () => {
+    console.log('[HandleCreate] Button clicked, name:', name);
+    
     if (!name.trim()) {
+      console.log('[HandleCreate] Name is empty, showing toast');
       toast({ title: "Nome necessário", description: "Por favor, digite seu nome.", variant: "destructive" });
       return;
     }
+    
+    console.log('[HandleCreate] Setting user and creating room');
+    
     if (saveNicknameChecked) {
       saveNickname(name);
     }

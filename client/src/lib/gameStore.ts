@@ -546,11 +546,18 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   createRoom: async () => {
     const { user } = get();
-    if (!user) return;
+    console.log('[CreateRoom] Called, user:', user);
+    
+    if (!user) {
+      console.log('[CreateRoom] No user, returning');
+      return;
+    }
 
+    console.log('[CreateRoom] Setting isLoading to true');
     set({ isLoading: true });
 
     try {
+      console.log('[CreateRoom] Fetching /api/rooms/create');
       const response = await fetch('/api/rooms/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -560,9 +567,12 @@ export const useGameStore = create<GameState>((set, get) => ({
         }),
       });
 
+      console.log('[CreateRoom] Response status:', response.status);
+
       if (!response.ok) throw new Error('Failed to create room');
 
       const room: Room = await response.json();
+      console.log('[CreateRoom] Room created:', room.code);
       
       set({ 
         room,
@@ -573,7 +583,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       get().connectWebSocket(room.code);
 
     } catch (error) {
-      console.error('Error creating room:', error);
+      console.error('[CreateRoom] Error:', error);
       set({ isLoading: false });
     }
   },
