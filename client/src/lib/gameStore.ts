@@ -202,6 +202,13 @@ export const useGameStore = create<GameState>((set, get) => ({
     const { user, room, ws } = get();
     set({ status: 'lobby', selectedMode: null, submodeSelect: false, lobbyChatMessages: [] });
     
+    // Clear sessionStorage to prevent auto-selection on next mode select
+    sessionStorage.removeItem('autoStartGame');
+    sessionStorage.removeItem('selectedThemeCode');
+    sessionStorage.removeItem('selectedGameMode');
+    sessionStorage.removeItem('selectedThemeId');
+    sessionStorage.removeItem('selectedCategory');
+    
     // If host, broadcast to all players
     if (room && user && room.hostId === user.uid && ws && ws.readyState === WebSocket.OPEN) {
       ws.send(JSON.stringify({ 
@@ -690,6 +697,13 @@ export const useGameStore = create<GameState>((set, get) => ({
         const updatedRoom = await response.json();
         console.log('returnToLobby: Got updated room, status:', updatedRoom?.status);
         
+        // Clear sessionStorage to prevent auto-selection on next mode select
+        sessionStorage.removeItem('autoStartGame');
+        sessionStorage.removeItem('selectedThemeCode');
+        sessionStorage.removeItem('selectedGameMode');
+        sessionStorage.removeItem('selectedThemeId');
+        sessionStorage.removeItem('selectedCategory');
+        
         set({ 
           selectedMode: null,
           status: 'lobby',
@@ -729,6 +743,13 @@ export const useGameStore = create<GameState>((set, get) => ({
       
       const updatedRoom = await response.json();
       console.log('leaveCurrentGame: Got updated room', updatedRoom);
+      
+      // Clear sessionStorage to prevent auto-selection on next mode select
+      sessionStorage.removeItem('autoStartGame');
+      sessionStorage.removeItem('selectedThemeCode');
+      sessionStorage.removeItem('selectedGameMode');
+      sessionStorage.removeItem('selectedThemeId');
+      sessionStorage.removeItem('selectedCategory');
       
       set({ 
         selectedMode: null,
