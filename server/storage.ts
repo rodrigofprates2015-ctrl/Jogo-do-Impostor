@@ -1,4 +1,4 @@
-import { type Player, type GameData, type User, type UpsertUser, users, type Theme, type InsertTheme, themes, type Post, type InsertPost, posts } from "@shared/schema";
+import { type Player, type GameData, type User, type UpsertUser, users, type Theme, type InsertTheme, themes, type Post, type InsertPost, posts, rooms as roomsTable } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc } from "drizzle-orm";
 
@@ -23,6 +23,7 @@ export interface IStorage {
   createRoom(room: InsertRoom): Promise<Room>;
   getRoom(code: string): Promise<Room | undefined>;
   getAllRooms(): Promise<Room[]>;
+  getAllUsers(): Promise<User[]>;
   updateRoom(code: string, updates: Partial<InsertRoom>): Promise<Room | undefined>;
   addPlayerToRoom(code: string, player: Player): Promise<Room | undefined>;
   removePlayerFromRoom(code: string, playerId: string): Promise<Room | undefined>;
@@ -68,6 +69,8 @@ export class MemoryStorage implements IStorage {
       id,
       ...postData,
       imageUrl: postData.imageUrl ?? null,
+      featured: postData.featured ?? false,
+      author: postData.author ?? "Equipe TikJogos",
       createdAt: new Date(),
     };
     this.postsMap.set(id, post);
@@ -147,6 +150,10 @@ export class MemoryStorage implements IStorage {
     return Array.from(this.rooms.values());
   }
 
+  async getAllUsers(): Promise<User[]> {
+    return Array.from(this.usersMap.values());
+  }
+
   cleanupOldRooms(): void {
     const oneHourAgo = Date.now() - 60 * 60 * 1000;
     const entries = Array.from(this.rooms.entries());
@@ -163,7 +170,7 @@ export class MemoryStorage implements IStorage {
       id,
       titulo: themeData.titulo,
       autor: themeData.autor,
-      palavras: themeData.palavras as string[],
+      palavras: themeData.palavras,
       isPublic: themeData.isPublic ?? true,
       accessCode: themeData.accessCode ?? null,
       paymentStatus: themeData.paymentStatus ?? "pending",
@@ -220,7 +227,7 @@ export class MemoryStorage implements IStorage {
     const updatedTheme: Theme = { 
       ...theme, 
       ...updates,
-      palavras: updates.palavras ? updates.palavras as string[] : theme.palavras
+      palavras: updates.palavras ?? theme.palavras
     };
     this.themesMap.set(id, updatedTheme);
     return updatedTheme;
@@ -321,6 +328,11 @@ export class DatabaseStorage implements IStorage {
 
   async getAllRooms(): Promise<Room[]> {
     return Array.from(this.rooms.values());
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    if (!db) throw new Error("Database not initialized");
+    return await db.select().from(users);
   }
 
   cleanupOldRooms(): void {

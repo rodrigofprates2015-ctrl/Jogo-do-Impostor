@@ -1945,6 +1945,33 @@ export async function registerRoutes(
       res.status(401).json({ error: "Não autorizado" });
     }
   };
+
+  // Dashboard Stats API
+  app.get("/api/admin/stats", verifyAdmin, async (req, res) => {
+    try {
+      const rooms = await storage.getAllRooms();
+      const themes = await storage.getAllThemes();
+      const users = await storage.getAllUsers();
+
+      res.json({
+        totalRooms: rooms.length,
+        activeRooms: rooms.filter(r => r.status === 'playing').length,
+        totalPlayers: rooms.reduce((acc, r) => acc + r.players.length, 0),
+        totalThemes: themes.length,
+        totalUsers: users.length,
+        rooms: rooms.map(r => ({
+          code: r.code,
+          players: r.players.length,
+          status: r.status,
+          mode: r.gameMode,
+          createdAt: r.createdAt
+        }))
+      });
+    } catch (error) {
+      console.error("[Admin Stats] Error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
   
   // Get all rooms for admin dashboard (protected)
   app.get("/api/admin/rooms", verifyAdmin, async (req, res) => {
