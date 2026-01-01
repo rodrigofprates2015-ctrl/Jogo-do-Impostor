@@ -2022,7 +2022,14 @@ const ModeSelectScreen = () => {
             return (
               <div 
                 key={mode.id}
-                onClick={() => selectMode(mode.id as GameModeType)}
+                onClick={() => {
+                  // Se for palavraComunidade (CUSTOM), redireciona para galeria
+                  if (mode.id === 'palavraComunidade') {
+                    window.location.href = '/temas';
+                  } else {
+                    selectMode(mode.id as GameModeType);
+                  }
+                }}
                 className={cn(
                   "relative p-5 rounded-3xl cursor-pointer transition-all duration-200 flex flex-col gap-4 h-full border-4",
                   isSelected 
