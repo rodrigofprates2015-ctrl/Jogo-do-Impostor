@@ -125,16 +125,28 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleLogout = () => {
-    // Clear all authentication state
-    localStorage.removeItem("adminToken");
-    setToken(null);
-    setIsAuthenticated(false);
-    setRooms([]);
-    setThemes([]);
-    setEmail("");
-    setPassword("");
-    setLoginError("");
+  const handleLogout = async () => {
+    try {
+      // Call server logout endpoint to clear session
+      await fetch("/api/admin/logout", {
+        method: "POST",
+        headers: {
+          "Authorization": token ? `Bearer ${token}` : ""
+        }
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      // Clear all authentication state regardless of server response
+      localStorage.removeItem("adminToken");
+      setToken(null);
+      setIsAuthenticated(false);
+      setRooms([]);
+      setThemes([]);
+      setEmail("");
+      setPassword("");
+      setLoginError("");
+    }
   };
 
   const fetchRooms = async () => {

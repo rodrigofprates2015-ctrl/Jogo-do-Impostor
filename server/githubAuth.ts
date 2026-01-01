@@ -20,6 +20,7 @@ export function getSession() {
   }
   
   const sessionConfig: session.SessionOptions = {
+    name: 'tikjogos.sid',
     secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
@@ -27,6 +28,7 @@ export function getSession() {
       httpOnly: true,
       secure: isProduction,
       maxAge: sessionTtl,
+      sameSite: 'lax',
     },
   };
 

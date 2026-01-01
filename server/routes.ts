@@ -1917,11 +1917,13 @@ export async function registerRoutes(
       if (email === adminEmail && password === adminPassword) {
         // Generate a simple session token
         const token = randomBytes(32).toString('hex');
-        // Store in session if available, otherwise just return the token
+        
+        // Clear any existing admin session data first
         if (req.session) {
-          (req.session as any).adminToken = token;
-          (req.session as any).isAdmin = true;
+          delete (req.session as any).adminToken;
+          delete (req.session as any).isAdmin;
         }
+        
         console.log('[Admin] Login successful');
         return res.json({ success: true, token });
       }
@@ -1934,16 +1936,49 @@ export async function registerRoutes(
     }
   });
   
-  // Admin middleware to verify admin token
+  // Admin logout endpoint - clears session and cookie
+  app.post("/api/admin/logout", (req, res) => {
+    try {
+      if (req.session) {
+        delete (req.session as any).adminToken;
+        delete (req.session as any).isAdmin;
+        req.session.destroy((err) => {
+          if (err) {
+            console.error('[Admin] Session destroy error:', err);
+          }
+          // Clear the session cookie
+          res.clearCookie('tikjogos.sid', {
+            path: '/',
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax'
+          });
+          console.log('[Admin] Logout successful - session and cookie cleared');
+          res.json({ success: true });
+        });
+      } else {
+        console.log('[Admin] Logout successful - no session to clear');
+        res.json({ success: true });
+      }
+    } catch (error) {
+      console.error('[Admin] Logout error:', error);
+      res.status(400).json({ error: "Erro no logout" });
+    }
+  });
+  
+  // Admin middleware to verify admin token - ONLY checks Bearer token, not session
   const verifyAdmin = (req: any, res: any, next: any) => {
     const authHeader = req.headers.authorization;
-    const sessionAdmin = req.session?.isAdmin;
     
-    if (sessionAdmin || (authHeader && authHeader.startsWith('Bearer '))) {
-      next();
-    } else {
-      res.status(401).json({ error: "Não autorizado" });
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.substring(7);
+      if (token && token.length > 0) {
+        next();
+        return;
+      }
     }
+    
+    res.status(401).json({ error: "Não autorizado" });
   };
 
   // Dashboard Stats API
