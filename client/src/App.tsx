@@ -55,8 +55,9 @@ function Router() {
       <Route path="/sala/:codigo" component={RoomRedirect} />
       <Route path="/criar-tema" component={CriarTema} />
       <Route path="/oficina" component={CriarTema} />
-      <Route path="/temas" component={CommunityThemes} />
-      <Route path="/temas-comunidade" component={CommunityThemes} />
+      {/* Rotas de temas da comunidade temporariamente desabilitadas */}
+      {/* <Route path="/temas" component={CommunityThemes} /> */}
+      {/* <Route path="/temas-comunidade" component={CommunityThemes} /> */}
       <Route path="/prototipo" component={Prototipo} />
       <Route path="/ad-test" component={AdTest} />
       <Route path="/comojogar" component={ComoJogar} />

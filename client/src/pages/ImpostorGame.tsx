@@ -2019,7 +2019,9 @@ const ModeSelectScreen = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-          {gameModes.map((mode, index) => {
+          {gameModes
+            .filter(mode => mode.id !== 'palavraComunidade') // Esconde modo de temas customizados
+            .map((mode, index) => {
             const Icon = getModeIcon(mode.id);
             const theme = getModeTheme(mode.id);
             const difficulty = getModeDifficulty(mode.id);
