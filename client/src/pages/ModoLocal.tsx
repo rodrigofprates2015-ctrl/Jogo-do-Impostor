@@ -105,7 +105,7 @@ export default function ModoLocal() {
             <Users className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-black text-white mb-2">
-            🎮 Modo Local
+            Modo Local
           </h1>
           <p className="text-slate-400">
             Configure o jogo para jogar em um só celular

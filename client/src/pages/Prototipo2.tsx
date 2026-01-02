@@ -133,17 +133,6 @@ export default function Prototipo() {
               CRIAR SALA
             </button>
 
-            {/* Modo Local button */}
-            <a 
-              href="/modo-local"
-              className="btn w-full justify-center bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold border-0"
-            >
-              🎮 Jogar em um só celular
-            </a>
-            <p className="text-xs text-center text-slate-400 -mt-2">
-              Modo Local — ideal para jogar presencialmente
-            </p>
-
             {/* Save nickname checkbox */}
             <div className="flex items-center justify-between px-1">
               <label className="flex items-center gap-2 cursor-pointer">
@@ -181,6 +170,24 @@ export default function Prototipo() {
                 ENTRAR
               </button>
             </div>
+
+            {/* OR divider */}
+            <div className="flex items-center gap-4 py-2">
+              <div className="flex-1 h-px bg-[#4a6a8a]"></div>
+              <span className="text-[#8aa0b0] text-sm font-bold">OU</span>
+              <div className="flex-1 h-px bg-[#4a6a8a]"></div>
+            </div>
+
+            {/* Modo Local button */}
+            <a 
+              href="/modo-local"
+              className="btn w-full justify-center bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold border-0"
+            >
+              Jogar em um só celular
+            </a>
+            <p className="text-xs text-center text-slate-400 -mt-2">
+              Modo Local — ideal para jogar presencialmente
+            </p>
 
           </div>
         </div>
