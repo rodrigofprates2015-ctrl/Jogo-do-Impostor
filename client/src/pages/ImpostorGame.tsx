@@ -3733,13 +3733,21 @@ const GameScreen = () => {
           // No hints at all - hardcore mode
           shouldShowHint = false;
           hintMessage = "Modo Hardcore! Você não tem dica.";
+          console.log('[ImpostorContent] Hints disabled - hardcore mode');
         } else if (hint) {
           if (firstPlayerHintOnly) {
             // Only show hint if impostor is first in speaking order
             // Speaking order is only available after the wheel is spun
             if (speakingOrder && speakingOrder.length > 0) {
               const firstPlayerId = speakingOrder[0];
-              shouldShowHint = firstPlayerId === user?.uid;
+              const isFirstPlayer = firstPlayerId === user?.uid;
+              shouldShowHint = isFirstPlayer;
+              console.log('[ImpostorContent] First player only mode:', {
+                firstPlayerId,
+                currentUserId: user?.uid,
+                isFirstPlayer,
+                shouldShowHint
+              });
               if (!shouldShowHint) {
                 hintMessage = "Você não é o primeiro a falar, então não tem dica!";
               }
@@ -3747,11 +3755,15 @@ const GameScreen = () => {
               // Speaking order not determined yet - show waiting message
               shouldShowHint = false;
               hintMessage = "Aguardando ordem de fala para revelar dica...";
+              console.log('[ImpostorContent] Waiting for speaking order to be determined');
             }
           } else {
             // Always show hint if enabled and not restricted to first player
             shouldShowHint = true;
+            console.log('[ImpostorContent] Hints enabled for all impostors');
           }
+        } else {
+          console.log('[ImpostorContent] No hint available for this word');
         }
         
         console.log('[ImpostorContent] Result:', { shouldShowHint, hintMessage });
