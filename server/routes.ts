@@ -159,6 +159,113 @@ function generateRoomCode(): string {
   return randomBytes(2).toString('hex').toUpperCase().substring(0, 4);
 }
 
+// Bot auto-vote system
+async function scheduleBotVotes(roomCode: string, bots: Player[]) {
+  // Wait 3-8 seconds before bots start voting
+  const delay = 3000 + Math.random() * 5000;
+  
+  setTimeout(async () => {
+    const room = await storage.getRoom(roomCode);
+    if (!room || room.status !== 'playing') return;
+    
+    // Get all players except bots
+    const humanPlayers = room.players.filter(p => !p.name.startsWith('Bot '));
+    if (humanPlayers.length === 0) return;
+    
+    // Each bot votes for a random human player
+    for (const bot of bots) {
+      const randomDelay = Math.random() * 3000; // Stagger votes 0-3 seconds
+      
+      setTimeout(async () => {
+        const currentRoom = await storage.getRoom(roomCode);
+        if (!currentRoom || currentRoom.status !== 'playing') return;
+        
+        // Pick a random human to vote for
+        const target = humanPlayers[Math.floor(Math.random() * humanPlayers.length)];
+        
+        const existingVotes = currentRoom.gameData?.votes || [];
+        const alreadyVoted = existingVotes.some(v => v.voterId === bot.uid);
+        
+        if (!alreadyVoted) {
+          const newVotes = [...existingVotes, { 
+            voterId: bot.uid, 
+            voterName: bot.name,
+            targetId: target.uid,
+            targetName: target.name
+          }];
+          
+          const updatedRoom = await storage.updateRoom(roomCode, {
+            gameData: {
+              ...currentRoom.gameData,
+              votes: newVotes
+            }
+          });
+          
+          if (updatedRoom) {
+            broadcastToRoom(roomCode, { type: 'room-update', room: updatedRoom });
+            console.log(`[Bot Vote] ${bot.name} voted for ${target.name}`);
+          }
+        }
+      }, randomDelay);
+    }
+  }, delay);
+}
+
+// Bot auto-answer system for "Perguntas Diferentes" mode
+async function scheduleBotAnswers(roomCode: string, bots: Player[]) {
+  // Wait 2-5 seconds before bots start answering
+  const delay = 2000 + Math.random() * 3000;
+  
+  const botAnswers = [
+    "Interessante pergunta...",
+    "Deixa eu pensar...",
+    "Hmm, difícil escolher",
+    "Acho que seria...",
+    "Com certeza!",
+    "Não tenho certeza",
+    "Talvez sim, talvez não",
+    "Depende do dia"
+  ];
+  
+  setTimeout(async () => {
+    const room = await storage.getRoom(roomCode);
+    if (!room || room.status !== 'playing' || room.gameMode !== 'perguntasDiferentes') return;
+    
+    for (const bot of bots) {
+      const randomDelay = Math.random() * 4000; // Stagger answers 0-4 seconds
+      
+      setTimeout(async () => {
+        const currentRoom = await storage.getRoom(roomCode);
+        if (!currentRoom || currentRoom.status !== 'playing') return;
+        
+        const existingAnswers = currentRoom.gameData?.answers || [];
+        const alreadyAnswered = existingAnswers.some(a => a.playerId === bot.uid);
+        
+        if (!alreadyAnswered) {
+          const randomAnswer = botAnswers[Math.floor(Math.random() * botAnswers.length)];
+          const newAnswers = [...existingAnswers, { 
+            playerId: bot.uid, 
+            playerName: bot.name,
+            answer: randomAnswer
+          }];
+          
+          const updatedRoom = await storage.updateRoom(roomCode, {
+            gameData: {
+              ...currentRoom.gameData,
+              answers: newAnswers
+            }
+          });
+          
+          if (updatedRoom) {
+            broadcastToRoom(roomCode, { type: 'room-update', room: updatedRoom });
+            console.log(`[Bot Answer] ${bot.name} answered: "${randomAnswer}"`);
+          }
+        }
+      }, randomDelay);
+    }
+  }, delay);
+}
+
 // Seeded random number generator (Mulberry32) - produces consistent results for same seed
 function createSeededRNG(seed: number): () => number {
   return function() {
@@ -1797,6 +1904,32 @@ export async function registerRoutes(
       });
 
       console.log(`[Room Created] Code: ${code}, Host: ${hostName} (${hostId})`);
+      
+      // Auto-add bots for admin testing
+      if (hostName === "testeadm26") {
+        console.log(`[Admin Mode] Detected admin user, adding 4 bots to room ${code}`);
+        const botNames = ["Bot Alpha", "Bot Beta", "Bot Gamma", "Bot Delta"];
+        
+        for (const botName of botNames) {
+          const botId = `bot-${randomBytes(4).toString('hex')}`;
+          const botPlayer: Player = { 
+            uid: botId, 
+            name: botName, 
+            connected: true 
+          };
+          
+          await storage.addPlayerToRoom(code, botPlayer);
+          console.log(`[Admin Mode] Added bot: ${botName} (${botId})`);
+        }
+        
+        // Get updated room with bots
+        const updatedRoom = await storage.getRoom(code);
+        if (updatedRoom) {
+          broadcastToRoom(code, { type: 'room-update', room: updatedRoom });
+          return res.json(updatedRoom);
+        }
+      }
+      
       res.json(room);
     } catch (error) {
       console.error('[Room Create Error]:', error);
@@ -1971,6 +2104,18 @@ export async function registerRoutes(
 
       if (updatedRoom) {
         broadcastToRoom(code.toUpperCase(), { type: 'room-update', room: updatedRoom });
+        
+        // Schedule bot actions if there are bots in the room
+        const bots = updatedRoom.players.filter(p => p.name.startsWith('Bot '));
+        if (bots.length > 0) {
+          console.log(`[Bot System] Scheduling auto-actions for ${bots.length} bots`);
+          scheduleBotVotes(code.toUpperCase(), bots);
+          
+          // Also schedule answers for "Perguntas Diferentes" mode
+          if (gameMode === 'perguntasDiferentes') {
+            scheduleBotAnswers(code.toUpperCase(), bots);
+          }
+        }
       }
 
       res.json(updatedRoom);
