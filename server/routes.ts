@@ -1214,10 +1214,15 @@ export async function registerRoutes(
   app.post("/api/rooms/:code/start", async (req, res) => {
     try {
       const { code } = req.params;
-      const { gameMode, selectedSubmode, themeCode } = z.object({
+      const { gameMode, selectedSubmode, themeCode, gameConfig } = z.object({
         gameMode: z.enum(["palavraSecreta", "palavras", "duasFaccoes", "categoriaItem", "perguntasDiferentes", "palavraComunidade"]),
         selectedSubmode: z.string().optional(),
-        themeCode: z.string().optional()
+        themeCode: z.string().optional(),
+        gameConfig: z.object({
+          impostorCount: z.number().min(1).max(5),
+          enableHints: z.boolean(),
+          firstPlayerHintOnly: z.boolean()
+        }).optional()
       }).parse(req.body);
       
       const room = await storage.getRoom(code.toUpperCase());
@@ -1262,10 +1267,32 @@ export async function registerRoutes(
         }
       }
 
-      const impostorIndex = Math.floor(Math.random() * connectedPlayers.length);
-      const impostorId = connectedPlayers[impostorIndex].uid;
+      // Determine number of impostors (default 1 for backward compatibility)
+      const impostorCount = gameConfig?.impostorCount || 1;
+      
+      // Validate impostor count
+      if (impostorCount >= connectedPlayers.length) {
+        return res.status(400).json({ 
+          error: "Too many impostors for player count",
+          impostorCount,
+          playerCount: connectedPlayers.length
+        });
+      }
+      
+      // Select random impostors
+      const shuffledPlayers = [...connectedPlayers].sort(() => Math.random() - 0.5);
+      const impostorIds = shuffledPlayers.slice(0, impostorCount).map(p => p.uid);
+      const impostorId = impostorIds[0]; // Keep first impostor as primary for backward compatibility
+      
+      console.log(`[StartGame] Selected ${impostorCount} impostor(s):`, impostorIds);
       
       const gameData = setupGameMode(gameMode, connectedPlayers, impostorId, selectedSubmode, code.toUpperCase(), customWords, themeCode);
+      
+      // Store game config in gameData for later use
+      if (gameConfig) {
+        gameData.gameConfig = gameConfig;
+        gameData.impostorIds = impostorIds;
+      }
       
       const modeInfo = GAME_MODES[gameMode];
 

@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useGameStore, type GameModeType, type PlayerVote, type PlayerAnswer } from "@/lib/gameStore";
+import { useState, useEffect, useMemo } from "react";
+import { useGameStore, type GameModeType, type PlayerVote, type PlayerAnswer, type GameConfig } from "@/lib/gameStore";
 import { Link } from "wouter";
 import PalavraSuperSecretaSubmodeScreen from "@/pages/PalavraSuperSecretaSubmodeScreen";
 import { NotificationCenter } from "@/components/NotificationCenter";
@@ -44,7 +44,9 @@ import {
   Clock,
   Star,
   Sparkles,
-  Info
+  Info,
+  AlertTriangle,
+  Settings
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -1641,6 +1643,334 @@ const PalavraSecretaCategoryModal = ({ isOpen, onClose, onSelectCategory }: { is
   );
 };
 
+// Counter Control Component
+interface CounterControlProps {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+  min: number;
+  max: number;
+  icon?: React.ComponentType<{ size?: number; className?: string }>;
+}
+
+const CounterControl: React.FC<CounterControlProps> = ({
+  label,
+  value,
+  onChange,
+  min,
+  max,
+  icon: Icon
+}) => {
+  return (
+    <div className="bg-slate-800 p-5 rounded-3xl border-4 border-slate-900 flex flex-col gap-4">
+      <div className="flex items-center gap-3 text-slate-300 font-bold text-lg">
+        {Icon && <Icon size={20} className="text-orange-500" />}
+        {label}
+      </div>
+      <div className="flex items-center justify-between bg-slate-900 rounded-2xl p-2">
+        <button
+          onClick={() => onChange(Math.max(min, value - 1))}
+          disabled={value <= min}
+          className={cn(
+            "w-14 h-14 flex items-center justify-center rounded-xl font-black text-2xl transition-all border-b-4",
+            value <= min
+              ? "bg-slate-800 border-slate-950 text-slate-600 cursor-not-allowed"
+              : "bg-slate-700 border-slate-950 text-white hover:bg-slate-600 active:border-b-0 active:translate-y-1"
+          )}
+        >
+          -
+        </button>
+        <span className="text-4xl font-black text-white w-16 text-center">
+          {value}
+        </span>
+        <button
+          onClick={() => onChange(Math.min(max, value + 1))}
+          disabled={value >= max}
+          className={cn(
+            "w-14 h-14 flex items-center justify-center rounded-xl font-black text-2xl transition-all border-b-4",
+            value >= max
+              ? "bg-slate-800 border-slate-950 text-slate-600 cursor-not-allowed"
+              : "bg-gradient-to-r from-orange-500 to-amber-500 border-orange-800 text-white hover:brightness-110 active:border-b-0 active:translate-y-1"
+          )}
+        >
+          +
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Toggle Switch Component
+interface ToggleSwitchProps {
+  label: string;
+  subLabel?: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  disabled?: boolean;
+}
+
+const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
+  label,
+  subLabel,
+  checked,
+  onChange,
+  disabled = false
+}) => {
+  return (
+    <div
+      className={cn(
+        "p-5 rounded-3xl border-4 transition-all duration-300",
+        disabled
+          ? "bg-slate-800/50 border-slate-900 opacity-50 cursor-not-allowed"
+          : "bg-slate-800 border-slate-900 hover:border-slate-700"
+      )}
+    >
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex-1">
+          <div className={cn(
+            "font-bold text-lg mb-1",
+            disabled ? "text-slate-500" : "text-slate-200"
+          )}>
+            {label}
+          </div>
+          {subLabel && (
+            <p className="text-sm text-slate-400 leading-snug">
+              {subLabel}
+            </p>
+          )}
+        </div>
+        
+        <button
+          onClick={() => !disabled && onChange(!checked)}
+          disabled={disabled}
+          className={cn(
+            "relative w-16 h-9 rounded-full transition-all duration-300 border-b-4 shrink-0",
+            checked
+              ? "bg-gradient-to-r from-emerald-500 to-green-500 border-emerald-800"
+              : "bg-slate-600 border-slate-900"
+          )}
+        >
+          <div
+            className={cn(
+              "absolute top-1 left-1 bg-white w-7 h-7 rounded-full transition-transform duration-300 shadow-lg flex items-center justify-center",
+              checked ? "translate-x-7" : "translate-x-0"
+            )}
+          >
+            {checked ? (
+              <Check size={16} className="text-emerald-600" strokeWidth={3} />
+            ) : (
+              <X size={16} className="text-slate-600" strokeWidth={3} />
+            )}
+          </div>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// Game Config Screen Component
+const GameConfigScreen = () => {
+  const { 
+    room, 
+    user, 
+    selectedMode, 
+    backToModeSelect, 
+    startGameWithConfig 
+  } = useGameStore();
+  
+  const { toast } = useToast();
+  const [isStarting, setIsStarting] = useState(false);
+  
+  // Configuration state
+  const [impostorCount, setImpostorCount] = useState(1);
+  const [enableHints, setEnableHints] = useState(true);
+  const [firstPlayerHintOnly, setFirstPlayerHintOnly] = useState(false);
+  
+  const isHost = room && user && room.hostId === user.uid;
+  
+  // Get theme code from sessionStorage if needed
+  const selectedThemeCode = sessionStorage.getItem('selectedThemeCode');
+  
+  // Config summary
+  const configSummary = useMemo(() => {
+    let hintText = '';
+    if (!enableHints) {
+      hintText = 'O impostor jogará sem dicas (Modo Hardcore)';
+    } else if (firstPlayerHintOnly) {
+      hintText = 'O impostor só terá dica se começar a rodada';
+    } else {
+      hintText = 'O impostor terá acesso à dica';
+    }
+    return { impostorCount, hintText };
+  }, [impostorCount, enableHints, firstPlayerHintOnly]);
+  
+  const handleStartGame = async () => {
+    if (!isHost) {
+      toast({
+        title: "Acesso negado",
+        description: "Apenas o host pode iniciar a partida",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (!room || !selectedMode) return;
+    
+    // Validate player count
+    if (room.players.length <= impostorCount) {
+      toast({
+        title: "Jogadores insuficientes",
+        description: `Você precisa de pelo menos ${impostorCount + 1} jogadores para ${impostorCount} impostor(es)`,
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setIsStarting(true);
+    
+    try {
+      const config: GameConfig = {
+        impostorCount,
+        enableHints,
+        firstPlayerHintOnly: enableHints ? firstPlayerHintOnly : false
+      };
+      
+      await startGameWithConfig(config, selectedThemeCode || undefined);
+    } catch (error) {
+      toast({
+        title: "Erro ao iniciar",
+        description: "Não foi possível iniciar a partida. Tente novamente.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsStarting(false);
+    }
+  };
+  
+  const handleBack = () => {
+    backToModeSelect();
+  };
+  
+  if (!isHost) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full gap-6 p-6">
+        <div className="w-20 h-20 rounded-full bg-blue-500/10 border-4 border-blue-500/20 flex items-center justify-center">
+          <Clock className="w-10 h-10 text-blue-500 animate-pulse" />
+        </div>
+        <div className="text-center">
+          <h2 className="text-2xl font-black text-white mb-2">Aguardando o Host</h2>
+          <p className="text-slate-400 font-medium">O host está configurando a partida...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  return (
+    <div className="flex flex-col w-full max-w-2xl h-full py-6 px-4 animate-fade-in relative z-10">
+      {/* Elementos decorativos de fundo */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-purple-600/20 rounded-full blur-[100px] animate-pulse"></div>
+        <div className="absolute bottom-[-10%] left-[-5%] w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1000ms' }}></div>
+      </div>
+      
+      <div className="bg-[#242642] rounded-[3rem] p-6 md:p-10 shadow-2xl border-4 border-[#2f3252] relative z-10">
+        {/* Header com botão de voltar */}
+        <div className="flex items-center gap-4 mb-8">
+          <button 
+            onClick={handleBack}
+            className="p-3 bg-slate-800 rounded-2xl hover:bg-slate-700 transition-colors border-b-4 border-slate-950 active:border-b-0 active:translate-y-1"
+          >
+            <ArrowLeft size={24} strokeWidth={3} className="text-slate-300" />
+          </button>
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 bg-orange-500/10 rounded-xl border-2 border-orange-500/20">
+                <Settings className="w-6 h-6 text-orange-500" />
+              </div>
+              <h2 className="text-2xl md:text-3xl font-black text-white">
+                Configuração da Partida
+              </h2>
+            </div>
+            <p className="text-slate-400 font-medium">Personalize as regras do jogo</p>
+          </div>
+        </div>
+
+        {/* Conteúdo das configurações */}
+        <div className="space-y-6 mb-8">
+          {/* Contador de Impostores */}
+          <CounterControl 
+            label="Quantidade de Impostores" 
+            value={impostorCount} 
+            onChange={setImpostorCount}
+            min={1}
+            max={5}
+            icon={AlertTriangle}
+          />
+
+          {/* Divisor */}
+          <div className="h-px bg-slate-700 my-6" />
+
+          {/* Seção de Dicas */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-slate-400 text-sm uppercase tracking-wider font-semibold px-1">
+              <HelpCircle size={14} />
+              <span>Sistema de Dicas</span>
+            </div>
+
+            <ToggleSwitch 
+              label="Dica para o Impostor"
+              subLabel="O impostor recebe uma pista vaga sobre a palavra."
+              checked={enableHints}
+              onChange={setEnableHints}
+            />
+
+            <ToggleSwitch 
+              label="Dica Apenas se for o Primeiro"
+              subLabel="Aumenta a dificuldade. Se o impostor não for o primeiro a falar, ele não recebe dica."
+              checked={firstPlayerHintOnly}
+              onChange={setFirstPlayerHintOnly}
+              disabled={!enableHints}
+            />
+          </div>
+
+          {/* Resumo visual */}
+          <div className="bg-slate-950/50 rounded-xl p-4 border border-slate-800/50 flex items-start gap-3">
+            <Info className="text-indigo-400 shrink-0 mt-0.5" size={18} />
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Haverá <strong className="text-red-400">{configSummary.impostorCount} impostor(es)</strong> nesta rodada. 
+              {' '}{configSummary.hintText}
+            </p>
+          </div>
+        </div>
+
+        {/* Botão de ação principal */}
+        <button 
+          onClick={handleStartGame}
+          disabled={isStarting}
+          className={cn(
+            "w-full px-8 py-5 rounded-2xl font-black text-xl tracking-wide flex items-center justify-center gap-3 transition-all duration-300 border-b-[6px] shadow-2xl",
+            isStarting
+              ? "bg-slate-700 border-slate-900 text-slate-500 cursor-not-allowed"
+              : "bg-gradient-to-r from-green-500 to-emerald-500 border-green-800 text-white hover:brightness-110 active:border-b-0 active:translate-y-2"
+          )}
+        >
+          {isStarting ? (
+            <>
+              <Loader2 size={28} className="animate-spin" />
+              INICIANDO...
+            </>
+          ) : (
+            <>
+              <Play size={28} className="fill-current animate-bounce" />
+              INICIAR PARTIDA
+            </>
+          )}
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const LobbyScreen = () => {
   const { room, user, goToModeSelect, leaveGame, kickPlayer } = useGameStore();
   const { toast } = useToast();
@@ -1850,7 +2180,7 @@ const LobbyScreen = () => {
 };
 
 const ModeSelectScreen = () => {
-  const { room, user, gameModes, selectedMode, selectMode, startGame, backToLobby, fetchGameModes, showSpeakingOrderWheel, speakingOrder, setSpeakingOrder, setShowSpeakingOrderWheel } = useGameStore();
+  const { room, user, gameModes, selectedMode, selectMode, startGame, goToGameConfig, backToLobby, fetchGameModes, showSpeakingOrderWheel, speakingOrder, setSpeakingOrder, setShowSpeakingOrderWheel } = useGameStore();
   const { toast } = useToast();
   const [isStarting, setIsStarting] = useState(false);
   const [communityThemes, setCommunityThemes] = useState<PublicTheme[]>([]);
@@ -1881,30 +2211,23 @@ const ModeSelectScreen = () => {
   const handleStartGameWithSorteio = async () => {
     if (!selectedMode || !room) return;
     
-    setIsStarting(true);
-    
-    // Se é modo de perguntas diferentes, pula sorteio
-    if (selectedMode === 'perguntasDiferentes') {
-      await startGame();
-      setIsStarting(false);
-      return;
-    }
-    
     // Se é palavraComunidade, precisa ter um tema selecionado
     if (selectedMode === 'palavraComunidade') {
       if (!selectedThemeCode) {
         toast({ title: "Selecione um tema", description: "Escolha um tema da comunidade para jogar", variant: "destructive" });
-        setIsStarting(false);
         return;
       }
-      await startGame(selectedThemeCode);
-      setIsStarting(false);
-      return;
+      // Salvar tema selecionado para usar na tela de config
+      sessionStorage.setItem('selectedThemeCode', selectedThemeCode);
     }
     
-    // Para outros modos, inicia direto (sorteio aparecerá depois)
-    await startGame();
-    setIsStarting(false);
+    // Salvar categoria selecionada se houver
+    if (selectedCategory) {
+      sessionStorage.setItem('selectedCategory', selectedCategory);
+    }
+    
+    // Navegar para tela de configuração
+    goToGameConfig();
   };
 
   const handleBackClick = () => {
@@ -3669,6 +3992,7 @@ export default function ImpostorGame() {
 
       {status === 'lobby' && <LobbyScreen />}
       {status === 'modeSelect' && <ModeSelectScreen />}
+      {status === 'gameConfig' && <GameConfigScreen />}
       {status === 'submodeSelect' && <PalavraSuperSecretaSubmodeScreen />}
       {status === 'playing' && <GameScreen />}
     </div>

@@ -6,7 +6,13 @@ export type Player = {
   waitingForGame?: boolean;
 };
 
-export type GameStatus = 'home' | 'lobby' | 'modeSelect' | 'submodeSelect' | 'spinning' | 'playing';
+export type GameStatus = 'home' | 'lobby' | 'modeSelect' | 'gameConfig' | 'submodeSelect' | 'spinning' | 'playing';
+
+export type GameConfig = {
+  impostorCount: number;
+  enableHints: boolean;
+  firstPlayerHintOnly: boolean;
+};
 
 export type LobbyChatMessage = {
   id: string;
@@ -85,6 +91,7 @@ export type GameState = {
   gameModes: GameMode[];
   selectedMode: GameModeType | null;
   submodeSelect: boolean;
+  gameConfig: GameConfig | null;
   notifications: Array<{ id: string; type: 'player-left' | 'player-joined' | 'player-reconnected' | 'host-changed' | 'disconnected' | 'player-kicked' | 'player-removed'; message: string }>;
   enteredDuringGame: boolean;
   isDisconnected: boolean;
@@ -102,10 +109,13 @@ export type GameState = {
   joinRoom: (code: string) => Promise<boolean>;
   selectMode: (mode: GameModeType) => void;
   startGame: (themeCode?: string) => Promise<void>;
+  startGameWithConfig: (config: GameConfig, themeCode?: string) => Promise<void>;
   returnToLobby: () => Promise<void>;
   leaveCurrentGame: () => Promise<void>;
   leaveGame: () => void;
   goToModeSelect: () => void;
+  goToGameConfig: () => void;
+  backToModeSelect: () => void;
   backToLobby: () => void;
   connectWebSocket: (code: string) => void;
   updateRoom: (room: Room) => void;
@@ -136,6 +146,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   gameModes: [],
   selectedMode: null,
   submodeSelect: false,
+  gameConfig: null,
   notifications: [],
   enteredDuringGame: false,
   isDisconnected: false,
@@ -198,9 +209,17 @@ export const useGameStore = create<GameState>((set, get) => ({
     get().fetchGameModes();
   },
 
+  goToGameConfig: () => {
+    set({ status: 'gameConfig' });
+  },
+
+  backToModeSelect: () => {
+    set({ status: 'modeSelect' });
+  },
+
   backToLobby: () => {
     const { user, room, ws } = get();
-    set({ status: 'lobby', selectedMode: null, submodeSelect: false, lobbyChatMessages: [] });
+    set({ status: 'lobby', selectedMode: null, submodeSelect: false, gameConfig: null, lobbyChatMessages: [] });
     
     // Clear sessionStorage to prevent auto-selection on next mode select
     sessionStorage.removeItem('autoStartGame');
@@ -669,6 +688,47 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     } catch (error) {
       console.error('Error starting game:', error);
+    }
+  },
+
+  startGameWithConfig: async (config: GameConfig, themeCode?: string) => {
+    const { room, selectedMode } = get();
+    if (!room || !selectedMode) return;
+
+    try {
+      const requestBody: any = { 
+        gameMode: selectedMode,
+        gameConfig: config
+      };
+      
+      // If Palavra Secreta, add the selected submode
+      if (selectedMode === 'palavraSecreta') {
+        const submode = localStorage.getItem('selectedSubmode');
+        if (submode) {
+          requestBody.selectedSubmode = submode;
+        }
+        // Add custom theme code if provided
+        if (themeCode && themeCode.trim()) {
+          requestBody.themeCode = themeCode.trim().toUpperCase();
+        }
+      }
+      
+      // If Palavra Comunidade, add the theme code
+      if (selectedMode === 'palavraComunidade' && themeCode && themeCode.trim()) {
+        requestBody.themeCode = themeCode.trim().toUpperCase();
+      }
+
+      const response = await fetch(`/api/rooms/${room.code}/start`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) throw new Error('Failed to start game');
+
+    } catch (error) {
+      console.error('Error starting game:', error);
+      throw error;
     }
   },
 

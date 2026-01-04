@@ -76,6 +76,12 @@ export type PlayerVote = {
   targetName: string;
 };
 
+export type GameConfig = {
+  impostorCount: number;
+  enableHints: boolean;
+  firstPlayerHintOnly: boolean;
+};
+
 export type GameData = {
   word?: string;
   location?: string;
@@ -93,6 +99,9 @@ export type GameData = {
   votes?: PlayerVote[];
   votingStarted?: boolean;
   votesRevealed?: boolean;
+  gameConfig?: GameConfig;
+  impostorIds?: string[];
+  hint?: string;
 };
 
 export const themes = pgTable("themes", {
