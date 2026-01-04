@@ -89,3 +89,54 @@ Essas dicas são carregadas no backend no objeto `WORD_HINTS` e usadas quando o 
 - Mantida compatibilidade com partidas antigas que usam apenas `room.impostorId`
 - Se `impostorIds` não existir, usa `impostorId` como fallback
 - Configurações padrão aplicadas quando `gameConfig` não é fornecido
+
+## Correções Adicionais (v2)
+
+### Problema: Dicas não apareciam para nenhum impostor
+
+**Causa**: A lógica de exibição de dicas verificava `speakingOrder` antes dele ser gerado, fazendo com que a condição sempre falhasse.
+
+**Solução**:
+1. **Dicas sempre ativadas** (`enableHints: true`, `firstPlayerHintOnly: false`):
+   - Dica aparece IMEDIATAMENTE para todos os impostores
+   - Não depende da ordem de fala
+   
+2. **Dica apenas se primeiro** (`enableHints: true`, `firstPlayerHintOnly: true`):
+   - Antes da ordem de fala: Mostra "Aguardando ordem de fala para revelar dica..."
+   - Depois da ordem de fala: Mostra dica APENAS se impostor for o primeiro
+   - Outros impostores veem: "Você não é o primeiro a falar, então não tem dica!"
+
+3. **Modo Hardcore** (`enableHints: false`):
+   - Nenhum impostor recebe dica
+   - Mostra: "Modo Hardcore! Você não tem dica."
+
+### Fluxo Correto
+
+**Cenário 1: Dicas sempre ativadas**
+```
+1. Jogo inicia
+2. Palavra revelada para tripulação
+3. Dica revelada IMEDIATAMENTE para TODOS os impostores
+4. Host gira roleta de ordem de fala
+5. Discussão começa
+```
+
+**Cenário 2: Dica apenas se primeiro**
+```
+1. Jogo inicia
+2. Palavra revelada para tripulação
+3. Impostores veem: "Aguardando ordem de fala..."
+4. Host gira roleta de ordem de fala
+5. Impostor que ficou em primeiro vê a dica
+6. Outros impostores veem: "Você não é o primeiro..."
+7. Discussão começa
+```
+
+**Cenário 3: Modo Hardcore**
+```
+1. Jogo inicia
+2. Palavra revelada para tripulação
+3. Impostores veem: "Modo Hardcore! Você não tem dica."
+4. Host gira roleta de ordem de fala
+5. Discussão começa (impostores sem dica)
+```

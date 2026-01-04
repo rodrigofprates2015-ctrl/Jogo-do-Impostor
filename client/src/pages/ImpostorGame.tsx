@@ -3715,18 +3715,46 @@ const GameScreen = () => {
         const firstPlayerHintOnly = gameConfig?.firstPlayerHintOnly || false;
         const enableHints = gameConfig?.enableHints ?? true;
         
+        // Debug logging
+        console.log('[ImpostorContent] Hint logic:', {
+          hint,
+          enableHints,
+          firstPlayerHintOnly,
+          speakingOrder,
+          userId: user?.uid,
+          firstPlayer: speakingOrder?.[0]
+        });
+        
         // Determine if impostor should see the hint
         let shouldShowHint = false;
-        if (hint && enableHints) {
+        let hintMessage = "Finja que você sabe a palavra! Engane a todos.";
+        
+        if (!enableHints) {
+          // No hints at all - hardcore mode
+          shouldShowHint = false;
+          hintMessage = "Modo Hardcore! Você não tem dica.";
+        } else if (hint) {
           if (firstPlayerHintOnly) {
             // Only show hint if impostor is first in speaking order
-            const firstPlayerId = speakingOrder?.[0];
-            shouldShowHint = firstPlayerId === user?.uid;
+            // Speaking order is only available after the wheel is spun
+            if (speakingOrder && speakingOrder.length > 0) {
+              const firstPlayerId = speakingOrder[0];
+              shouldShowHint = firstPlayerId === user?.uid;
+              if (!shouldShowHint) {
+                hintMessage = "Você não é o primeiro a falar, então não tem dica!";
+              }
+            } else {
+              // Speaking order not determined yet - show waiting message
+              shouldShowHint = false;
+              hintMessage = "Aguardando ordem de fala para revelar dica...";
+            }
           } else {
-            // Always show hint if enabled
+            // Always show hint if enabled and not restricted to first player
             shouldShowHint = true;
           }
         }
+        
+        console.log('[ImpostorContent] Result:', { shouldShowHint, hintMessage });
         
         return (
           <div className="space-y-3 text-center p-4 bg-rose-500/5 rounded-2xl border-2 border-rose-500/20">
@@ -3740,12 +3768,7 @@ const GameScreen = () => {
               </>
             ) : (
               <p className="text-slate-300 text-sm font-medium leading-relaxed">
-                {!enableHints 
-                  ? "Modo Hardcore! Você não tem dica."
-                  : firstPlayerHintOnly && hint
-                  ? "Você não é o primeiro a falar, então não tem dica!"
-                  : "Finja que você sabe a palavra! Engane a todos."
-                }
+                {hintMessage}
               </p>
             )}
           </div>
