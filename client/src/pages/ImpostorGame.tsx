@@ -1768,6 +1768,147 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   );
 };
 
+// Game Config Modal Component (for Lobby)
+interface GameConfigModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const GameConfigModal: React.FC<GameConfigModalProps> = ({ isOpen, onClose }) => {
+  const { gameConfig } = useGameStore();
+  const { toast } = useToast();
+  
+  // Configuration state - initialize from store or defaults
+  const [impostorCount, setImpostorCount] = useState(gameConfig?.impostorCount || 1);
+  const [enableHints, setEnableHints] = useState(gameConfig?.enableHints ?? true);
+  const [firstPlayerHintOnly, setFirstPlayerHintOnly] = useState(gameConfig?.firstPlayerHintOnly || false);
+  
+  // Config summary
+  const configSummary = useMemo(() => {
+    let hintText = '';
+    if (!enableHints) {
+      hintText = 'O impostor jogará sem dicas (Modo Hardcore)';
+    } else if (firstPlayerHintOnly) {
+      hintText = 'O impostor só terá dica se começar a rodada';
+    } else {
+      hintText = 'O impostor terá acesso à dica';
+    }
+    return { impostorCount, hintText };
+  }, [impostorCount, enableHints, firstPlayerHintOnly]);
+  
+  const handleSave = () => {
+    const config: GameConfig = {
+      impostorCount,
+      enableHints,
+      firstPlayerHintOnly: enableHints ? firstPlayerHintOnly : false
+    };
+    
+    // Save to store
+    useGameStore.setState({ gameConfig: config });
+    
+    toast({
+      title: "Configurações salvas!",
+      description: "As configurações serão aplicadas ao tema clássico no modo Palavra Secreta."
+    });
+    
+    onClose();
+  };
+  
+  if (!isOpen) return null;
+  
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+      <div className="w-full max-w-2xl bg-[#242642] rounded-[3rem] p-6 md:p-10 shadow-2xl border-4 border-[#2f3252] relative animate-scale-in">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-orange-500/10 rounded-xl border-2 border-orange-500/20">
+              <Settings className="w-6 h-6 text-orange-500" />
+            </div>
+            <div>
+              <h2 className="text-2xl md:text-3xl font-black text-white">
+                Configurações da Partida
+              </h2>
+              <p className="text-slate-400 text-sm font-medium">Apenas para tema clássico - Palavra Secreta</p>
+            </div>
+          </div>
+          <button 
+            onClick={onClose}
+            className="p-3 bg-slate-800 rounded-2xl hover:bg-slate-700 transition-colors border-b-4 border-slate-950 active:border-b-0 active:translate-y-1"
+          >
+            <X size={24} strokeWidth={3} className="text-slate-300" />
+          </button>
+        </div>
+
+        {/* Conteúdo das configurações */}
+        <div className="space-y-6 mb-8">
+          {/* Contador de Impostores */}
+          <CounterControl 
+            label="Quantidade de Impostores" 
+            value={impostorCount} 
+            onChange={setImpostorCount}
+            min={1}
+            max={5}
+            icon={AlertTriangle}
+          />
+
+          {/* Divisor */}
+          <div className="h-px bg-slate-700 my-6" />
+
+          {/* Seção de Dicas */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-slate-400 text-sm uppercase tracking-wider font-semibold px-1">
+              <HelpCircle size={14} />
+              <span>Sistema de Dicas</span>
+            </div>
+
+            <ToggleSwitch 
+              label="Dica para o Impostor"
+              subLabel="O impostor recebe uma pista vaga sobre a palavra."
+              checked={enableHints}
+              onChange={setEnableHints}
+            />
+
+            <ToggleSwitch 
+              label="Dica Apenas se for o Primeiro"
+              subLabel="Aumenta a dificuldade. Se o impostor não for o primeiro a falar, ele não recebe dica."
+              checked={firstPlayerHintOnly}
+              onChange={setFirstPlayerHintOnly}
+              disabled={!enableHints}
+            />
+          </div>
+
+          {/* Resumo visual */}
+          <div className="bg-slate-950/50 rounded-xl p-4 border border-slate-800/50 flex items-start gap-3">
+            <Info className="text-indigo-400 shrink-0 mt-0.5" size={18} />
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Haverá <strong className="text-red-400">{configSummary.impostorCount} impostor(es)</strong> nesta rodada. 
+              {' '}{configSummary.hintText}
+            </p>
+          </div>
+        </div>
+
+        {/* Botões de ação */}
+        <div className="flex gap-3">
+          <button 
+            onClick={onClose}
+            className="flex-1 px-8 py-4 rounded-2xl font-black text-lg tracking-wide transition-all duration-300 border-b-[6px] shadow-xl bg-slate-700 border-slate-900 text-slate-300 hover:bg-slate-600 active:border-b-0 active:translate-y-2"
+          >
+            CANCELAR
+          </button>
+          <button 
+            onClick={handleSave}
+            className="flex-1 px-8 py-4 rounded-2xl font-black text-lg tracking-wide flex items-center justify-center gap-3 transition-all duration-300 border-b-[6px] shadow-xl bg-gradient-to-r from-green-500 to-emerald-500 border-green-800 text-white hover:brightness-110 active:border-b-0 active:translate-y-2"
+          >
+            <Check size={24} strokeWidth={3} />
+            SALVAR
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Game Config Screen Component
 const GameConfigScreen = () => {
   const { 
@@ -1972,8 +2113,9 @@ const GameConfigScreen = () => {
 };
 
 const LobbyScreen = () => {
-  const { room, user, goToModeSelect, leaveGame, kickPlayer } = useGameStore();
+  const { room, user, goToModeSelect, leaveGame, kickPlayer, gameConfig } = useGameStore();
   const { toast } = useToast();
+  const [showConfigModal, setShowConfigModal] = useState(false);
 
   if (!room) return null;
 
@@ -2135,20 +2277,30 @@ const LobbyScreen = () => {
         </div>
       ) : isHost ? (
         <div className="w-full animate-fade-in space-y-4">
-          <button 
-            onClick={goToModeSelect}
-            disabled={players.length < 3}
-            className={cn(
-              "w-full px-8 py-5 rounded-2xl font-black text-xl tracking-wide flex items-center justify-center gap-3 transition-all duration-300 border-b-[6px] shadow-2xl",
-              players.length >= 3
-                ? 'bg-gradient-to-r from-purple-500 to-violet-500 border-purple-800 text-white hover:brightness-110 active:border-b-0 active:translate-y-2' 
-                : 'bg-slate-700 border-slate-900 text-slate-500 cursor-not-allowed opacity-50'
-            )}
-            data-testid="button-start-game"
-          >
-            <Play size={28} className={players.length >= 3 ? 'animate-bounce fill-current' : 'fill-current'} />
-            {players.length >= 3 ? 'ESCOLHER MODO' : 'AGUARDANDO TRIPULANTES'}
-          </button>
+          <div className="flex gap-3">
+            <button 
+              onClick={goToModeSelect}
+              disabled={players.length < 3}
+              className={cn(
+                "flex-1 px-8 py-5 rounded-2xl font-black text-xl tracking-wide flex items-center justify-center gap-3 transition-all duration-300 border-b-[6px] shadow-2xl",
+                players.length >= 3
+                  ? 'bg-gradient-to-r from-purple-500 to-violet-500 border-purple-800 text-white hover:brightness-110 active:border-b-0 active:translate-y-2' 
+                  : 'bg-slate-700 border-slate-900 text-slate-500 cursor-not-allowed opacity-50'
+              )}
+              data-testid="button-start-game"
+            >
+              <Play size={28} className={players.length >= 3 ? 'animate-bounce fill-current' : 'fill-current'} />
+              {players.length >= 3 ? 'ESCOLHER MODO' : 'AGUARDANDO TRIPULANTES'}
+            </button>
+            
+            <button 
+              onClick={() => setShowConfigModal(true)}
+              className="px-6 py-5 rounded-2xl font-black transition-all duration-300 border-b-[6px] shadow-2xl bg-gradient-to-r from-orange-500 to-amber-500 border-orange-800 text-white hover:brightness-110 active:border-b-0 active:translate-y-2 flex items-center justify-center"
+              title="Configurações da Partida"
+            >
+              <Settings size={28} />
+            </button>
+          </div>
           {players.length < 3 && (
             <div className="flex items-center justify-center gap-2 text-rose-400">
               <Info size={16} />
@@ -2175,12 +2327,20 @@ const LobbyScreen = () => {
       </div>
 
       <LobbyChat />
+      
+      {/* Modal de Configuração */}
+      {showConfigModal && (
+        <GameConfigModal 
+          isOpen={showConfigModal}
+          onClose={() => setShowConfigModal(false)}
+        />
+      )}
     </div>
   );
 };
 
 const ModeSelectScreen = () => {
-  const { room, user, gameModes, selectedMode, selectMode, startGame, goToGameConfig, backToLobby, fetchGameModes, showSpeakingOrderWheel, speakingOrder, setSpeakingOrder, setShowSpeakingOrderWheel } = useGameStore();
+  const { room, user, gameModes, selectedMode, selectMode, startGame, startGameWithConfig, gameConfig, backToLobby, fetchGameModes, showSpeakingOrderWheel, speakingOrder, setSpeakingOrder, setShowSpeakingOrderWheel } = useGameStore();
   const { toast } = useToast();
   const [isStarting, setIsStarting] = useState(false);
   const [communityThemes, setCommunityThemes] = useState<PublicTheme[]>([]);
@@ -2211,23 +2371,48 @@ const ModeSelectScreen = () => {
   const handleStartGameWithSorteio = async () => {
     if (!selectedMode || !room) return;
     
-    // Se é palavraComunidade, precisa ter um tema selecionado
-    if (selectedMode === 'palavraComunidade') {
-      if (!selectedThemeCode) {
-        toast({ title: "Selecione um tema", description: "Escolha um tema da comunidade para jogar", variant: "destructive" });
-        return;
+    setIsStarting(true);
+    
+    try {
+      // Se é palavraComunidade, precisa ter um tema selecionado
+      if (selectedMode === 'palavraComunidade') {
+        if (!selectedThemeCode) {
+          toast({ title: "Selecione um tema", description: "Escolha um tema da comunidade para jogar", variant: "destructive" });
+          setIsStarting(false);
+          return;
+        }
       }
-      // Salvar tema selecionado para usar na tela de config
-      sessionStorage.setItem('selectedThemeCode', selectedThemeCode);
+      
+      // Check if it's Palavra Secreta with classic theme (no custom theme code)
+      const isClassicPalavraSecreta = selectedMode === 'palavraSecreta' && !selectedThemeCode;
+      
+      // If classic Palavra Secreta and has gameConfig, use it
+      if (isClassicPalavraSecreta && gameConfig) {
+        // Validate player count
+        if (room.players.length <= gameConfig.impostorCount) {
+          toast({
+            title: "Jogadores insuficientes",
+            description: `Você precisa de pelo menos ${gameConfig.impostorCount + 1} jogadores para ${gameConfig.impostorCount} impostor(es)`,
+            variant: "destructive"
+          });
+          setIsStarting(false);
+          return;
+        }
+        
+        await startGameWithConfig(gameConfig, selectedThemeCode || undefined);
+      } else {
+        // For other modes or custom themes, start normally
+        await startGame(selectedThemeCode || undefined);
+      }
+    } catch (error) {
+      toast({
+        title: "Erro ao iniciar",
+        description: "Não foi possível iniciar a partida. Tente novamente.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsStarting(false);
     }
-    
-    // Salvar categoria selecionada se houver
-    if (selectedCategory) {
-      sessionStorage.setItem('selectedCategory', selectedCategory);
-    }
-    
-    // Navegar para tela de configuração
-    goToGameConfig();
   };
 
   const handleBackClick = () => {
@@ -3992,7 +4177,6 @@ export default function ImpostorGame() {
 
       {status === 'lobby' && <LobbyScreen />}
       {status === 'modeSelect' && <ModeSelectScreen />}
-      {status === 'gameConfig' && <GameConfigScreen />}
       {status === 'submodeSelect' && <PalavraSuperSecretaSubmodeScreen />}
       {status === 'playing' && <GameScreen />}
     </div>
