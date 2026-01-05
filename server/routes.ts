@@ -159,112 +159,7 @@ function generateRoomCode(): string {
   return randomBytes(2).toString('hex').toUpperCase().substring(0, 4);
 }
 
-// Bot auto-vote system
-async function scheduleBotVotes(roomCode: string, bots: Player[]) {
-  // Wait 3-8 seconds before bots start voting
-  const delay = 3000 + Math.random() * 5000;
-  
-  setTimeout(async () => {
-    const room = await storage.getRoom(roomCode);
-    if (!room || room.status !== 'playing') return;
-    
-    // Get all players except bots
-    const humanPlayers = room.players.filter(p => !p.name.startsWith('Bot '));
-    if (humanPlayers.length === 0) return;
-    
-    // Each bot votes for a random human player
-    for (const bot of bots) {
-      const randomDelay = Math.random() * 3000; // Stagger votes 0-3 seconds
-      
-      setTimeout(async () => {
-        const currentRoom = await storage.getRoom(roomCode);
-        if (!currentRoom || currentRoom.status !== 'playing') return;
-        
-        // Pick a random human to vote for
-        const target = humanPlayers[Math.floor(Math.random() * humanPlayers.length)];
-        
-        const existingVotes = currentRoom.gameData?.votes || [];
-        const alreadyVoted = existingVotes.some(v => v.voterId === bot.uid);
-        
-        if (!alreadyVoted) {
-          const newVotes = [...existingVotes, { 
-            voterId: bot.uid, 
-            voterName: bot.name,
-            targetId: target.uid,
-            targetName: target.name
-          }];
-          
-          const updatedRoom = await storage.updateRoom(roomCode, {
-            gameData: {
-              ...currentRoom.gameData,
-              votes: newVotes
-            }
-          });
-          
-          if (updatedRoom) {
-            broadcastToRoom(roomCode, { type: 'room-update', room: updatedRoom });
-            console.log(`[Bot Vote] ${bot.name} voted for ${target.name}`);
-          }
-        }
-      }, randomDelay);
-    }
-  }, delay);
-}
 
-// Bot auto-answer system for "Perguntas Diferentes" mode
-async function scheduleBotAnswers(roomCode: string, bots: Player[]) {
-  // Wait 2-5 seconds before bots start answering
-  const delay = 2000 + Math.random() * 3000;
-  
-  const botAnswers = [
-    "Interessante pergunta...",
-    "Deixa eu pensar...",
-    "Hmm, difícil escolher",
-    "Acho que seria...",
-    "Com certeza!",
-    "Não tenho certeza",
-    "Talvez sim, talvez não",
-    "Depende do dia"
-  ];
-  
-  setTimeout(async () => {
-    const room = await storage.getRoom(roomCode);
-    if (!room || room.status !== 'playing' || room.gameMode !== 'perguntasDiferentes') return;
-    
-    for (const bot of bots) {
-      const randomDelay = Math.random() * 4000; // Stagger answers 0-4 seconds
-      
-      setTimeout(async () => {
-        const currentRoom = await storage.getRoom(roomCode);
-        if (!currentRoom || currentRoom.status !== 'playing') return;
-        
-        const existingAnswers = currentRoom.gameData?.answers || [];
-        const alreadyAnswered = existingAnswers.some(a => a.playerId === bot.uid);
-        
-        if (!alreadyAnswered) {
-          const randomAnswer = botAnswers[Math.floor(Math.random() * botAnswers.length)];
-          const newAnswers = [...existingAnswers, { 
-            playerId: bot.uid, 
-            playerName: bot.name,
-            answer: randomAnswer
-          }];
-          
-          const updatedRoom = await storage.updateRoom(roomCode, {
-            gameData: {
-              ...currentRoom.gameData,
-              answers: newAnswers
-            }
-          });
-          
-          if (updatedRoom) {
-            broadcastToRoom(roomCode, { type: 'room-update', room: updatedRoom });
-            console.log(`[Bot Answer] ${bot.name} answered: "${randomAnswer}"`);
-          }
-        }
-      }, randomDelay);
-    }
-  }, delay);
-}
 
 // Seeded random number generator (Mulberry32) - produces consistent results for same seed
 function createSeededRNG(seed: number): () => number {
@@ -1226,6 +1121,106 @@ export async function registerRoutes(
         ws.send(message);
       }
     });
+  }
+
+  // Bot auto-vote system
+  async function scheduleBotVotes(roomCode: string, bots: Player[]) {
+    const delay = 3000 + Math.random() * 5000;
+    
+    setTimeout(async () => {
+      const room = await storage.getRoom(roomCode);
+      if (!room || room.status !== 'playing') return;
+      
+      const humanPlayers = room.players.filter(p => !p.name.startsWith('Bot '));
+      if (humanPlayers.length === 0) return;
+      
+      for (const bot of bots) {
+        const randomDelay = Math.random() * 3000;
+        
+        setTimeout(async () => {
+          const currentRoom = await storage.getRoom(roomCode);
+          if (!currentRoom || currentRoom.status !== 'playing') return;
+          
+          const target = humanPlayers[Math.floor(Math.random() * humanPlayers.length)];
+          const existingVotes = currentRoom.gameData?.votes || [];
+          const alreadyVoted = existingVotes.some(v => v.playerId === bot.uid);
+          
+          if (!alreadyVoted) {
+            const newVotes = [...existingVotes, { 
+              playerId: bot.uid, 
+              playerName: bot.name,
+              targetId: target.uid,
+              targetName: target.name
+            }];
+            
+            const updatedRoom = await storage.updateRoom(roomCode, {
+              gameData: {
+                ...currentRoom.gameData,
+                votes: newVotes
+              }
+            });
+            
+            if (updatedRoom) {
+              broadcastToRoom(roomCode, { type: 'room-update', room: updatedRoom });
+              console.log(`[Bot Vote] ${bot.name} voted for ${target.name}`);
+            }
+          }
+        }, randomDelay);
+      }
+    }, delay);
+  }
+
+  // Bot auto-answer system
+  async function scheduleBotAnswers(roomCode: string, bots: Player[]) {
+    const delay = 2000 + Math.random() * 3000;
+    const botAnswers = [
+      "Interessante pergunta...",
+      "Deixa eu pensar...",
+      "Hmm, difícil escolher",
+      "Acho que seria...",
+      "Com certeza!",
+      "Não tenho certeza",
+      "Talvez sim, talvez não",
+      "Depende do dia"
+    ];
+    
+    setTimeout(async () => {
+      const room = await storage.getRoom(roomCode);
+      if (!room || room.status !== 'playing' || room.gameMode !== 'perguntasDiferentes') return;
+      
+      for (const bot of bots) {
+        const randomDelay = Math.random() * 4000;
+        
+        setTimeout(async () => {
+          const currentRoom = await storage.getRoom(roomCode);
+          if (!currentRoom || currentRoom.status !== 'playing') return;
+          
+          const existingAnswers = currentRoom.gameData?.answers || [];
+          const alreadyAnswered = existingAnswers.some(a => a.playerId === bot.uid);
+          
+          if (!alreadyAnswered) {
+            const randomAnswer = botAnswers[Math.floor(Math.random() * botAnswers.length)];
+            const newAnswers = [...existingAnswers, { 
+              playerId: bot.uid, 
+              playerName: bot.name,
+              answer: randomAnswer
+            }];
+            
+            const updatedRoom = await storage.updateRoom(roomCode, {
+              gameData: {
+                ...currentRoom.gameData,
+                answers: newAnswers
+              }
+            });
+            
+            if (updatedRoom) {
+              broadcastToRoom(roomCode, { type: 'room-update', room: updatedRoom });
+              console.log(`[Bot Answer] ${bot.name} answered: "${randomAnswer}"`);
+            }
+          }
+        }, randomDelay);
+      }
+    }, delay);
   }
 
   // Mark a player as disconnected (but keep them in the room - they can reconnect)
