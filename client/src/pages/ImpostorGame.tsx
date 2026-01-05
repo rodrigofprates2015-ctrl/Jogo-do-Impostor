@@ -1701,17 +1701,17 @@ const CounterControl: React.FC<CounterControlProps> = ({
   icon: Icon
 }) => {
   return (
-    <div className="bg-slate-800 p-5 rounded-3xl border-4 border-slate-900 flex flex-col gap-4">
-      <div className="flex items-center gap-3 text-slate-300 font-bold text-lg">
-        {Icon && <Icon size={20} className="text-orange-500" />}
+    <div className="bg-slate-800 p-3 md:p-5 rounded-2xl md:rounded-3xl border-2 md:border-4 border-slate-900 flex flex-col gap-3 md:gap-4">
+      <div className="flex items-center gap-2 md:gap-3 text-slate-300 font-bold text-base md:text-lg">
+        {Icon && <Icon size={18} className="text-orange-500 md:w-5 md:h-5" />}
         {label}
       </div>
-      <div className="flex items-center justify-between bg-slate-900 rounded-2xl p-2">
+      <div className="flex items-center justify-between bg-slate-900 rounded-xl md:rounded-2xl p-1.5 md:p-2">
         <button
           onClick={() => onChange(Math.max(min, value - 1))}
           disabled={value <= min}
           className={cn(
-            "w-14 h-14 flex items-center justify-center rounded-xl font-black text-2xl transition-all border-b-4",
+            "w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-lg md:rounded-xl font-black text-xl md:text-2xl transition-all border-b-4",
             value <= min
               ? "bg-slate-800 border-slate-950 text-slate-600 cursor-not-allowed"
               : "bg-slate-700 border-slate-950 text-white hover:bg-slate-600 active:border-b-0 active:translate-y-1"
@@ -1719,14 +1719,14 @@ const CounterControl: React.FC<CounterControlProps> = ({
         >
           -
         </button>
-        <span className="text-4xl font-black text-white w-16 text-center">
+        <span className="text-3xl md:text-4xl font-black text-white w-12 md:w-16 text-center">
           {value}
         </span>
         <button
           onClick={() => onChange(Math.min(max, value + 1))}
           disabled={value >= max}
           className={cn(
-            "w-14 h-14 flex items-center justify-center rounded-xl font-black text-2xl transition-all border-b-4",
+            "w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-lg md:rounded-xl font-black text-xl md:text-2xl transition-all border-b-4",
             value >= max
               ? "bg-slate-800 border-slate-950 text-slate-600 cursor-not-allowed"
               : "bg-gradient-to-r from-orange-500 to-amber-500 border-orange-800 text-white hover:brightness-110 active:border-b-0 active:translate-y-1"
@@ -1758,22 +1758,22 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   return (
     <div
       className={cn(
-        "p-5 rounded-3xl border-4 transition-all duration-300",
+        "p-3 md:p-5 rounded-2xl md:rounded-3xl border-2 md:border-4 transition-all duration-300",
         disabled
           ? "bg-slate-800/50 border-slate-900 opacity-50 cursor-not-allowed"
           : "bg-slate-800 border-slate-900 hover:border-slate-700"
       )}
     >
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex-1">
+      <div className="flex items-center justify-between gap-3 md:gap-4">
+        <div className="flex-1 min-w-0">
           <div className={cn(
-            "font-bold text-lg mb-1",
+            "font-bold text-base md:text-lg mb-1",
             disabled ? "text-slate-500" : "text-slate-200"
           )}>
             {label}
           </div>
           {subLabel && (
-            <p className="text-sm text-slate-400 leading-snug">
+            <p className="text-xs md:text-sm text-slate-400 leading-snug">
               {subLabel}
             </p>
           )}
@@ -1783,7 +1783,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
           onClick={() => !disabled && onChange(!checked)}
           disabled={disabled}
           className={cn(
-            "relative w-16 h-9 rounded-full transition-all duration-300 border-b-4 shrink-0",
+            "relative w-14 h-8 md:w-16 md:h-9 rounded-full transition-all duration-300 border-b-4 shrink-0",
             checked
               ? "bg-gradient-to-r from-emerald-500 to-green-500 border-emerald-800"
               : "bg-slate-600 border-slate-900"
@@ -1791,14 +1791,14 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
         >
           <div
             className={cn(
-              "absolute top-1 left-1 bg-white w-7 h-7 rounded-full transition-transform duration-300 shadow-lg flex items-center justify-center",
-              checked ? "translate-x-7" : "translate-x-0"
+              "absolute top-0.5 md:top-1 left-0.5 md:left-1 bg-white w-6 h-6 md:w-7 md:h-7 rounded-full transition-transform duration-300 shadow-lg flex items-center justify-center",
+              checked ? "translate-x-6 md:translate-x-7" : "translate-x-0"
             )}
           >
             {checked ? (
-              <Check size={16} className="text-emerald-600" strokeWidth={3} />
+              <Check size={14} className="text-emerald-600 md:w-4 md:h-4" strokeWidth={3} />
             ) : (
-              <X size={16} className="text-slate-600" strokeWidth={3} />
+              <X size={14} className="text-slate-600 md:w-4 md:h-4" strokeWidth={3} />
             )}
           </div>
         </button>
@@ -1856,90 +1856,92 @@ const GameConfigModal: React.FC<GameConfigModalProps> = ({ isOpen, onClose }) =>
   if (!isOpen) return null;
   
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-      <div className="w-full max-w-2xl bg-[#242642] rounded-[3rem] p-6 md:p-10 shadow-2xl border-4 border-[#2f3252] relative animate-scale-in">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+      <div className="w-full max-w-2xl max-h-[95vh] md:max-h-none bg-[#242642] rounded-2xl md:rounded-[3rem] shadow-2xl border-4 border-[#2f3252] relative animate-scale-in flex flex-col md:block overflow-hidden md:overflow-visible">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-orange-500/10 rounded-xl border-2 border-orange-500/20">
-              <Settings className="w-6 h-6 text-orange-500" />
+        <div className="flex items-center justify-between p-4 md:p-10 pb-4 md:pb-0 md:mb-8 shrink-0">
+          <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
+            <div className="p-1.5 md:p-2 bg-orange-500/10 rounded-xl border-2 border-orange-500/20 shrink-0">
+              <Settings className="w-5 h-5 md:w-6 md:h-6 text-orange-500" />
             </div>
-            <div>
-              <h2 className="text-2xl md:text-3xl font-black text-white">
+            <div className="min-w-0 flex-1">
+              <h2 className="text-base md:text-2xl lg:text-3xl font-black text-white leading-tight md:leading-normal">
                 Configurações da Partida
               </h2>
-              <p className="text-slate-400 text-sm font-medium">Apenas para tema clássico - Palavra Secreta</p>
+              <p className="text-slate-400 text-xs md:text-sm font-medium leading-tight md:leading-normal">Apenas para tema clássico - Palavra Secreta</p>
             </div>
           </div>
           <button 
             onClick={onClose}
-            className="p-3 bg-slate-800 rounded-2xl hover:bg-slate-700 transition-colors border-b-4 border-slate-950 active:border-b-0 active:translate-y-1"
+            className="p-2 md:p-3 bg-slate-800 rounded-xl md:rounded-2xl hover:bg-slate-700 transition-colors border-b-4 border-slate-950 active:border-b-0 active:translate-y-1 shrink-0 ml-2"
           >
-            <X size={24} strokeWidth={3} className="text-slate-300" />
+            <X size={20} strokeWidth={3} className="text-slate-300 md:w-6 md:h-6" />
           </button>
         </div>
 
         {/* Conteúdo das configurações */}
-        <div className="space-y-6 mb-8">
-          {/* Contador de Impostores */}
-          <CounterControl 
-            label="Quantidade de Impostores" 
-            value={impostorCount} 
-            onChange={setImpostorCount}
-            min={1}
-            max={5}
-            icon={AlertTriangle}
-          />
+        <div className="overflow-y-auto md:overflow-visible px-4 md:px-10 pb-4 md:pb-0 flex-1 md:flex-none">
+          <div className="space-y-4 md:space-y-6 md:mb-8">
+            {/* Contador de Impostores */}
+            <CounterControl 
+              label="Quantidade de Impostores" 
+              value={impostorCount} 
+              onChange={setImpostorCount}
+              min={1}
+              max={5}
+              icon={AlertTriangle}
+            />
 
-          {/* Divisor */}
-          <div className="h-px bg-slate-700 my-6" />
+            {/* Divisor */}
+            <div className="h-px bg-slate-700 my-4 md:my-6" />
 
-          {/* Seção de Dicas */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 text-slate-400 text-sm uppercase tracking-wider font-semibold px-1">
-              <HelpCircle size={14} />
-              <span>Sistema de Dicas</span>
+            {/* Seção de Dicas */}
+            <div className="space-y-3 md:space-y-4">
+              <div className="flex items-center gap-2 text-slate-400 text-xs md:text-sm uppercase tracking-wider font-semibold px-1">
+                <HelpCircle size={14} />
+                <span>Sistema de Dicas</span>
+              </div>
+
+              <ToggleSwitch 
+                label="Dica para o Impostor"
+                subLabel="O impostor recebe uma pista vaga sobre a palavra."
+                checked={enableHints}
+                onChange={setEnableHints}
+              />
+
+              <ToggleSwitch 
+                label="Dica Apenas se for o Primeiro"
+                subLabel="Aumenta a dificuldade. Se o impostor não for o primeiro a falar, ele não recebe dica."
+                checked={firstPlayerHintOnly}
+                onChange={setFirstPlayerHintOnly}
+                disabled={!enableHints}
+              />
             </div>
 
-            <ToggleSwitch 
-              label="Dica para o Impostor"
-              subLabel="O impostor recebe uma pista vaga sobre a palavra."
-              checked={enableHints}
-              onChange={setEnableHints}
-            />
-
-            <ToggleSwitch 
-              label="Dica Apenas se for o Primeiro"
-              subLabel="Aumenta a dificuldade. Se o impostor não for o primeiro a falar, ele não recebe dica."
-              checked={firstPlayerHintOnly}
-              onChange={setFirstPlayerHintOnly}
-              disabled={!enableHints}
-            />
-          </div>
-
-          {/* Resumo visual */}
-          <div className="bg-slate-950/50 rounded-xl p-4 border border-slate-800/50 flex items-start gap-3">
-            <Info className="text-indigo-400 shrink-0 mt-0.5" size={18} />
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Haverá <strong className="text-red-400">{configSummary.impostorCount} impostor(es)</strong> nesta rodada. 
-              {' '}{configSummary.hintText}
-            </p>
+            {/* Resumo visual */}
+            <div className="bg-slate-950/50 rounded-xl p-3 md:p-4 border border-slate-800/50 flex items-start gap-2 md:gap-3">
+              <Info className="text-indigo-400 shrink-0 mt-0.5" size={16} md:size={18} />
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Haverá <strong className="text-red-400">{configSummary.impostorCount} impostor(es)</strong> nesta rodada. 
+                {' '}{configSummary.hintText}
+              </p>
+            </div>
           </div>
         </div>
 
         {/* Botões de ação */}
-        <div className="flex gap-3">
+        <div className="flex gap-2 md:gap-3 p-4 md:p-10 pt-4 md:pt-0 shrink-0">
           <button 
             onClick={onClose}
-            className="flex-1 px-8 py-4 rounded-2xl font-black text-lg tracking-wide transition-all duration-300 border-b-[6px] shadow-xl bg-slate-700 border-slate-900 text-slate-300 hover:bg-slate-600 active:border-b-0 active:translate-y-2"
+            className="flex-1 px-4 md:px-8 py-3 md:py-4 rounded-xl md:rounded-2xl font-black text-sm md:text-lg tracking-wide transition-all duration-300 border-b-4 md:border-b-[6px] shadow-xl bg-slate-700 border-slate-900 text-slate-300 hover:bg-slate-600 active:border-b-0 active:translate-y-2"
           >
             CANCELAR
           </button>
           <button 
             onClick={handleSave}
-            className="flex-1 px-8 py-4 rounded-2xl font-black text-lg tracking-wide flex items-center justify-center gap-3 transition-all duration-300 border-b-[6px] shadow-xl bg-gradient-to-r from-green-500 to-emerald-500 border-green-800 text-white hover:brightness-110 active:border-b-0 active:translate-y-2"
+            className="flex-1 px-4 md:px-8 py-3 md:py-4 rounded-xl md:rounded-2xl font-black text-sm md:text-lg tracking-wide flex items-center justify-center gap-2 md:gap-3 transition-all duration-300 border-b-4 md:border-b-[6px] shadow-xl bg-gradient-to-r from-green-500 to-emerald-500 border-green-800 text-white hover:brightness-110 active:border-b-0 active:translate-y-2"
           >
-            <Check size={24} strokeWidth={3} />
+            <Check size={20} strokeWidth={3} className="md:w-6 md:h-6" />
             SALVAR
           </button>
         </div>
