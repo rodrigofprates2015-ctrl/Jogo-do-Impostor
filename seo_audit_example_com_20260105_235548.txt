@@ -1,0 +1,56 @@
+
+================================================================================
+🔍 RELATÓRIO DE AUDITORIA SEO
+================================================================================
+URL: https://example.com
+Palavra-chave foco: example website
+Data: 05/01/2026 23:55:48
+================================================================================
+
+================================================================================
+📋 PLANO DE AÇÃO - PRIORIDADES PARA RANKEAR NO GOOGLE
+================================================================================
+
+🔴 CRÍTICO (Faça IMEDIATAMENTE):
+   ❌ Meta Description não encontrada
+   ❌ Conteúdo Raso (Thin Content) - Apenas 18 palavras. Recomendado: mínimo 300
+
+🟡 OPORTUNIDADES DE OTIMIZAÇÃO:
+   ⚠️ Title muito curto (14 chars) - Recomendado: 50-60 caracteres
+   ⚠️ Palavra-chave 'example website' não encontrada no Title
+   ⚠️ Palavra-chave 'example website' não encontrada no H1
+   ⚠️ Nenhuma tag H2 - Use para estruturar o conteúdo
+   ⚠️ Palavra-chave 'example website' não encontrada na URL
+   ⚠️ Densidade da palavra-chave muito baixa (0.00%) - Recomendado: 1-2%
+   ⚠️ Nenhum texto em negrito - Use para destacar termos importantes
+   ⚠️ Nenhuma lista - Listas melhoram a legibilidade
+   ⚠️ Poucos links internos - Melhore a linkagem interna para distribuir autoridade
+   ⚠️ robots.txt não encontrado - Recomendado para controlar crawlers
+   ⚠️ sitemap.xml não encontrado - Essencial para indexação
+   ⚠️ Nenhum Schema Markup encontrado - Use dados estruturados para Rich Snippets
+
+🔵 ESTRATÉGIA DE LINK BUILDING:
+   1. Crie conteúdo de alta qualidade e compartilhável
+   2. Guest posts em blogs relevantes do seu nicho
+   3. Parcerias com influenciadores e sites de autoridade
+   4. Divulgue em redes sociais e fóruns especializados
+   5. Crie infográficos e recursos linkáveis
+   6. Participe de comunidades online (Reddit, Quora, etc)
+   7. Monitore menções à sua marca e peça links
+
+🎯 PRÓXIMOS PASSOS:
+   1. Corrija todos os problemas críticos listados acima
+   2. Implemente as oportunidades de otimização
+   3. Crie conteúdo adicional focado na palavra-chave
+   4. Monitore o ranking semanalmente (Google Search Console)
+   5. Construa backlinks de qualidade gradualmente
+   6. Atualize o conteúdo regularmente (Google valoriza frescor)
+
+================================================================================
+📊 RESUMO DA ANÁLISE
+================================================================================
+✅ Problemas Críticos: 2
+⚠️  Oportunidades: 12
+⚡ TTFB: 0.066s
+📦 Tamanho: 0.50 KB
+================================================================================

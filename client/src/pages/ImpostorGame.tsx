@@ -834,7 +834,7 @@ const TopRightButtons = ({ onDonateClick }: { onDonateClick: () => void }) => (
         <span className="text-sm font-medium">Como Jogar</span>
       </Link>
       <a
-        href="https://discord.gg/rhZxA2ha"
+        href="https://discord.gg/H3cjkcd7Pz"
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-2 px-4 py-2 bg-[#5865F2] border-2 border-[#4752C4] rounded-xl text-white hover:bg-[#6875F3] transition-all font-semibold shadow-lg"
@@ -872,7 +872,7 @@ const MobileActionButtons = ({ onDonateClick }: { onDonateClick: () => void }) =
       <HelpCircle className="w-4 h-4" />
     </Link>
     <a
-      href="https://discord.gg/rhZxA2ha"
+      href="https://discord.gg/H3cjkcd7Pz"
       target="_blank"
       rel="noopener noreferrer"
       className="flex items-center gap-2 px-3 py-2 bg-[#5865F2] border-2 border-[#4752C4] rounded-xl text-white hover:bg-[#6875F3] transition-all font-semibold shadow-lg"
