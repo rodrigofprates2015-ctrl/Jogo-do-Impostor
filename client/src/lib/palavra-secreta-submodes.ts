@@ -5,7 +5,7 @@ export const PALAVRA_SECRETA_SUBMODES: Record<PalavraSuperSecretaSubmode, { titl
     title: 'Clássico',
     desc: 'Palavras aleatórias do dia a dia',
     longDesc: 'Teste seu conhecimento geral e blefe com seus amigos usando palavras comuns do cotidiano. Ideal para quem está começando ou quer uma partida descontraída.',
-    image: '/submode-classico.png',
+    image: 'https://img.freepik.com/vetores-gratis/gradiente-de-volta-a-colecao-de-elementos-da-escola_52683-87525.jpg?semt=ais_incoming&w=740&q=80',
     words: ['Sol', 'Carro', 'Casa', 'Cachorro', 'Computador', 'Montanha', 'Pizza', 'Escola', 'Roupa', 'Avião', 'Janela', 'Telefone', 'Bola', 'Relógio', 'Flor', 'Gelo', 'Música', 'Prédio', 'Caminhão', 'Praia']
   },
   natal: {
