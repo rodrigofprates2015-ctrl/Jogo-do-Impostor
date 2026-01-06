@@ -1111,14 +1111,20 @@ const HomeScreen = () => {
       {/* Tripulante character - left side (desktop only) */}
       <img 
         src={tripulanteImg} 
-        alt="Tripulante" 
+        alt="Personagem Tripulante do Jogo do Impostor - TikJogos" 
+        width="300"
+        height="420"
+        loading="lazy"
         className="hidden md:block absolute bottom-32 left-[18%] lg:left-[22%] xl:left-[26%] h-[42vh] max-h-[420px] object-contain z-10"
       />
 
       {/* Impostor character - right side (desktop only) */}
       <img 
         src={impostorImg} 
-        alt="Impostor" 
+        alt="Personagem Impostor do Jogo - TikJogos" 
+        width="300"
+        height="420"
+        loading="lazy"
         className="hidden md:block absolute bottom-32 right-[18%] lg:right-[22%] xl:right-[26%] h-[42vh] max-h-[420px] object-contain z-10"
       />
 
@@ -1131,7 +1137,13 @@ const HomeScreen = () => {
         <div className="bg-[#242642] rounded-[3rem] p-6 md:p-10 shadow-2xl border-4 border-[#2f3252] w-[90%] max-w-md animate-fade-in">
           {/* Impostor logo with characters */}
           <div className="flex justify-center mb-3">
-            <img src={logoImpostor} alt="Impostor" className="h-28 md:h-36 object-contain" />
+            <img 
+              src={logoImpostor} 
+              alt="Logo Jogo do Impostor Online - TikJogos" 
+              width="200"
+              height="144"
+              className="h-28 md:h-36 object-contain" 
+            />
           </div>
 
           {/* Form */}
@@ -1245,7 +1257,14 @@ const HomeScreen = () => {
 
       {/* Footer - now below the content, takes full width */}
       <div className="w-full text-center py-6 px-4 bg-gradient-to-t from-black/40 to-transparent z-20 relative border-t border-[#3d4a5c]/30">
-        <img src={logoTikjogos} alt="TikJogos" className="h-4 md:h-5 mx-auto mb-2" />
+        <img 
+          src={logoTikjogos} 
+          alt="TikJogos - Jogos Online Grátis" 
+          width="120"
+          height="20"
+          loading="lazy"
+          className="h-4 md:h-5 mx-auto mb-2" 
+        />
         <p className="text-[#6a8aaa] text-xs">
           Desenvolvido com <Heart className="inline w-3 h-3 text-gray-500 fill-current" /> por <span className="text-[#8aa0b0]">Rodrigo Freitas</span>
         </p>
