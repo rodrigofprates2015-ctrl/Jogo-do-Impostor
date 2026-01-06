@@ -1140,8 +1140,6 @@ const HomeScreen = () => {
             <img 
               src={logoImpostor} 
               alt="Logo Jogo do Impostor Online - TikJogos" 
-              width="200"
-              height="144"
               className="h-28 md:h-36 object-contain" 
             />
           </div>
@@ -1260,8 +1258,6 @@ const HomeScreen = () => {
         <img 
           src={logoTikjogos} 
           alt="TikJogos - Jogos Online Grátis" 
-          width="120"
-          height="20"
           loading="lazy"
           className="h-4 md:h-5 mx-auto mb-2" 
         />
