@@ -13,13 +13,14 @@ const DEBOUNCE_MS = 2000; // 2 seconds
 
 // Paths to ignore (static assets, API health checks)
 const IGNORE_PATHS = [
-  /\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|webp|map|json|txt|xml)$/i,
+  /\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|webp|map|json|txt|xml|webmanifest)$/i,
   /^\/api\//,  // Ignore ALL API routes
   /^\/assets\//,
   /^\/node_modules\//,
   /^\/@/,  // Vite dev server paths
   /^\/favicon/,
   /^\/manifest/,
+  /^\/site\.webmanifest$/,  // Explicitly ignore site.webmanifest
   /^\/robots/,
   /^\/sitemap/,
 ];
