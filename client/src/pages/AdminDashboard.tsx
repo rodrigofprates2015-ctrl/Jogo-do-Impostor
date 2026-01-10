@@ -677,7 +677,7 @@ export default function AdminDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <AnalyticsDashboard />
+            <AnalyticsDashboard token={token} />
           </CardContent>
         </Card>
       </main>

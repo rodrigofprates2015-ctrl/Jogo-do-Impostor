@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { BarChart3, Users, Eye } from 'lucide-react';
 import { AnalyticsChart } from '@/components/AnalyticsChart';
-import { getQueryFn } from '@/lib/queryClient';
 
 type AnalyticsSummary = {
   totalPageviews: number;
@@ -12,21 +11,61 @@ type AnalyticsSummary = {
   uniqueVisitorsLast30Days: Array<{ date: string; count: number }>;
 };
 
-export default function AnalyticsDashboard() {
+type AnalyticsDashboardProps = {
+  token: string | null;
+};
+
+export default function AnalyticsDashboard({ token }: AnalyticsDashboardProps) {
   const { data, isLoading, error } = useQuery<AnalyticsSummary>({
-    queryKey: ['/api/analytics/summary'],
-    queryFn: getQueryFn({ on401: 'throw' }),
+    queryKey: ['/api/analytics/summary', token],
+    queryFn: async () => {
+      if (!token) {
+        throw new Error('No authentication token available');
+      }
+      
+      const response = await fetch('/api/analytics/summary', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `${response.status}: ${response.statusText}`);
+      }
+      
+      return response.json();
+    },
     staleTime: 5 * 60 * 1000, // 5 minutes cache
     refetchOnWindowFocus: false,
+    enabled: !!token, // Only run query if token exists
   });
 
   if (isLoading) {
     return <AnalyticsLoadingSkeleton />;
   }
 
+  if (!token) {
+    return (
+      <div className="p-6">
+        <Card className="border-yellow-600">
+          <CardContent className="pt-6">
+            <p className="text-yellow-600 font-semibold mb-2">
+              Autenticação necessária
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Faça login como administrador para visualizar os dados de analytics.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (error) {
     const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
     const isDatabaseError = errorMessage.includes('503') || errorMessage.includes('Database not available');
+    const isAuthError = errorMessage.includes('401') || errorMessage.includes('Não autorizado');
     
     return (
       <div className="p-6">
@@ -36,7 +75,9 @@ export default function AnalyticsDashboard() {
               Erro ao carregar dados de analytics
             </p>
             <p className="text-sm text-muted-foreground mb-4">
-              {isDatabaseError 
+              {isAuthError
+                ? 'Token de autenticação inválido. Faça logout e login novamente.'
+                : isDatabaseError 
                 ? 'O banco de dados não está disponível. Configure a variável DATABASE_URL para habilitar o analytics.'
                 : errorMessage}
             </p>
