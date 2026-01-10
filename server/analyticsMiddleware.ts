@@ -2,32 +2,36 @@ import type { Request, Response, NextFunction } from 'express';
 import { db } from './db';
 import { analyticsEvents, type InsertAnalyticsEvent } from '@shared/schema';
 import { randomUUID } from 'crypto';
+import { eq } from 'drizzle-orm';
 
 const COOKIE_NAME = 'visitor_id';
 const COOKIE_MAX_AGE = 365 * 24 * 60 * 60 * 1000; // 365 days
 
+// Debounce: prevent tracking the same page multiple times in quick succession
+const recentPageviews = new Map<string, number>(); // visitorId+path -> timestamp
+const DEBOUNCE_MS = 2000; // 2 seconds
+
 // Paths to ignore (static assets, API health checks)
 const IGNORE_PATHS = [
-  /\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|webp|map|json)$/i,
+  /\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|webp|map|json|txt|xml)$/i,
   /^\/api\//,  // Ignore ALL API routes
   /^\/assets\//,
   /^\/node_modules\//,
   /^\/@/,  // Vite dev server paths
+  /^\/favicon/,
+  /^\/manifest/,
+  /^\/robots/,
+  /^\/sitemap/,
 ];
 
-// Track which visitors we've already registered as unique
-const registeredVisitors = new Set<string>();
-
-export function analyticsMiddleware(req: Request, res: Response, next: NextFunction) {
+export async function analyticsMiddleware(req: Request, res: Response, next: NextFunction) {
   // Skip tracking for ignored paths
   if (IGNORE_PATHS.some(pattern => pattern.test(req.path))) {
-    console.log(`[Analytics] Ignored path: ${req.method} ${req.path}`);
     return next();
   }
 
   // Only track GET requests for HTML pages
   if (req.method !== 'GET') {
-    console.log(`[Analytics] Ignored method: ${req.method} ${req.path}`);
     return next();
   }
 
@@ -49,13 +53,27 @@ export function analyticsMiddleware(req: Request, res: Response, next: NextFunct
     });
   }
 
-  // Check if this is the first time we're seeing this visitor in this session
-  const shouldTrackAsUnique = isNewVisitor && !registeredVisitors.has(visitorId);
+  // Check if this visitor already has a unique_visitor record in the database
+  let shouldTrackAsUnique = false;
   
-  console.log(`[Analytics] Visitor: ${visitorId.substring(0, 8)}... | New: ${isNewVisitor} | TrackUnique: ${shouldTrackAsUnique} | Registered: ${registeredVisitors.size}`);
-  
-  if (shouldTrackAsUnique) {
-    registeredVisitors.add(visitorId);
+  if (db && visitorId) {
+    try {
+      const existingVisitor = await db
+        .select()
+        .from(analyticsEvents)
+        .where(eq(analyticsEvents.visitorId, visitorId))
+        .where(eq(analyticsEvents.eventType, 'unique_visitor'))
+        .limit(1);
+      
+      shouldTrackAsUnique = isNewVisitor || existingVisitor.length === 0;
+      
+      console.log(`[Analytics] Visitor: ${visitorId.substring(0, 8)}... | New: ${isNewVisitor} | ExistsInDB: ${existingVisitor.length > 0} | WillTrackUnique: ${shouldTrackAsUnique}`);
+    } catch (error) {
+      console.error('[Analytics] Error checking visitor:', error);
+      shouldTrackAsUnique = isNewVisitor;
+    }
+  } else {
+    shouldTrackAsUnique = isNewVisitor;
   }
 
   // Extract metadata
@@ -64,7 +82,26 @@ export function analyticsMiddleware(req: Request, res: Response, next: NextFunct
   const pagePath = req.path;
   const referrer = req.headers['referer'] || null;
 
-  // Track unique visitor event (only once per visitor)
+  // Debounce: check if we recently tracked this exact page for this visitor
+  const debounceKey = `${visitorId}:${pagePath}`;
+  const lastTracked = recentPageviews.get(debounceKey);
+  const now = Date.now();
+  
+  if (lastTracked && (now - lastTracked) < DEBOUNCE_MS) {
+    console.log(`[Analytics] ⏭️  SKIPPED (debounce): ${pagePath} for ${visitorId.substring(0, 8)}... (${now - lastTracked}ms ago)`);
+    return next();
+  }
+  
+  recentPageviews.set(debounceKey, now);
+  
+  // Cleanup old entries (older than 10 seconds)
+  for (const [key, timestamp] of recentPageviews.entries()) {
+    if (now - timestamp > 10000) {
+      recentPageviews.delete(key);
+    }
+  }
+
+  // Track unique visitor event (only once per visitor, checked in DB)
   if (shouldTrackAsUnique) {
     console.log(`[Analytics] → Registering UNIQUE_VISITOR for ${visitorId.substring(0, 8)}...`);
     trackEvent({
