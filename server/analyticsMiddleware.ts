@@ -8,10 +8,15 @@ const COOKIE_MAX_AGE = 365 * 24 * 60 * 60 * 1000; // 365 days
 
 // Paths to ignore (static assets, API health checks)
 const IGNORE_PATHS = [
-  /\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|webp|map)$/i,
-  /^\/api\/health/,
-  /^\/api\/version/,
+  /\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|webp|map|json)$/i,
+  /^\/api\//,  // Ignore ALL API routes
+  /^\/assets\//,
+  /^\/node_modules\//,
+  /^\/@/,  // Vite dev server paths
 ];
+
+// Track which visitors we've already registered as unique
+const registeredVisitors = new Set<string>();
 
 export function analyticsMiddleware(req: Request, res: Response, next: NextFunction) {
   // Skip tracking for ignored paths
@@ -19,13 +24,18 @@ export function analyticsMiddleware(req: Request, res: Response, next: NextFunct
     return next();
   }
 
+  // Only track GET requests for HTML pages
+  if (req.method !== 'GET') {
+    return next();
+  }
+
   // Extract or create visitor ID
   let visitorId = req.cookies?.[COOKIE_NAME];
-  let eventType: 'unique_visitor' | 'pageview' = 'pageview';
+  let isNewVisitor = false;
 
   if (!visitorId) {
     visitorId = randomUUID();
-    eventType = 'unique_visitor';
+    isNewVisitor = true;
     
     res.cookie(COOKIE_NAME, visitorId, {
       maxAge: COOKIE_MAX_AGE,
@@ -35,22 +45,43 @@ export function analyticsMiddleware(req: Request, res: Response, next: NextFunct
     });
   }
 
+  // Check if this is the first time we're seeing this visitor in this session
+  const shouldTrackAsUnique = isNewVisitor && !registeredVisitors.has(visitorId);
+  
+  if (shouldTrackAsUnique) {
+    registeredVisitors.add(visitorId);
+  }
+
   // Extract metadata
   const ipAddress = extractRealIP(req);
   const userAgent = req.headers['user-agent'] || null;
   const pagePath = req.path;
   const referrer = req.headers['referer'] || null;
 
-  // Async tracking (non-blocking)
+  // Track unique visitor event (only once per visitor)
+  if (shouldTrackAsUnique) {
+    trackEvent({
+      visitorId,
+      eventType: 'unique_visitor',
+      ipAddress,
+      userAgent,
+      pagePath,
+      referrer,
+    }).catch(err => {
+      console.error('[Analytics] Failed to track unique visitor:', err);
+    });
+  }
+
+  // Always track pageview
   trackEvent({
     visitorId,
-    eventType,
+    eventType: 'pageview',
     ipAddress,
     userAgent,
     pagePath,
     referrer,
   }).catch(err => {
-    console.error('[Analytics] Failed to track event:', err);
+    console.error('[Analytics] Failed to track pageview:', err);
   });
 
   next();

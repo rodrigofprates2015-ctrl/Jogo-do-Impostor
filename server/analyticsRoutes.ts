@@ -18,10 +18,11 @@ export function createAnalyticsRouter(verifyAdmin: any) {
         });
       }
 
-      // Total pageviews (all events)
+      // Total pageviews (only pageview events, not unique_visitor)
       const totalPageviewsResult = await db
         .select({ count: count() })
-        .from(analyticsEvents);
+        .from(analyticsEvents)
+        .where(sql`${analyticsEvents.eventType} = 'pageview'`);
       const totalPageviews = totalPageviewsResult[0]?.count || 0;
 
       // Total unique visitors (distinct visitor_id where event_type = 'unique_visitor')
@@ -41,7 +42,7 @@ export function createAnalyticsRouter(verifyAdmin: any) {
           count: count(),
         })
         .from(analyticsEvents)
-        .where(sql`${analyticsEvents.createdAt} >= ${thirtyDaysAgo}`)
+        .where(sql`${analyticsEvents.createdAt} >= ${thirtyDaysAgo} AND ${analyticsEvents.eventType} = 'pageview'`)
         .groupBy(sql`DATE(${analyticsEvents.createdAt})`)
         .orderBy(sql`DATE(${analyticsEvents.createdAt})`);
 
