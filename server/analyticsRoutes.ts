@@ -11,7 +11,11 @@ export function createAnalyticsRouter(verifyAdmin: any) {
   router.get('/summary', verifyAdmin, async (req, res) => {
     try {
       if (!db) {
-        return res.status(503).json({ error: 'Database not available' });
+        console.error('[Analytics API] Database not configured - DATABASE_URL missing');
+        return res.status(503).json({ 
+          error: 'Database not available',
+          message: 'DATABASE_URL environment variable is not configured. Analytics requires a PostgreSQL database.'
+        });
       }
 
       // Total pageviews (all events)
@@ -64,9 +68,25 @@ export function createAnalyticsRouter(verifyAdmin: any) {
         pageviewsLast30Days: pageviewsTimeSeries,
         uniqueVisitorsLast30Days: uniqueVisitorsTimeSeries,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('[Analytics API] Error fetching summary:', error);
-      res.status(500).json({ error: 'Failed to fetch analytics data' });
+      
+      // Check if it's a table not found error
+      const isTableNotFound = error?.message?.includes('relation "analytics_events" does not exist') ||
+                              error?.message?.includes('table') ||
+                              error?.code === '42P01';
+      
+      if (isTableNotFound) {
+        return res.status(503).json({ 
+          error: 'Analytics table not created',
+          message: 'Run "npm run db:push" to create the analytics_events table.'
+        });
+      }
+      
+      res.status(500).json({ 
+        error: 'Failed to fetch analytics data',
+        message: error?.message || 'Unknown error'
+      });
     }
   });
 

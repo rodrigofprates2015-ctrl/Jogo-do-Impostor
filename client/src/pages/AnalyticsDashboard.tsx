@@ -25,13 +25,29 @@ export default function AnalyticsDashboard() {
   }
 
   if (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+    const isDatabaseError = errorMessage.includes('503') || errorMessage.includes('Database not available');
+    
     return (
       <div className="p-6">
         <Card className="border-destructive">
           <CardContent className="pt-6">
-            <p className="text-destructive">
-              Erro ao carregar dados de analytics. Tente novamente mais tarde.
+            <p className="text-destructive font-semibold mb-2">
+              Erro ao carregar dados de analytics
             </p>
+            <p className="text-sm text-muted-foreground mb-4">
+              {isDatabaseError 
+                ? 'O banco de dados não está disponível. Configure a variável DATABASE_URL para habilitar o analytics.'
+                : errorMessage}
+            </p>
+            {isDatabaseError && (
+              <div className="bg-slate-800 p-4 rounded-md text-xs font-mono">
+                <p className="text-slate-400 mb-2">Para configurar:</p>
+                <p className="text-slate-300">1. Adicione DATABASE_URL nas variáveis de ambiente</p>
+                <p className="text-slate-300">2. Execute: npm run db:push</p>
+                <p className="text-slate-300">3. Reinicie o servidor</p>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
