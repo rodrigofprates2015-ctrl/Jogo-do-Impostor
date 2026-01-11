@@ -22,9 +22,30 @@ export default function PlayGame() {
       .google-ads-side-rail-container,
       .google-ads-side-rail-left,
       .google-ads-side-rail-right,
+      .adsbygoogle[data-ad-status="filled"],
+      .adsbygoogle[data-vignette-loaded="true"],
+      #google_ads_iframe_auto_ads,
+      iframe[name^="google_ads_iframe"],
       ins.adsbygoogle[data-ad-format="vertical"],
-      ins.adsbygoogle[data-ad-format="rectangle"] {
+      ins.adsbygoogle[data-ad-format="rectangle"],
+      div[id^="google_ads_iframe"],
+      div[class*="google-auto-placed"] {
         display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        height: 0 !important;
+        width: 0 !important;
+      }
+      /* Permitir apenas o anúncio do footer */
+      footer .adsbygoogle,
+      footer .adsbygoogle * {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        height: auto !important;
+        width: auto !important;
       }
     `;
     document.head.appendChild(style);
