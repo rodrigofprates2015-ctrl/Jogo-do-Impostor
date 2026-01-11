@@ -3,6 +3,7 @@ import { ArrowLeft, RotateCcw, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import gameFeed from "@/assets/feed_1768102619275.json";
+import { AdBlockBottom } from "@/components/AdBlocks";
 
 export default function PlayGame() {
   const [, params] = useRoute("/jogar/:id");
@@ -13,6 +14,25 @@ export default function PlayGame() {
 
   useEffect(() => {
     setLoading(true);
+    // Bloquear anúncios laterais do AdSense (Auto Ads) nesta página
+    const style = document.createElement('style');
+    style.id = 'hide-adsense-sidebars';
+    style.innerHTML = `
+      .google-ads-side-rail,
+      .google-ads-side-rail-container,
+      .google-ads-side-rail-left,
+      .google-ads-side-rail-right,
+      ins.adsbygoogle[data-ad-format="vertical"],
+      ins.adsbygoogle[data-ad-format="rectangle"] {
+        display: none !important;
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      const existingStyle = document.getElementById('hide-adsense-sidebars');
+      if (existingStyle) existingStyle.remove();
+    };
   }, [gameId, key]);
 
   if (!game) {
@@ -82,8 +102,11 @@ export default function PlayGame() {
         />
       </main>
 
-      <footer className="p-4 bg-[#1a1a1b] border-t border-[#3a3a3c] hidden lg:block shrink-0">
-        <div className="max-w-4xl mx-auto flex items-start gap-4">
+      <footer className="shrink-0 bg-[#1a1a1b] border-t border-[#3a3a3c]">
+        <div className="max-w-4xl mx-auto py-2">
+          <AdBlockBottom />
+        </div>
+        <div className="p-4 hidden lg:flex items-start gap-4">
           <div className="flex-1">
             <h2 className="text-white font-bold mb-1">{game.title}</h2>
             <p className="text-gray-400 text-xs leading-relaxed line-clamp-2">{game.description}</p>
