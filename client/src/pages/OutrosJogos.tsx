@@ -57,18 +57,16 @@ export default function OutrosJogos() {
 
         {/* Jogos do Feed Externo */}
         {gameFeed.map((game) => (
-          <a
+          <Link
             key={game.id}
-            href={game.url}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={`/jogar/${game.id}`}
             className="group relative overflow-hidden rounded-xl bg-[#1a1a1b] border border-[#3a3a3c] p-6 transition-all duration-300 hover-elevate active-elevate-2"
             data-testid={`card-external-game-${game.id}`}
           >
             <div className="relative z-10">
               <div className="flex justify-between items-start mb-3">
                 <img src={game.thumb} alt={game.title} className="w-12 h-12 rounded-lg object-cover" />
-                <ExternalLink className="w-4 h-4 text-gray-500 group-hover:text-emerald-400 transition-colors" />
+                <Gamepad2 className="w-4 h-4 text-gray-500 group-hover:text-emerald-400 transition-colors" />
               </div>
               <h3 className="text-xl font-bold text-white mb-2 line-clamp-1">{game.title}</h3>
               <p className="text-gray-400 text-sm line-clamp-2">{game.description}</p>
@@ -78,7 +76,7 @@ export default function OutrosJogos() {
                 </span>
               </div>
             </div>
-          </a>
+          </Link>
         ))}
 
         <div className="relative overflow-hidden rounded-xl bg-[#1a1a1b]/50 border border-dashed border-[#3a3a3c] p-6 flex items-center justify-center">

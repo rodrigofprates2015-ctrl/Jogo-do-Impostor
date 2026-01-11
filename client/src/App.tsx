@@ -16,6 +16,7 @@ import Termo from "@/pages/Termo";
 import AdminDashboard from "@/pages/AdminDashboard";
 import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
+import PlayGame from "@/pages/PlayGame";
 import CommunityThemes from "@/pages/CommunityThemes";
 import Prototipo from "@/pages/Prototipo";
 import ModoLocal from "@/pages/ModoLocal";
@@ -76,6 +77,7 @@ function Router() {
       <Route path="/terms" component={TermsOfUse} />
       <Route path="/outros-jogos" component={OutrosJogos} />
       <Route path="/termo" component={Termo} />
+      <Route path="/jogar/:id" component={PlayGame} />
       <Route path="/dashadmin" component={AdminDashboard} />
       
       {/* SEO Theme Pages */}
