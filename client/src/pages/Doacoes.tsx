@@ -138,7 +138,7 @@ export default function Doacoes() {
               <img 
                 src="https://raw.githubusercontent.com/rodrigofprates2015-ctrl/tikjogos2/main/client/public/Gemini_Generated_Image_ekoppaekoppaekop.png" 
                 alt="Personagem" 
-                className="w-40 h-40 md:w-52 md:h-52 object-contain"
+                className="w-72 h-72 md:w-[374px] md:h-[374px] object-contain"
               />
             </div>
 
