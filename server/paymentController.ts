@@ -37,6 +37,11 @@ export interface ThemeData {
   isPublic?: boolean;
 }
 
+export interface DonationData {
+  donorName: string;
+  message?: string;
+}
+
 export interface PaymentResponse {
   success: boolean;
   paymentId?: number;
@@ -45,6 +50,80 @@ export interface PaymentResponse {
   ticketUrl?: string;
   expirationDate?: string;
   error?: string;
+}
+
+export async function createDonationPayment(donationData: DonationData): Promise<PaymentResponse> {
+  if (!process.env.MERCADO_PAGO_ACCESS_TOKEN && !process.env.MERCADOPAGO_ACCESS_TOKEN) {
+    return {
+      success: false,
+      error: 'Mercado Pago access token not configured'
+    };
+  }
+
+  try {
+    const payment = getPaymentClient();
+    const idempotencyKey = `donation-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+    
+    let webhookUrl = process.env.APP_URL || process.env.RAILWAY_PUBLIC_DOMAIN || process.env.REPLIT_DEV_DOMAIN;
+    if (webhookUrl && !webhookUrl.startsWith('http')) {
+      webhookUrl = `https://${webhookUrl}`;
+    }
+    const notificationUrl = webhookUrl ? `${webhookUrl}/webhook/donation` : undefined;
+    
+    console.log('[Donation Payment] Creating payment with notification_url:', notificationUrl);
+    
+    const paymentData: any = {
+      transaction_amount: 5.00,
+      description: `Doação TikJogos - ${donationData.donorName}`,
+      payment_method_id: 'pix',
+      payer: {
+        email: 'doador@tikjogos.com.br',
+        first_name: donationData.donorName,
+        last_name: 'TikJogos'
+      },
+      metadata: {
+        type: 'donation',
+        donorName: donationData.donorName,
+        message: donationData.message || ''
+      }
+    };
+    
+    if (notificationUrl) {
+      paymentData.notification_url = notificationUrl;
+    }
+
+    const response = await payment.create({
+      body: paymentData,
+      requestOptions: {
+        idempotencyKey
+      }
+    });
+
+    if (response.point_of_interaction?.transaction_data) {
+      const transactionData = response.point_of_interaction.transaction_data;
+      
+      return {
+        success: true,
+        paymentId: response.id,
+        qrCode: transactionData.qr_code,
+        qrCodeBase64: transactionData.qr_code_base64,
+        ticketUrl: transactionData.ticket_url,
+        expirationDate: response.date_of_expiration || undefined
+      };
+    }
+
+    return {
+      success: false,
+      error: 'Failed to generate PIX QR Code'
+    };
+
+  } catch (error: any) {
+    console.error('[Donation Payment] Error creating payment:', error);
+    return {
+      success: false,
+      error: error.message || 'Unknown payment error'
+    };
+  }
 }
 
 export async function createPayment(themeData: ThemeData): Promise<PaymentResponse> {

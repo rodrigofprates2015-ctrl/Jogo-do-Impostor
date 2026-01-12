@@ -11,6 +11,7 @@ import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfUse from "@/pages/TermsOfUse";
 import ComoJogar from "@/pages/ComoJogar";
 import CriarTema from "@/pages/CriarTema";
+import Doacoes from "@/pages/Doacoes";
 import OutrosJogos from "@/pages/OutrosJogos";
 import Termo from "@/pages/Termo";
 import AdminDashboard from "@/pages/AdminDashboard";
@@ -63,6 +64,8 @@ function Router() {
       {/* Rotas de temas da comunidade temporariamente desabilitadas */}
       {/* <Route path="/temas" component={CommunityThemes} /> */}
       {/* <Route path="/temas-comunidade" component={CommunityThemes} /> */}
+      <Route path="/doacoes" component={Doacoes} />
+      <Route path="/apoie" component={Doacoes} />
       <Route path="/prototipo" component={Prototipo} />
       <Route path="/modo-local" component={ModoLocal} />
       <Route path="/modo-local/jogo" component={ModoLocalJogo} />

@@ -6,7 +6,7 @@ import { type Player, type GameModeType, type GameData } from "@shared/schema";
 import { z } from "zod";
 import { randomBytes } from "crypto";
 import { setupAuth, isAuthenticated } from "./githubAuth";
-import { createPayment, getPaymentStatus, type ThemeData } from "./paymentController";
+import { createPayment, createDonationPayment, getPaymentStatus, type ThemeData, type DonationData } from "./paymentController";
 import { randomBytes as cryptoRandomBytes } from "crypto";
 import { createAnalyticsRouter } from "./analyticsRoutes";
 
@@ -2539,6 +2539,98 @@ export async function registerRoutes(
       }
       console.error('[Payment Route] Error:', error);
       res.status(500).json({ error: "Erro interno ao processar pagamento" });
+    }
+  });
+
+  // Donation Payment Route
+  const createDonationSchema = z.object({
+    donorName: z.string().min(2, "Nome deve ter pelo menos 2 caracteres").max(50, "Nome deve ter no máximo 50 caracteres"),
+    message: z.string().max(200, "Mensagem deve ter no máximo 200 caracteres").optional()
+  });
+
+  app.post("/api/donations/create", async (req, res) => {
+    try {
+      const validatedData = createDonationSchema.parse(req.body);
+      
+      const donationData: DonationData = {
+        donorName: validatedData.donorName,
+        message: validatedData.message
+      };
+      
+      const paymentResult = await createDonationPayment(donationData);
+      
+      if (!paymentResult.success) {
+        return res.status(400).json({ 
+          error: paymentResult.error || "Falha ao criar pagamento" 
+        });
+      }
+      
+      console.log('[Donation] Created payment:', paymentResult.paymentId, 'for donor:', donationData.donorName);
+      
+      res.json({
+        success: true,
+        paymentId: paymentResult.paymentId,
+        qrCode: paymentResult.qrCode,
+        qrCodeBase64: paymentResult.qrCodeBase64,
+        ticketUrl: paymentResult.ticketUrl,
+        expirationDate: paymentResult.expirationDate
+      });
+      
+    } catch (error: any) {
+      if (error.name === 'ZodError') {
+        return res.status(400).json({ 
+          error: "Dados inválidos", 
+          details: error.errors 
+        });
+      }
+      console.error('[Donation Route] Error:', error);
+      res.status(500).json({ error: "Erro interno ao processar doação" });
+    }
+  });
+
+  // Donation status check
+  app.get("/api/donations/status/:paymentId", async (req, res) => {
+    try {
+      const paymentId = parseInt(req.params.paymentId);
+      if (isNaN(paymentId)) {
+        return res.status(400).json({ error: "ID de pagamento inválido" });
+      }
+      
+      const paymentInfo = await getPaymentStatus(paymentId);
+      res.json({ status: paymentInfo.status });
+    } catch (error) {
+      console.error('[Donation Status] Error:', error);
+      res.status(500).json({ error: "Erro ao verificar status" });
+    }
+  });
+
+  // Webhook for donations
+  app.post("/webhook/donation", async (req, res) => {
+    try {
+      res.status(200).send('OK');
+      
+      const { type, action, data } = req.body;
+      console.log('[Donation Webhook] Received:', { type, action, data });
+      
+      const isPaymentNotification = 
+        type === 'payment' || 
+        (action && action.startsWith('payment.')) ||
+        (type && type.startsWith('payment.'));
+      
+      if (!isPaymentNotification) {
+        return;
+      }
+      
+      const paymentId = data?.id;
+      if (!paymentId) {
+        return;
+      }
+      
+      const paymentInfo = await getPaymentStatus(paymentId);
+      console.log('[Donation Webhook] Payment status:', paymentInfo.status, 'for ID:', paymentId);
+      
+    } catch (error) {
+      console.error('[Donation Webhook] Error:', error);
     }
   });
 
