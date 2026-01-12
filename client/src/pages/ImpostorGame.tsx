@@ -985,15 +985,11 @@ const HomeScreen = () => {
       window.history.replaceState({}, '', '/');
     }
 
-    // Check if new feature popup should be shown
-    const hasSeenPopup = localStorage.getItem('hasSeenNewFeaturePopup_v2');
-    if (!hasSeenPopup) {
-      // Show popup after 1 second
-      const timer = setTimeout(() => {
-        setShowNewFeaturePopup(true);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
+    // Show donation popup after 1 second on every page load
+    const timer = setTimeout(() => {
+      setShowNewFeaturePopup(true);
+    }, 1000);
+    return () => clearTimeout(timer);
   }, [loadSavedNickname, toast]);
 
   // Auto-create room when coming from gallery
@@ -1032,7 +1028,6 @@ const HomeScreen = () => {
 
   const handleClosePopup = () => {
     setShowNewFeaturePopup(false);
-    localStorage.setItem('hasSeenNewFeaturePopup_v2', 'true');
   };
 
   const handleCreate = () => {
