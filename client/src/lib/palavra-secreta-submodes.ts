@@ -1,4 +1,4 @@
-export type PalavraSuperSecretaSubmode = 'classico' | 'natal' | 'estrategia' | 'animes' | 'herois' | 'seriesMisterio' | 'valorant' | 'futebol' | 'disney' | 'roblox' | 'supernatural' | 'dragonball' | 'naruto' | 'rock' | 'minecraft' | 'gta';
+export type PalavraSuperSecretaSubmode = 'classico' | 'natal' | 'estrategia' | 'animes' | 'herois' | 'seriesMisterio' | 'valorant' | 'futebol' | 'disney' | 'roblox' | 'supernatural' | 'dragonball' | 'naruto' | 'rock' | 'minecraft' | 'gta' | 'fnaf';
 
 export const PALAVRA_SECRETA_SUBMODES: Record<PalavraSuperSecretaSubmode, { title: string; desc: string; longDesc?: string; words: string[]; image?: string }> = {
   classico: {
@@ -120,5 +120,12 @@ export const PALAVRA_SECRETA_SUBMODES: Record<PalavraSuperSecretaSubmode, { titl
     longDesc: 'Teste seu conhecimento e blefe com seus amigos usando termos do GTA. Nossa lista inclui personagens icônicos, cidades, gangues, veículos e missões.',
     image: 'https://www.scotsman.com/webimg/b25lY21zOmEzNzZkMDhlLTI5NDAtNDI1MS04MDI5LWVmOTI0N2QwN2UxZDo1YjY2NDY4OC1iNDFmLTQ5M2YtODMyNC04OTdjZDVkMmYzODE=.jpg?crop=3:2,smart&trim=&width=640&quality=65&enable=upscale',
     words: ['CJ (Carl Johnson)', 'Franklin Clinton', 'Michael De Santa', 'Trevor Philips', 'Niko Bellic', 'Tommy Vercetti', 'Los Santos', 'Liberty City', 'Vice City', 'San Andreas', 'Grove Street', 'Ballas', 'Vagos', 'Polícia (LSPD)', '5 Estrelas', 'Helicóptero', 'Tanque de Guerra', 'Jetpack', 'Missão', 'Roubo de Carros', 'Assalto a Banco', 'Dinheiro', 'Carro Esportivo', 'Moto', 'Armas', 'Wanted (Procurado)', 'Lester Crest', 'Big Smoke', 'Ryder', 'Lamar Davis', 'Cassino', 'Golpe', 'Modo Online', 'Garagem', 'Los Santos Customs', 'Paraquedas', 'Cheat']
+  },
+  fnaf: {
+    title: 'Five Nights at Freddy\'s',
+    desc: 'Termos do universo de terror dos animatrônicos',
+    longDesc: 'Teste seu conhecimento e blefe com seus amigos usando termos do Five Nights at Freddy\'s. Nossa lista inclui animatrônicos icônicos, personagens, locais e mecânicas do jogo de terror.',
+    image: 'https://playgama.com/cdn-cgi/imagedelivery/LN2S-4p3-GgZvEx3IPaKUA/03fae46f-f8b6-4c22-de29-d9f91eb97000/enlarged',
+    words: ['Animatrônicos', 'Freddy Fazbear', 'Bonnie', 'Chica', 'Foxy', 'Golden Freddy', 'Springtrap', 'Glitchtrap', 'Circus Baby', 'Ennard', 'Puppet', 'Marionete', 'Ballora', 'Funtime Freddy', 'Funtime Foxy', 'Molten Freddy', 'Scraptrap', 'Helpy', 'Vanny', 'Vanessa', 'William Afton', 'Michael Afton', 'Gregory', 'Glamrock Freddy', 'Roxanne Wolf', 'Montgomery Gator', 'Sun (Daycare Attendant)', 'Moon (Daycare Attendant)', 'Pizzaria', 'Fazbear Entertainment', 'Escritório', 'Câmeras', 'Monitores', 'Corredor', 'Ventilação', 'Portas', 'Gerador', 'Energia', 'Lanternas', 'Tablet', 'Noite', 'Turno', 'Vigilância', 'Sobrevivência', 'Jumpscare', 'Missões', 'Mapas', 'Minigames', 'Colecionáveis', 'Easter eggs', 'FNAF 1', 'FNAF 2', 'FNAF 3', 'FNAF 4', 'Sister Location', 'Security Breach', 'Ultimate Custom Night', 'Custom Night', 'Teorias', 'Lore']
   }
 };
