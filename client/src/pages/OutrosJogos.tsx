@@ -18,8 +18,8 @@ const internalGames = [
 export default function OutrosJogos() {
   return (
     <div className="min-h-screen w-full flex flex-col items-center bg-[#121a31] py-8 px-4">
-      {/* Top Ad Block - TEMPORARIAMENTE DESABILITADO */}
-      {/* <AdBlockTop /> */}
+      {/* Top Ad Block */}
+      <AdBlockTop />
 
       <Link 
         href="/"
@@ -87,8 +87,8 @@ export default function OutrosJogos() {
         </div>
       </div>
 
-      {/* Bottom Ad Block - TEMPORARIAMENTE DESABILITADO */}
-      {/* <AdBlockBottom /> */}
+      {/* Bottom Ad Block */}
+      <AdBlockBottom />
 
       <div className="mt-12 mb-8 text-center max-w-md px-4">
         <img src={logoTikjogos} alt="TikJogos" className="h-4 md:h-5 mx-auto mb-2 opacity-50" />
