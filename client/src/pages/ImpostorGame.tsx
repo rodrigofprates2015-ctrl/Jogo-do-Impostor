@@ -7,6 +7,7 @@ import { AdBlockTop, AdBlockBottom } from "@/components/AdBlocks";
 import { SpeakingOrderWithVotingStage } from "@/components/RoundStageContent";
 import { LobbyChat } from "@/components/LobbyChat";
 import NewFeaturePopup from "@/components/NewFeaturePopup";
+import { PremiumBanner } from "@/components/PremiumBanner";
 import { SiDiscord } from "react-icons/si";
 import { 
   User, 
@@ -1127,6 +1128,11 @@ const HomeScreen = () => {
       <div className="flex-1 flex flex-col items-center justify-center pt-20 md:pt-24 px-4 relative z-20">
         {/* Mobile action buttons - above the card */}
         <MobileActionButtons onDonateClick={() => setIsDonationOpen(true)} />
+
+        {/* Premium Banner - Create your own theme */}
+        <div className="w-[90%] max-w-md mb-4">
+          <PremiumBanner />
+        </div>
 
         {/* Main card */}
         <div className="bg-[#242642] rounded-[3rem] p-6 md:p-10 shadow-2xl border-4 border-[#2f3252] w-[90%] max-w-md animate-fade-in">
