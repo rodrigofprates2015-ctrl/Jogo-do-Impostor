@@ -28,13 +28,13 @@ export const PremiumBanner = () => {
           </div>
 
           <div 
-            className="flex-shrink-0 flex items-center gap-2 px-4 py-2 md:px-5 md:py-2.5 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl text-black font-black text-sm md:text-base shadow-lg border-b-4 border-orange-700 active:border-b-0 active:translate-y-1 transition-all hover:brightness-110"
+            className="flex-shrink-0 flex items-center gap-3 px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl text-black font-black text-base md:text-lg shadow-xl border-b-4 border-orange-700 active:border-b-0 active:translate-y-1 transition-all hover:brightness-110 hover:scale-105"
           >
             <div className="flex flex-col items-start leading-none">
-              <span className="text-[10px] font-bold opacity-80">APENAS</span>
-              <span>R$ 3,00</span>
+              <span className="text-xs font-bold opacity-80">APENAS</span>
+              <span className="text-lg md:text-xl">R$ 3,00</span>
             </div>
-            <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform" strokeWidth={3} />
+            <Plus className="w-6 h-6 md:w-7 md:h-7 group-hover:rotate-90 transition-transform" strokeWidth={3} />
           </div>
         </div>
       </div>
