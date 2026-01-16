@@ -6,7 +6,7 @@ import { NotificationCenter } from "@/components/NotificationCenter";
 import { AdBlockTop, AdBlockBottom } from "@/components/AdBlocks";
 import { SpeakingOrderWithVotingStage } from "@/components/RoundStageContent";
 import { LobbyChat } from "@/components/LobbyChat";
-import NewFeaturePopup from "@/components/NewFeaturePopup";
+
 import { PremiumBanner } from "@/components/PremiumBanner";
 import { SiDiscord } from "react-icons/si";
 import { 
@@ -946,7 +946,6 @@ const HomeScreen = () => {
   const [code, setCodeInput] = useState("");
   const [saveNicknameChecked, setSaveNicknameChecked] = useState(false);
   const [isDonationOpen, setIsDonationOpen] = useState(false);
-  const [showNewFeaturePopup, setShowNewFeaturePopup] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -986,11 +985,6 @@ const HomeScreen = () => {
       window.history.replaceState({}, '', '/');
     }
 
-    // Show donation popup after 1 second on every page load
-    const timer = setTimeout(() => {
-      setShowNewFeaturePopup(true);
-    }, 1000);
-    return () => clearTimeout(timer);
   }, [loadSavedNickname, toast]);
 
   // Auto-create room when coming from gallery
@@ -1026,10 +1020,6 @@ const HomeScreen = () => {
       }
     }
   }, [loadSavedNickname, setUser, createRoom, toast]);
-
-  const handleClosePopup = () => {
-    setShowNewFeaturePopup(false);
-  };
 
   const handleCreate = () => {
     console.log('[HandleCreate] Button clicked, name:', name);
@@ -1287,8 +1277,7 @@ const HomeScreen = () => {
       <TopRightButtons onDonateClick={() => setIsDonationOpen(true)} />
       <DonationModal isOpen={isDonationOpen} onClose={() => setIsDonationOpen(false)} />
       
-      {/* New Feature Popup */}
-      {showNewFeaturePopup && <NewFeaturePopup onClose={handleClosePopup} />}
+
     </div>
   );
 };
