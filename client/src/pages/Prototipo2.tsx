@@ -68,7 +68,7 @@ import impostorImg from "@assets/impostor_natal_1765071992843.png";
 
 const PIX_KEY = "48492456-23f1-4edc-b739-4e36547ef90e";
 
-const MIN_PALAVRAS = 10;
+const MIN_PALAVRAS = 7;
 const MAX_PALAVRAS = 20;
 
 type ThemeWorkshopTab = 'galeria' | 'criar';
@@ -1058,17 +1058,16 @@ const HomeScreen = () => {
       {/* Top Ad Block */}
       <AdBlockTop />
 
-      {/* Hero Banner - Oficina de Temas - TEMPORARIAMENTE DESABILITADO */}
-      {/* <Link 
+      {/* Hero Banner - Oficina de Temas */}
+      <Link 
         href="/criar-tema"
         className="hero-banner"
         data-testid="hero-banner-theme-workshop"
       >
         <div className="hero-banner-overlay">
-          <p className="hero-banner-text-small">Divirta-se com os amigos</p>
           <p className="hero-banner-text-main">Crie seu próprio tema por apenas R$ 1,50</p>
         </div>
-      </Link> */}
+      </Link>
 
       {/* Tripulante character - left side (desktop only) */}
       <img 
@@ -1085,7 +1084,7 @@ const HomeScreen = () => {
       />
 
       {/* Main content area - flex-grow to push footer down */}
-      <div className="flex-1 flex flex-col items-center justify-center pt-20 md:pt-24 px-4 relative z-20">
+      <div className="flex-1 flex flex-col items-center justify-center pt-16 md:pt-20 px-4 relative z-20">
         {/* Mobile action buttons - above the card */}
         <MobileActionButtons onDonateClick={() => setIsDonationOpen(true)} />
 

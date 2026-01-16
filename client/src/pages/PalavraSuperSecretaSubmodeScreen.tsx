@@ -2,13 +2,26 @@ import { useState } from "react";
 import { useGameStore } from "@/lib/gameStore";
 import { PALAVRA_SECRETA_SUBMODES, type PalavraSuperSecretaSubmode } from "@/lib/palavra-secreta-submodes";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Sparkles, Palette, Gamepad2, Rocket, Check, Star } from "lucide-react";
+import { ArrowLeft, Sparkles, Palette, Gamepad2, Rocket, Check, Star, Loader2, Library } from "lucide-react";
 import { cn } from "@/lib/utils";
+import ThemeGallery from "@/components/ThemeGallery";
+
+interface ThemeInfo {
+  id: string;
+  titulo: string;
+  autor: string;
+  palavrasCount: number;
+  accessCode: string;
+}
 
 const PalavraSuperSecretaSubmodeScreen = () => {
   const { startGame, startGameWithConfig, gameConfig, backToLobby, user, room } = useGameStore();
   const isHost = room && user && room.hostId === user.uid;
   const [themeCode, setThemeCode] = useState('');
+  const [isValidating, setIsValidating] = useState(false);
+  const [validatedTheme, setValidatedTheme] = useState<ThemeInfo | null>(null);
+  const [themeError, setThemeError] = useState<string | null>(null);
+  const [showGallery, setShowGallery] = useState(false);
 
   const handleSelectSubmode = (submode: PalavraSuperSecretaSubmode) => {
     if (isHost) {
@@ -36,12 +49,55 @@ const PalavraSuperSecretaSubmodeScreen = () => {
     }
   };
 
+  const validateThemeCode = async (code: string) => {
+    if (code.length !== 6) {
+      setValidatedTheme(null);
+      setThemeError(null);
+      return;
+    }
+
+    setIsValidating(true);
+    setThemeError(null);
+    
+    try {
+      const response = await fetch(`/api/themes/code/${code.toUpperCase()}`);
+      if (response.ok) {
+        const theme = await response.json();
+        setValidatedTheme(theme);
+        setThemeError(null);
+      } else if (response.status === 404) {
+        setValidatedTheme(null);
+        setThemeError('Código não encontrado');
+      } else {
+        setValidatedTheme(null);
+        setThemeError('Tema não disponível');
+      }
+    } catch (error) {
+      setValidatedTheme(null);
+      setThemeError('Erro ao validar código');
+    } finally {
+      setIsValidating(false);
+    }
+  };
+
+  const handleThemeCodeChange = (value: string) => {
+    const upperValue = value.toUpperCase();
+    setThemeCode(upperValue);
+    validateThemeCode(upperValue);
+  };
+
   const handleStartWithCustomTheme = () => {
-    if (isHost && themeCode.length === 6) {
+    if (isHost && themeCode.length === 6 && validatedTheme) {
       localStorage.setItem('selectedSubmode', 'classico');
-      // Custom themes don't use gameConfig
       startGame(themeCode);
     }
+  };
+
+  const handleSelectThemeFromGallery = (theme: ThemeInfo) => {
+    setThemeCode(theme.accessCode);
+    setValidatedTheme(theme);
+    setThemeError(null);
+    setShowGallery(false);
   };
 
   return (
@@ -142,21 +198,33 @@ const PalavraSuperSecretaSubmodeScreen = () => {
               <p className="text-base font-black text-white">Ou use um tema personalizado:</p>
             </div>
             <div className="flex gap-3">
-              <input
-                type="text"
-                placeholder="CÓDIGO DO TEMA (ex: ABC123)"
-                value={themeCode}
-                onChange={(e) => setThemeCode(e.target.value.toUpperCase())}
-                maxLength={6}
-                className="flex-1 bg-slate-900 border-2 border-slate-700 rounded-2xl px-6 py-4 text-center text-white text-lg font-black tracking-widest uppercase focus:border-yellow-500 focus:outline-none transition-colors"
-                data-testid="input-theme-code"
-              />
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  placeholder="CÓDIGO DO TEMA (ex: FUTEBOL)"
+                  value={themeCode}
+                  onChange={(e) => handleThemeCodeChange(e.target.value)}
+                  maxLength={6}
+                  className={cn(
+                    "w-full bg-slate-900 border-2 rounded-2xl px-6 py-4 text-center text-white text-lg font-black tracking-widest uppercase focus:outline-none transition-colors",
+                    validatedTheme ? "border-green-500 focus:border-green-500" : 
+                    themeError ? "border-red-500 focus:border-red-500" : 
+                    "border-slate-700 focus:border-yellow-500"
+                  )}
+                  data-testid="input-theme-code"
+                />
+                {isValidating && (
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                    <Loader2 className="w-5 h-5 text-yellow-400 animate-spin" />
+                  </div>
+                )}
+              </div>
               <button
                 onClick={handleStartWithCustomTheme}
-                disabled={themeCode.length !== 6}
+                disabled={!validatedTheme || isValidating}
                 className={cn(
                   "px-8 py-4 rounded-2xl font-black text-lg tracking-wide flex items-center justify-center gap-2 transition-all duration-300 border-b-[6px] shadow-2xl whitespace-nowrap",
-                  themeCode.length === 6
+                  validatedTheme && !isValidating
                     ? 'bg-gradient-to-r from-yellow-500 to-orange-500 border-yellow-800 text-white hover:brightness-110 active:border-b-0 active:translate-y-2' 
                     : 'bg-slate-700 border-slate-900 text-slate-500 cursor-not-allowed opacity-50'
                 )}
@@ -165,6 +233,32 @@ const PalavraSuperSecretaSubmodeScreen = () => {
                 JOGAR
               </button>
             </div>
+            
+            {/* Feedback do tema validado */}
+            {validatedTheme && (
+              <div className="bg-green-500/10 border-2 border-green-500/30 rounded-2xl p-4 text-center">
+                <p className="text-green-400 font-bold text-lg">{validatedTheme.titulo}</p>
+                <p className="text-green-300/70 text-sm">por {validatedTheme.autor} • {validatedTheme.palavrasCount} palavras</p>
+              </div>
+            )}
+            
+            {/* Erro de validação */}
+            {themeError && themeCode.length === 6 && (
+              <div className="bg-red-500/10 border-2 border-red-500/30 rounded-2xl p-4 text-center">
+                <p className="text-red-400 font-bold">{themeError}</p>
+              </div>
+            )}
+            
+            {/* Botão para abrir galeria */}
+            <button
+              onClick={() => setShowGallery(true)}
+              className="w-full p-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl hover:brightness-110 transition-all border-b-4 border-purple-900 active:border-b-0 active:translate-y-1 text-white flex items-center justify-center gap-3 font-bold"
+              data-testid="button-open-gallery"
+            >
+              <Library className="w-5 h-5" />
+              VER GALERIA DE TEMAS DA COMUNIDADE
+            </button>
+            
             <p className="text-sm text-slate-400 text-center font-medium">
               💡 Adquira temas personalizados na Oficina de Temas
             </p>
@@ -182,6 +276,14 @@ const PalavraSuperSecretaSubmodeScreen = () => {
           </button>
         </div>
       </div>
+
+      {/* Modal da Galeria de Temas */}
+      {showGallery && (
+        <ThemeGallery
+          onClose={() => setShowGallery(false)}
+          onSelectTheme={handleSelectThemeFromGallery}
+        />
+      )}
     </div>
   );
 };

@@ -23,6 +23,7 @@ type PaymentState = {
   error?: string;
 };
 
+const MIN_PALAVRAS = 7;
 const TOTAL_PALAVRAS = 25;
 const THEME_PRICE = "3,00";
 
@@ -76,7 +77,7 @@ export default function CriarTema() {
   };
 
   const validPalavrasCount = palavras.filter(p => p.trim().length > 0).length;
-  const isFormComplete = validPalavrasCount === TOTAL_PALAVRAS && titulo.trim() && autor.trim();
+  const isFormComplete = validPalavrasCount >= MIN_PALAVRAS && titulo.trim() && autor.trim();
   const canSubmit = isFormComplete && termsAccepted;
 
   const handleCreateTheme = async () => {
@@ -90,8 +91,8 @@ export default function CriarTema() {
     }
     
     const validPalavras = palavras.filter(p => p.trim().length > 0);
-    if (validPalavras.length < TOTAL_PALAVRAS) {
-      toast({ title: "Erro", description: `Preencha todas as ${TOTAL_PALAVRAS} palavras (${validPalavras.length}/${TOTAL_PALAVRAS})`, variant: "destructive" });
+    if (validPalavras.length < MIN_PALAVRAS) {
+      toast({ title: "Erro", description: `Digite no mínimo ${MIN_PALAVRAS} palavras (${validPalavras.length}/${MIN_PALAVRAS})`, variant: "destructive" });
       return;
     }
     
@@ -251,10 +252,10 @@ export default function CriarTema() {
       <div className="bg-[#242642] p-6 rounded-[2rem] border-4 border-[#2f3252] shadow-xl">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-white font-black text-xl flex items-center gap-2">
-            <span className="bg-purple-600 text-white text-xs px-2 py-1 rounded-lg">{TOTAL_PALAVRAS} PALAVRAS</span>
+            <span className="bg-purple-600 text-white text-xs px-2 py-1 rounded-lg">MÍN. {MIN_PALAVRAS} PALAVRAS</span>
           </h3>
-          <span className={`text-sm font-bold ${validPalavrasCount === TOTAL_PALAVRAS ? 'text-green-400' : 'text-slate-400'}`}>
-            {validPalavrasCount} / {TOTAL_PALAVRAS} Preenchidas
+          <span className={`text-sm font-bold ${validPalavrasCount >= MIN_PALAVRAS ? 'text-green-400' : 'text-slate-400'}`}>
+            {validPalavrasCount} / {TOTAL_PALAVRAS} Preenchidas {validPalavrasCount >= MIN_PALAVRAS && '✓'}
           </span>
         </div>
 

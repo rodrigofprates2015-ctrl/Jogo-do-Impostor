@@ -26,7 +26,7 @@ if (process.env.DATABASE_URL) {
     console.log('[DB] Using standard pg driver (Railway/production environment)');
     pool = new PgPool({ 
       connectionString: process.env.DATABASE_URL,
-      ssl: false
+      ssl: { rejectUnauthorized: false }
     });
     db = drizzlePg(pool as PgPool, { schema });
   }

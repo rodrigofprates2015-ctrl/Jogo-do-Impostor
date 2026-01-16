@@ -1130,7 +1130,7 @@ const HomeScreen = () => {
         <MobileActionButtons onDonateClick={() => setIsDonationOpen(true)} />
 
         {/* Premium Banner - Create your own theme */}
-        <div className="w-[90%] max-w-md mb-4">
+        <div className="w-[95%] max-w-4xl mb-4">
           <PremiumBanner />
         </div>
 
