@@ -21,8 +21,8 @@ export const PremiumBanner = () => {
               <h2 className="text-base md:text-lg font-black text-white leading-tight truncate">
                 Crie seu Próprio Tema
               </h2>
-              <p className="text-indigo-200 font-medium text-xs md:text-sm truncate hidden sm:block">
-                Animes, séries, memes ou aquela piada interna da galera? Crie um tema 100% seu e leve a diversão para outro nível!
+              <p className="text-indigo-200 font-medium text-xs md:text-sm hidden sm:block">
+                Animes, séries, memes ou aquela piada interna da galera?<br />Crie um tema 100% seu e leve a diversão para outro nível!
               </p>
             </div>
           </div>
