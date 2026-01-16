@@ -1079,8 +1079,8 @@ const HomeScreen = () => {
         <div className="absolute bottom-[-10%] left-[-5%] w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1000ms' }}></div>
       </div>
 
-      {/* Top Ad Block */}
-      <AdBlockTop />
+      {/* Top Ad Block - TEMPORARIAMENTE DESABILITADO */}
+      {/* <AdBlockTop /> */}
 
       {/* Hero Banner - Oficina de Temas - TEMPORARIAMENTE DESABILITADO */}
       {/* <Link 
@@ -1241,8 +1241,8 @@ const HomeScreen = () => {
         </div>
       </div>
 
-      {/* Bottom Ad Block */}
-      <AdBlockBottom />
+      {/* Bottom Ad Block - TEMPORARIAMENTE DESABILITADO */}
+      {/* <AdBlockBottom /> */}
 
       {/* Footer - now below the content, takes full width */}
       <div className="w-full text-center py-6 px-4 bg-gradient-to-t from-black/40 to-transparent z-20 relative border-t border-[#3d4a5c]/30">

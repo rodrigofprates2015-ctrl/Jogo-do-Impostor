@@ -139,9 +139,10 @@ export default function PlayGame() {
       </main>
 
       <footer className="shrink-0 bg-[#1a1a1b] border-t border-[#3a3a3c]">
-        <div className="max-w-4xl mx-auto py-2">
+        {/* Ad Block - TEMPORARIAMENTE DESABILITADO */}
+        {/* <div className="max-w-4xl mx-auto py-2">
           <AdBlockBottom />
-        </div>
+        </div> */}
         <div className="p-4 hidden lg:flex items-start gap-4">
           <div className="flex-1">
             <h2 className="text-white font-bold mb-1">{game.title}</h2>

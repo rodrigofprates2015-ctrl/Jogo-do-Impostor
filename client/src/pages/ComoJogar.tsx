@@ -126,8 +126,8 @@ export default function ComoJogar() {
         backgroundColor: '#1C202C'
       }}
     >
-      {/* Top Ad Block */}
-      <AdBlockTop />
+      {/* Top Ad Block - TEMPORARIAMENTE DESABILITADO */}
+      {/* <AdBlockTop /> */}
 
       {/* Header */}
       <header className="sticky top-0 z-50 bg-[#0a1628]/90 backdrop-blur-sm border-b border-[#3d4a5c]">
@@ -262,8 +262,8 @@ export default function ComoJogar() {
           </div>
         </section>
 
-        {/* Ad Block In Content */}
-        <AdBlockInContent />
+        {/* Ad Block In Content - TEMPORARIAMENTE DESABILITADO */}
+        {/* <AdBlockInContent /> */}
 
         {/* CTA */}
         <section className="text-center py-8">
@@ -275,8 +275,8 @@ export default function ComoJogar() {
         </section>
       </main>
 
-      {/* Bottom Ad Block */}
-      <AdBlockBottom />
+      {/* Bottom Ad Block - TEMPORARIAMENTE DESABILITADO */}
+      {/* <AdBlockBottom /> */}
 
       {/* Footer */}
       <footer className="bg-[#0a1628]/90 border-t border-[#3d4a5c] py-6">
