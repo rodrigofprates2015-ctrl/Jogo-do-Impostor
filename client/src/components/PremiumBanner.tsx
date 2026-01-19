@@ -12,26 +12,26 @@ export const PremiumBanner = () => {
           <Crown size={60} className="text-white rotate-12" />
         </div>
 
-        <div className="relative z-10 px-4 py-3 md:px-6 md:py-4 flex flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
-            <div className="hidden sm:flex items-center justify-center w-10 h-10 rounded-xl bg-yellow-400/20 border border-yellow-400/50 flex-shrink-0">
+        <div className="relative z-10 px-4 py-3 md:px-6 md:py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3 w-full sm:flex-1 min-w-0">
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-yellow-400/20 border border-yellow-400/50 flex-shrink-0">
               <Crown size={20} className="text-yellow-300" />
             </div>
-            <div className="min-w-0">
-              <h2 className="text-base md:text-lg font-black text-white leading-tight truncate">
+            <div className="min-w-0 flex-1 text-left">
+              <h2 className="text-lg md:text-xl font-black text-white leading-tight">
                 Crie seu Próprio Tema
               </h2>
-              <p className="text-indigo-200 font-medium text-xs md:text-sm hidden sm:block">
-                Animes, séries, memes ou aquela piada interna da galera?<br />Crie um tema 100% seu e leve a diversão para outro nível!
+              <p className="text-indigo-100 font-medium text-xs md:text-sm mt-1 leading-snug">
+                Animes, séries, memes ou aquela piada interna da galera? Crie um tema 100% seu e leve a diversão para outro nível!
               </p>
             </div>
           </div>
 
           <div 
-            className="flex-shrink-0 flex items-center gap-3 px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl text-black font-black text-base md:text-lg shadow-xl border-b-4 border-orange-700 active:border-b-0 active:translate-y-1 transition-all hover:brightness-110 hover:scale-105"
+            className="w-full sm:w-auto flex-shrink-0 flex items-center justify-between sm:justify-center gap-3 px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl text-black font-black text-base md:text-lg shadow-xl border-b-4 border-orange-700 active:border-b-0 active:translate-y-1 transition-all hover:brightness-110 hover:scale-[1.02]"
           >
             <div className="flex flex-col items-start leading-none">
-              <span className="text-xs font-bold opacity-80">APENAS</span>
+              <span className="text-[10px] md:text-xs font-bold opacity-80 uppercase tracking-wider">APENAS</span>
               <span className="text-lg md:text-xl">R$ 3,00</span>
             </div>
             <Plus className="w-6 h-6 md:w-7 md:h-7 group-hover:rotate-90 transition-transform" strokeWidth={3} />
