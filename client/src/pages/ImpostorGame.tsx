@@ -1920,7 +1920,7 @@ const GameConfigModal: React.FC<GameConfigModalProps> = ({ isOpen, onClose }) =>
 
             {/* Resumo visual */}
             <div className="bg-slate-950/50 rounded-xl p-3 md:p-4 border border-slate-800/50 flex items-start gap-2 md:gap-3">
-              <Info className="text-indigo-400 shrink-0 mt-0.5" size={16} md:size={18} />
+              <Info className="text-indigo-400 shrink-0 mt-0.5" size={16} />
               <p className="text-xs text-slate-400 leading-relaxed">
                 Haverá <strong className="text-red-400">{configSummary.impostorCount} impostor(es)</strong> nesta rodada. 
                 {' '}{configSummary.hintText}
