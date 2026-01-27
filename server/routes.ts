@@ -9,6 +9,11 @@ import { setupAuth, isAuthenticated } from "./githubAuth";
 import { createPayment, createDonationPayment, getPaymentStatus, type ThemeData, type DonationData } from "./paymentController";
 import { randomBytes as cryptoRandomBytes } from "crypto";
 import { createAnalyticsRouter } from "./analyticsRoutes";
+import { createRequire } from "module";
+
+// Agora token generation (CommonJS module)
+const require = createRequire(import.meta.url);
+const { RtcTokenBuilder, RtcRole } = require('agora-token');
 
 // Note: All pending themes are now stored directly in PostgreSQL database
 // This ensures persistence across server restarts and works in all deployment environments
@@ -3043,7 +3048,7 @@ export async function registerRoutes(
   });
 
   // Agora.io token generation endpoint
-  app.post("/api/agora/token", async (req, res) => {
+  app.post("/api/agora/token", (req, res) => {
     try {
       const { channelName, uid } = req.body;
       
@@ -3051,8 +3056,6 @@ export async function registerRoutes(
         return res.status(400).json({ error: "channelName is required" });
       }
 
-      const { RtcTokenBuilder, RtcRole } = await import('agora-token');
-      
       const AGORA_APP_ID = '0afca49f230e4f2b86c975ef2689c383';
       const AGORA_APP_CERTIFICATE = '8bb27e4982ff430cba1fb6d25e9cbc3c';
       
