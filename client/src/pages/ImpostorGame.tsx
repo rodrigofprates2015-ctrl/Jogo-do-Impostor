@@ -7,6 +7,7 @@ import { AdBlockTop, AdBlockBottom } from "@/components/AdBlocks";
 import { DisplayAd } from "@/components/AdSense";
 import { SpeakingOrderWithVotingStage } from "@/components/RoundStageContent";
 import { LobbyChat } from "@/components/LobbyChat";
+import { VoiceChat } from "@/components/VoiceChat";
 
 import { PremiumBanner } from "@/components/PremiumBanner";
 import { SiDiscord } from "react-icons/si";
@@ -2371,8 +2372,6 @@ const LobbyScreen = () => {
         </div>
       )}
       </div>
-
-      <LobbyChat />
       
       {/* Modal de Configuração */}
       {showConfigModal && (
@@ -4304,6 +4303,10 @@ export default function ImpostorGame() {
       {status === 'modeSelect' && <ModeSelectScreen />}
       {status === 'submodeSelect' && <PalavraSuperSecretaSubmodeScreen />}
       {status === 'playing' && <GameScreen />}
+      
+      {/* Chat de voz e texto disponíveis em todas as telas do jogo */}
+      <VoiceChat />
+      <LobbyChat />
     </div>
   );
 }

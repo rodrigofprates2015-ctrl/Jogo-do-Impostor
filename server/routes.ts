@@ -3042,5 +3042,44 @@ export async function registerRoutes(
     }
   });
 
+  // Agora.io token generation endpoint
+  app.post("/api/agora/token", async (req, res) => {
+    try {
+      const { channelName, uid } = req.body;
+      
+      if (!channelName) {
+        return res.status(400).json({ error: "channelName is required" });
+      }
+
+      const { RtcTokenBuilder, RtcRole } = await import('agora-token');
+      
+      const AGORA_APP_ID = '0afca49f230e4f2b86c975ef2689c383';
+      const AGORA_APP_CERTIFICATE = '8bb27e4982ff430cba1fb6d25e9cbc3c';
+      
+      // Token expires in 24 hours
+      const expirationTimeInSeconds = 86400;
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+      const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds;
+      
+      // Use provided uid or 0 for dynamic uid assignment
+      const uidNum = uid ? parseInt(uid, 10) : 0;
+      
+      const token = RtcTokenBuilder.buildTokenWithUid(
+        AGORA_APP_ID,
+        AGORA_APP_CERTIFICATE,
+        channelName,
+        uidNum,
+        RtcRole.PUBLISHER,
+        privilegeExpiredTs,
+        privilegeExpiredTs
+      );
+
+      res.json({ token, appId: AGORA_APP_ID });
+    } catch (err) {
+      console.error('[Agora Token Error]:', err);
+      res.status(500).json({ error: "Failed to generate token" });
+    }
+  });
+
   return httpServer;
 }
