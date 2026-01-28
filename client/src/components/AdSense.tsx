@@ -39,7 +39,7 @@ const AdSenseBlock = ({
       <ins
         className="adsbygoogle"
         style={{ display: "block", minWidth: "250px" }}
-        data-ad-client="ca-pub-9927561573478881"
+        data-ad-client="ca-pub-4191672287001242"
         data-ad-slot={slot}
         data-ad-format={format}
         data-ad-layout={layout}

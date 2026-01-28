@@ -23,7 +23,7 @@ export function AdBlock({ slot, format = "auto", responsive = true, style }: AdB
     <ins
       className="adsbygoogle"
       style={{ display: 'block', ...style }}
-      data-ad-client="ca-pub-9927561573478881"
+      data-ad-client="ca-pub-4191672287001242"
       data-ad-slot={slot}
       data-ad-format={format}
       data-full-width-responsive={responsive ? "true" : "false"}
