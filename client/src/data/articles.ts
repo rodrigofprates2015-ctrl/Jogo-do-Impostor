@@ -505,64 +505,101 @@ export const articles: Article[] = [
   {
     id: 15,
     slug: "tikjogos-praticidade",
-    title: "TikJogos: praticidade e diversão em um só lugar",
+    title: "Por Que Construímos o TikJogos: Nossa Filosofia de Design",
     type: "Produto",
     readTime: "3 min",
-    summary: "Conheça a ferramenta que facilita a organização, sorteio e cronometragem das suas partidas.",
+    summary: "Criamos esta ferramenta para resolver frustrações que vivíamos em nossas próprias partidas. Entenda as decisões por trás do design.",
     content: `
-      <p class="mb-4">O TikJogos foi desenvolvido para remover os obstáculos que impedem o jogo de acontecer.</p>
-      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Design para todos (UX)</h3>
-      <p class="mb-4">A interface simples permite que qualquer pessoa utilize a ferramenta, do sobrinho à avó. Crie a sala, mande o link e jogue.</p>
-      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Fluidez é tudo</h3>
-      <p class="mb-4">A automação torna as partidas mais fluidas. Menos tempo gerenciando burocracia, mais tempo se divertindo com os amigos.</p>
+      <div class="bg-[#1a2744] border-l-4 border-[#4a90a4] p-4 mb-6 rounded-r">
+        <p class="text-[#4a90a4] font-bold mb-1">Princípio Central</p>
+        <p class="text-gray-300 text-sm">A tecnologia deve ser invisível. Se você percebe a ferramenta, ela está atrapalhando.</p>
+      </div>
+
+      <p class="mb-4">Desenvolvemos o TikJogos após anos jogando com métodos improvisados - papéis dobrados, apps genéricos, planilhas. Cada solução tinha problemas que queríamos eliminar.</p>
+      
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Decisões de Design</h3>
+      <div class="bg-[#1a2744] border border-[#3d4a5c] p-4 mb-6 rounded">
+        <ul class="list-disc pl-4 text-gray-300 text-sm space-y-1">
+          <li><strong>Zero cadastro obrigatório:</strong> Ninguém quer criar conta só para uma partida</li>
+          <li><strong>Funciona em qualquer dispositivo:</strong> Celular, tablet, computador - sem instalar nada</li>
+          <li><strong>Interface mínima:</strong> Apenas o necessário na tela, sem distrações</li>
+          <li><strong>Automação silenciosa:</strong> Sorteios, timers e votação acontecem sem intervenção</li>
+        </ul>
+      </div>
+      
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">O Resultado</h3>
+      <p class="mb-4">Partidas que antes levavam 5 minutos para organizar agora começam em segundos. A ferramenta cuida da mecânica enquanto você foca no que importa: interagir com as pessoas.</p>
     `
   },
   {
     id: 16,
     slug: "como-ganhar-no-jogo-do-impostor",
-    title: "COMO GANHAR NO JOGO DO IMPOSTOR",
+    title: "Playbook Avançado: Táticas de Vitória Para Ambos os Lados",
     type: "Estratégia",
     readTime: "5 min",
-    summary: "Domine a arte da dissimulação e aprenda táticas avançadas para vencer como impostor.",
+    summary: "Compilamos as estratégias com maior taxa de sucesso após centenas de partidas. Funciona para impostores e tripulantes.",
     content: `
-      <h3 class="text-xl font-semibold text-[#4a90a4] mb-4">🔹 1. Não demonstre insegurança</h3>
-      <p class="mb-4">Evite frases como “não sei”, “tô confuso” ou “acho que errei”. Isso chama atenção. Fale com confiança, mesmo que esteja arriscando.</p>
+      <div class="bg-[#1a2744] border-l-4 border-[#e8a045] p-4 mb-6 rounded-r">
+        <p class="text-[#e8a045] font-bold mb-1">Nível Avançado</p>
+        <p class="text-gray-300 text-sm">Estas táticas assumem que você já domina o básico. Se é iniciante, comece pelos guias fundamentais.</p>
+      </div>
 
-      <h3 class="text-xl font-semibold text-[#4a90a4] mb-4">🔹 2. Use palavras genéricas</h3>
-      <p class="mb-4">Sua palavra é diferente, então evite detalhes específicos. Prefira descrições vagas como:</p>
-      <ul class="list-disc pl-5 mb-4 space-y-2 text-gray-300">
-        <li>“É algo comum”</li>
-        <li>“Vejo isso no dia a dia”</li>
-        <li>“Acho fácil de lembrar”</li>
-      </ul>
-      <p class="mb-4">Assim, você foge de revelar que não tem a mesma palavra.</p>
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Para Impostores: A Arte da Confiança Falsa</h3>
+      <p class="mb-4">Frases como "não sei" ou "estou confuso" são bandeiras vermelhas. Mesmo sem saber a palavra, fale com convicção. Hesitação é o maior delator.</p>
+      
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Técnica: O Genérico Estratégico</h3>
+      <p class="mb-4">Use descrições que se aplicam a múltiplas palavras possíveis:</p>
+      <div class="bg-[#1a2744] border border-[#3d4a5c] p-4 mb-6 rounded">
+        <ul class="list-disc pl-4 text-gray-300 text-sm space-y-1">
+          <li>"Isso me lembra algo do cotidiano"</li>
+          <li>"Tenho uma associação pessoal com isso"</li>
+          <li>"É mais comum do que as pessoas pensam"</li>
+        </ul>
+      </div>
 
-      <h3 class="text-xl font-semibold text-[#4a90a4] mb-4">🔹 3. Observe primeiro</h3>
-      <p class="mb-4">Se puder, fale por último. Ouça como os outros descrevem e tente seguir a mesma linha de raciocínio. Isso aumenta muito suas chances de passar despercebido.</p>
-
-      <h3 class="text-xl font-semibold text-[#4a90a4] mb-4">🔹 4. Acuse com cuidado</h3>
-      <p class="mb-4">Nada gera mais confiança do que um impostor que também acusa alguém. Mas cuidado: faça acusações com argumentos, não aleatoriamente.</p>
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Técnica: O Observador Tardio</h3>
+      <p class="mb-4">Fale por último quando possível. Absorva as dicas dos outros e construa sua resposta baseada no padrão que identificar.</p>
+      
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Técnica: A Acusação Calculada</h3>
+      <p class="mb-4">Impostores passivos chamam atenção. Faça uma acusação fundamentada - isso demonstra engajamento e desvia suspeitas.</p>
     `
   },
   {
     id: 17,
     slug: "jogo-impostor-palavra-online",
-    title: "Jogo Impostor Palavra Online",
+    title: "Guia Completo: Modo Palavra Secreta Passo a Passo",
     type: "Produto",
     readTime: "4 min",
-    summary: "Descubra como jogar o Jogo do Impostor com palavras de forma online e gratuita no TikJogos.",
+    summary: "O modo mais popular explicado em detalhes. Desde a criação da sala até estratégias específicas para esta modalidade.",
     content: `
-      <h2 class="text-2xl font-bold text-white mb-4">O que é o Jogo Impostor Palavra Online?</h2>
-      <p class="mb-4">O Jogo Impostor Palavra Online é uma versão digital do clássico jogo de dedução social onde os participantes recebem uma palavra secreta, exceto o impostor, que precisa descobrir qual é a palavra sem ser desmascarado. No TikJogos, você pode jogar essa modalidade diretamente do seu navegador, sem precisar baixar nenhum aplicativo. Basta criar uma sala, compartilhar o link com seus amigos e começar a diversão em segundos. A plataforma cuida de todo o sorteio e distribuição das palavras automaticamente.</p>
+      <div class="bg-[#1a2744] border-l-4 border-[#4a90a4] p-4 mb-6 rounded-r">
+        <p class="text-[#4a90a4] font-bold mb-1">Visão Geral do Modo</p>
+        <p class="text-gray-300 text-sm">Jogadores: 4-15 | Duração: 5-10 min por rodada | Dificuldade: Iniciante | Popularidade: Mais jogado</p>
+      </div>
 
-      <h2 class="text-2xl font-bold text-white mb-4 mt-8">Como funciona no TikJogos?</h2>
-      <p class="mb-4">Nossa plataforma foi desenvolvida para tornar a experiência do jogo impostor palavra online a mais fluida possível. Ao entrar no TikJogos, você pode criar uma sala privada ou entrar em uma existente usando um código. O sistema sorteia aleatoriamente quem será o impostor e distribui a palavra secreta para todos os outros jogadores. Durante a partida, cada participante dá dicas sobre a palavra sem revelá-la diretamente, enquanto o impostor tenta se passar por alguém que conhece a palavra. No final, todos votam em quem acham que é o impostor.</p>
+      <h2 class="text-2xl font-bold text-white mb-4">Como Funciona</h2>
+      <p class="mb-4">Todos recebem a mesma palavra secreta, exceto o impostor. Cada jogador dá dicas sobre a palavra sem revelá-la diretamente. O impostor tenta descobrir qual é a palavra pelas dicas dos outros enquanto finge que já sabe. No final, todos votam em quem acham que é o impostor.</p>
 
-      <h2 class="text-2xl font-bold text-white mb-4 mt-8">Por que jogar no TikJogos?</h2>
-      <p class="mb-4">O TikJogos oferece diversas vantagens para quem quer jogar impostor palavra online. A interface é intuitiva e funciona em qualquer dispositivo com acesso à internet, seja computador, tablet ou celular. Não há necessidade de cadastro obrigatório para participar de uma partida. Além disso, a plataforma conta com diversos temas de palavras para manter o jogo sempre interessante e desafiador. O timer automático e o sistema de votação integrado eliminam a necessidade de um mediador, permitindo que todos participem ativamente da diversão.</p>
+      <h2 class="text-2xl font-bold text-white mb-4 mt-8">Passo a Passo Para Jogar</h2>
+      <div class="bg-[#1a2744] border border-[#3d4a5c] p-4 mb-6 rounded">
+        <ol class="list-decimal pl-4 text-gray-300 text-sm space-y-2">
+          <li>Acesse o site e clique em "Criar Sala"</li>
+          <li>Compartilhe o código com os participantes</li>
+          <li>Aguarde todos entrarem (mínimo 4 pessoas)</li>
+          <li>Selecione o modo "Palavra Secreta"</li>
+          <li>Escolha um tema de palavras</li>
+          <li>Inicie a partida - o sistema distribui os papéis automaticamente</li>
+        </ol>
+      </div>
 
-      <h2 class="text-2xl font-bold text-white mb-4 mt-8">Dicas para aproveitar ao máximo</h2>
-      <p class="mb-4">Para ter a melhor experiência no jogo impostor palavra online do TikJogos, reúna um grupo de pelo menos 4 pessoas. Quanto mais jogadores, mais divertida e desafiadora fica a partida. Use um canal de voz como Discord ou WhatsApp para a comunicação durante o jogo, já que a interação verbal é essencial para a dinâmica de dedução. Experimente os diferentes temas disponíveis na plataforma para variar as partidas e mantenha todos engajados. Lembre-se: o objetivo é se divertir com os amigos, então não leve as acusações para o lado pessoal!</p>
+      <h2 class="text-2xl font-bold text-white mb-4 mt-8">Estratégias Específicas Para Este Modo</h2>
+      <p class="mb-4">Como tripulante: dê dicas que confirmem seu conhecimento sem entregar a palavra ao impostor. Evite ser óbvio demais ou vago demais.</p>
+      <p class="mb-4">Como impostor: preste atenção nas primeiras dicas para deduzir a palavra. Use associações genéricas que funcionem para múltiplas palavras possíveis.</p>
+      
+      <div class="bg-[#1a2744] border border-[#e8a045] p-4 mb-6 rounded">
+        <p class="text-[#e8a045] font-bold mb-2">Dica de Veterano</p>
+        <p class="text-gray-300 text-sm">Use um canal de voz (Discord, WhatsApp) durante a partida. A interação verbal torna a experiência muito mais divertida e facilita a detecção de nervosismo.</p>
+      </div>
     `
   }
 ];
