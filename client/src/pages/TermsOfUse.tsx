@@ -11,147 +11,98 @@ export default function TermsOfUse() {
           Voltar ao jogo
         </Link>
 
-        <h1 className="text-3xl font-bold mb-6 text-[#00f2ea]">Condições de Utilização</h1>
+        <h1 className="text-3xl font-bold mb-6 text-[#00f2ea]">Termos e Condições de Uso</h1>
         
         <div className="space-y-6 text-gray-300 leading-relaxed">
           <p>
-            <strong className="text-white">Vigência:</strong> Janeiro de 2025
-          </p>
-
-          <p>
-            Ao utilizar esta plataforma, você manifesta concordância com as condições descritas abaixo.
+            <strong className="text-white">Atualizado em:</strong> Janeiro de 2026
           </p>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">1. Concordância</h2>
+            <h2 className="text-xl font-bold text-white mb-3">1. Aceitação do Regulamento</h2>
             <p>
-              O acesso a esta plataforma implica aceitação integral destas condições e da legislação vigente. Caso discorde de qualquer disposição, recomendamos não prosseguir com o uso.
+              Ao ingressar e utilizar as funcionalidades desta plataforma, o utilizador declara estar 
+              plenamente ciente e de acordo com as normas aqui estabelecidas. O usufruto dos serviços 
+              implica a adesão automática a estes termos. Caso não concorde com algum ponto, a orientação 
+              é cessar imediatamente a navegação.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">2. Natureza do Serviço</h2>
+            <h2 className="text-xl font-bold text-white mb-3">2. Descrição do Ecossistema</h2>
             <p>
-              TikJogos é uma plataforma gratuita de entretenimento social digital. Recursos disponíveis:
+              O TikJogos é um ambiente digital dedicado ao entretenimento social gratuito. A plataforma disponibiliza:
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Cinco modalidades de interação distintas</li>
-              <li>Capacidade para 4 a 15 participantes por sessão</li>
-              <li>Interface localizada em português</li>
-              <li>Opções de personalização de partida</li>
+              <li>Cinco modalidades distintas de jogos de palavras e lógica.</li>
+              <li>Suporte para partidas dinâmicas entre 4 e 15 participantes simultâneos.</li>
+              <li>Interface otimizada totalmente em língua portuguesa.</li>
+              <li>Ferramentas de customização para o anfitrião da sala.</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">3. Conduta Esperada</h2>
+            <h2 className="text-xl font-bold text-white mb-3">3. Código de Conduta e Restrições</h2>
             <p>
-              O uso da plataforma deve respeitar a legislação aplicável. Condutas vedadas:
+              É estritamente proibido o uso da plataforma para finalidades ilícitas, abusivas ou que 
+              comprometam a infraestrutura técnica. Vedamos explicitamente:
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Atividades que contrariem normas legais em qualquer jurisdição</li>
-              <li>Tentativas de acesso não autorizado a sistemas ou dados</li>
-              <li>Ações que comprometam a estabilidade ou disponibilidade do serviço</li>
-              <li>Distribuição de código malicioso ou prejudicial</li>
-              <li>Utilização de automação não autorizada</li>
-              <li>Reprodução ou distribuição de conteúdo sem permissão expressa</li>
+              <li>Engenharia reversa ou tentativas de invasão de dados.</li>
+              <li>Uso de scripts, bots ou automações não autorizadas.</li>
+              <li>Disseminação de conteúdo malicioso (malware) ou spam.</li>
+              <li>Violação de direitos de propriedade intelectual de terceiros.</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">4. Direitos Autorais</h2>
+            <h2 className="text-xl font-bold text-white mb-3">4. Propriedade Intelectual</h2>
             <p>
-              O conteúdo original desta plataforma, incluindo elementos visuais, textuais e código, pertence ao TikJogos ou licenciadores autorizados, sendo protegido pela legislação de propriedade intelectual.
-            </p>
-            <p className="mt-2">
-              Eventuais referências a marcas de terceiros nas dinâmicas de jogo são utilizadas exclusivamente em contexto de entretenimento e trivia, permanecendo a titularidade com seus respectivos detentores.
+              Todo o código-fonte, design gráfico, textos e algoritmos são de titularidade exclusiva do 
+              TikJogos. A menção a marcas externas, nomes de franquias ou personagens durante as partidas 
+              ocorre sob a doutrina de "uso justo" em contextos de trivia e educação, pertencendo os 
+              direitos originais aos seus respectivos detentores.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">5. Responsabilidade do Participante</h2>
+            <h2 className="text-xl font-bold text-white mb-3">5. Responsabilidade do Utilizador</h2>
             <p>
-              Ao criar sessões ou utilizar apelidos, o participante assume responsabilidade pelo conteúdo inserido. Não são permitidos:
-            </p>
-            <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Conteúdo inadequado, ofensivo ou contrário à lei</li>
-              <li>Identificações que infrinjam direitos de terceiros</li>
-              <li>Dados falsos ou que induzam a erro</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-white mb-3">6. Continuidade do Serviço</h2>
-            <p>
-              Embora busquemos manter disponibilidade contínua, não há garantia de funcionamento ininterrupto. Modificações, suspensões ou descontinuação podem ocorrer sem comunicação prévia.
+              Os participantes são os únicos responsáveis pelos "nicknames" e conteúdos inseridos em 
+              salas privadas. É proibida a utilização de termos ofensivos, discriminatórios ou que 
+              infrinjam leis de proteção de dados e direitos civis.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">7. Isenção de Responsabilidade</h2>
+            <h2 className="text-xl font-bold text-white mb-3">6. Disponibilidade e Garantias</h2>
             <p>
-              A plataforma é disponibilizada no estado em que se encontra. Não há responsabilidade por:
-            </p>
-            <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Prejuízos de qualquer natureza decorrentes do uso</li>
-              <li>Perda de informações ou oportunidades</li>
-              <li>Indisponibilidade temporária ou permanente</li>
-              <li>Imprecisões no conteúdo apresentado</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-white mb-3">8. Recursos Externos</h2>
-            <p>
-              Eventuais links para plataformas de terceiros não implicam endosso ou responsabilidade sobre seu conteúdo ou práticas.
+              O serviço é fornecido "como está" (as is). Não garantimos que o sistema estará online 
+              100% do tempo. Reservamo-nos o direito de suspender, atualizar ou remover funcionalidades 
+              para manutenção ou evolução do projeto sem aviso prévio.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">9. Sustentabilidade do Serviço</h2>
+            <h2 className="text-xl font-bold text-white mb-3">7. Financiamento e Doações</h2>
             <p>
-              A exibição de publicidade digital viabiliza a gratuidade da plataforma. O uso implica concordância com esta prática.
+              A manutenção dos servidores é viabilizada pela publicidade digital. Contribuições 
+              voluntárias podem ser feitas pelo utilizador; todavia, estas não geram benefícios 
+              funcionais, não são reembolsáveis e não configuram relação de consumo.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">10. Contribuições Voluntárias</h2>
+            <h2 className="text-xl font-bold text-white mb-3">8. Foro e Jurisdição</h2>
             <p>
-              Apoios financeiros são opcionais, não reembolsáveis e não conferem vantagens funcionais na plataforma.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-white mb-3">11. Canal de Atendimento</h2>
-            <p>
-              Esclarecimentos podem ser solicitados através de:
-            </p>
-            <p className="mt-2">
-              <a 
-                href="mailto:rodrigo.f.prates2033@gmail.com" 
-                className="text-[#00f2ea] hover:underline font-medium"
-              >
-                rodrigo.f.prates2033@gmail.com
-              </a>
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-white mb-3">12. Revisões</h2>
-            <p>
-              Estas condições podem ser atualizadas a qualquer momento. A continuidade de uso após modificações representa aceitação das novas disposições.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-white mb-3">13. Jurisdição</h2>
-            <p>
-              Estas condições são regidas pela legislação brasileira, com foro na comarca competente do Brasil para resolução de eventuais controvérsias.
+              Estes termos são regidos pela legislação brasileira. Qualquer litígio será resolvido 
+              na comarca competente de domicílio do proprietário da plataforma no Brasil.
             </p>
           </section>
         </div>
 
         <div className="mt-12 pt-6 border-t border-gray-800 text-center text-gray-500 text-sm">
-          <p>© {new Date().getFullYear()} TikJogos. Todos os direitos reservados.</p>
+          <p>© 2026 TikJogos. Todos os direitos reservados.</p>
         </div>
         
         <LegalDisclaimer />
