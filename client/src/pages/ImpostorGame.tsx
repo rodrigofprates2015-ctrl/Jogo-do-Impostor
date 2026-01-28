@@ -9,6 +9,7 @@ import { SpeakingOrderWithVotingStage } from "@/components/RoundStageContent";
 import { LobbyChat } from "@/components/LobbyChat";
 import { VoiceControlButton, VoiceChatJoinButton, SpeakingIndicator } from "@/components/InlineVoiceControls";
 import { useVoiceChatContext } from "@/hooks/VoiceChatContext";
+import { MiniPlayer } from "@/components/MiniPlayer";
 
 import { PremiumBanner } from "@/components/PremiumBanner";
 import { SiDiscord } from "react-icons/si";
@@ -4318,6 +4319,9 @@ export default function ImpostorGame() {
       
       {/* Chat de texto disponível em todas as telas do jogo */}
       <LobbyChat />
+      
+      {/* Mini Player YouTube */}
+      <MiniPlayer />
     </div>
   );
 }
