@@ -1120,7 +1120,7 @@ const HomeScreen = () => {
       />
 
       {/* Main content area - flex-grow to push footer down */}
-      <div className="flex-1 flex flex-col items-center justify-center pt-20 md:pt-24 px-4 relative z-20">
+      <div className="flex-1 flex flex-col items-center justify-center pt-0 px-4 relative z-20">
         {/* Mobile action buttons - above the card */}
         <MobileActionButtons onDonateClick={() => setIsDonationOpen(true)} />
 
