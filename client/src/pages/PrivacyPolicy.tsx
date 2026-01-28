@@ -11,71 +11,65 @@ export default function PrivacyPolicy() {
           Voltar ao jogo
         </Link>
 
-        <h1 className="text-3xl font-bold mb-6 text-[#00f2ea]">Diretrizes de Privacidade</h1>
+        <h1 className="text-3xl font-bold mb-6 text-[#00f2ea]">Políticas de Privacidade e Proteção de Dados</h1>
         
         <div className="space-y-6 text-gray-300 leading-relaxed">
           <p>
-            <strong className="text-white">Revisão mais recente:</strong> {new Date().toLocaleDateString('pt-BR')}
+            <strong className="text-white">Última atualização:</strong> 28 de janeiro de 2026
           </p>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">1. Dados Pessoais</h2>
+            <h2 className="text-xl font-bold text-white mb-3">1. Coleta de Informações Pessoais</h2>
             <p>
-              Esta plataforma não armazena informações pessoais identificáveis. Apelidos utilizados 
-              durante as sessões são temporários e descartados automaticamente após o encerramento.
+              Nossa plataforma opera sob o princípio da minimização de dados. Não solicitamos nem 
+              armazenamos registros de identidade civil, endereços ou documentos. Os identificadores 
+              (apelidos) escolhidos para as salas de jogo possuem natureza efêmera, sendo eliminados 
+              permanentemente dos nossos servidores assim que a sessão é finalizada.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">2. Tecnologias de Navegação</h2>
+            <h2 className="text-xl font-bold text-white mb-3">2. Gestão de Cookies e Rastreamento</h2>
             <p>
-              Empregamos cookies para otimizar a experiência de uso e viabilizar a exibição de conteúdo publicitário. 
-              Parceiros externos, incluindo redes de anúncios, podem utilizar cookies para personalizar 
-              o conteúdo apresentado com base no histórico de navegação.
+              Para assegurar o funcionamento técnico e a estabilidade da interface, utilizamos cookies 
+              de sessão. Adicionalmente, parceiros de tecnologia e redes de publicidade de terceiros 
+              podem utilizar cookies próprios para mapear preferências de navegação e exibir anúncios 
+              que sejam pertinentes ao perfil do visitante, baseando-se em interações prévias em 
+              diferentes sites da web.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">3. Publicidade Digital</h2>
+            <h2 className="text-xl font-bold text-white mb-3">3. Ecossistema Publicitário</h2>
             <p>
-              A plataforma integra serviços de publicidade do Google para manutenção do serviço gratuito. 
-              Estes serviços utilizam cookies para adequar os anúncios ao perfil de navegação do visitante.
-            </p>
-            <p className="mt-2">
-              A personalização pode ser desabilitada através das{" "}
-              <a 
-                href="https://www.google.com/settings/ads" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-[#00f2ea] hover:underline"
-              >
-                Preferências de Publicidade do Google
-              </a>.
+              O TikJogos é financiado através da exibição de anúncios gerenciados pelo Google. Tais 
+              serviços publicitários processam dados de navegação por meio de cookies para entregar 
+              uma experiência comercial contextualizada. O usuário retém total autonomia para gerir 
+              ou desativar o rastreamento de anúncios de terceiros através das configurações de 
+              privacidade do navegador.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">4. Informações de Sessão</h2>
+            <h2 className="text-xl font-bold text-white mb-3">4. Ciclo de Vida dos Dados de Partida</h2>
             <p>
-              Salas e partidas existem apenas em memória volátil durante a sessão ativa. 
-              Não há persistência de histórico de partidas, participantes ou resultados após o encerramento.
+              Toda a dinâmica de jogo, incluindo a criação de salas e o processamento de rodadas, 
+              ocorre em memória volátil (RAM). Não mantemos bancos de dados históricos sobre quem 
+              jogou, quem venceu ou quais foram os termos utilizados após o encerramento da conexão.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">5. Garantias do Usuário</h2>
-            <p>
-              Você possui as seguintes garantias:
-            </p>
-            <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Transparência sobre dados eventualmente processados</li>
-              <li>Remoção de informações mediante solicitação</li>
-              <li>Controle sobre personalização de publicidade</li>
+            <h2 className="text-xl font-bold text-white mb-3">Direitos e Controle do Usuário</h2>
+            <ul className="list-disc list-inside mt-2 space-y-2">
+              <li><strong className="text-white">Informação:</strong> Saber exatamente como os dados de navegação são tratados.</li>
+              <li><strong className="text-white">Privacidade:</strong> Garantia de que nenhum dado sensível é coletado.</li>
+              <li><strong className="text-white">Opt-out:</strong> Ferramentas para recusar a personalização de anúncios.</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">6. Canal de Comunicação</h2>
+            <h2 className="text-xl font-bold text-white mb-3">Canal de Comunicação</h2>
             <p>
               Questões relacionadas a estas diretrizes podem ser encaminhadas para:
             </p>
@@ -88,18 +82,15 @@ export default function PrivacyPolicy() {
               </a>
             </p>
           </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-white mb-3">7. Atualizações</h2>
-            <p>
-              Estas diretrizes podem ser revisadas periodicamente. Recomendamos consulta 
-              regular desta página para acompanhar eventuais modificações.
-            </p>
-          </section>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-gray-800 text-center text-gray-500 text-sm">
-          <p>© {new Date().getFullYear()} TikJogos. Todos os direitos reservados.</p>
+        <div className="mt-12 pt-6 border-t border-gray-800">
+          <h2 className="text-xl font-bold text-white mb-3">Nota Legal e Direitos Autorais</h2>
+          <p className="text-gray-400 text-sm">
+            © 2026 TikJogos. O TikJogos é uma iniciativa independente voltada ao entretenimento. 
+            Referências a marcas, personagens ou propriedades intelectuais externas são feitas 
+            estritamente sob o escopo de uso informativo e recreativo.
+          </p>
         </div>
         
         <LegalDisclaimer />
