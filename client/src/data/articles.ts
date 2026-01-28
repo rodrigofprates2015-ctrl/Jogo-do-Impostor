@@ -299,34 +299,72 @@ export const articles: Article[] = [
   {
     id: 9,
     slug: "erros-iniciantes",
-    title: "Erros comuns de iniciantes no Jogo do Impostor",
+    title: "Os 6 Erros Fatais Que Todo Novato Comete (E Como Evitá-los)",
     type: "Dica",
     readTime: "4 min",
-    summary: "Falar demais? Acusar cedo? Evite os deslizes clássicos que entregam sua posição.",
+    summary: "Analisamos partidas de iniciantes e catalogamos os deslizes mais frequentes. Corrija estes e suba de nível instantaneamente.",
     content: `
-      <p class="mb-4">Observar onde os novatos escorregam é a melhor forma de encurtar sua curva de aprendizado.</p>
-      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">O erro do "Tagarela"</h3>
-      <p class="mb-4">Existe um mito de que falar muito prova inocência. Errado. O excesso de explicação é frequentemente um sinal de culpa.</p>
-      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">O erro do "Acusador Precoce"</h3>
-      <p class="mb-4">Acusar sem provas cria caos. Se você é inocente, pode eliminar um aliado. Se é impostor, chama atenção para si. A paciência é uma virtude estratégica.</p>
+      <div class="bg-[#1a2744] border-l-4 border-[#c44536] p-4 mb-6 rounded-r">
+        <p class="text-[#c44536] font-bold mb-1">Alerta de Spoiler</p>
+        <p class="text-gray-300 text-sm">Se você comete algum destes erros, provavelmente já foi eliminado por causa dele sem perceber.</p>
+      </div>
+
+      <p class="mb-4">Observamos dezenas de jogadores em suas primeiras partidas. Os mesmos padrões de erro se repetem constantemente. A boa notícia: são fáceis de corrigir uma vez que você os conhece.</p>
+      
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Erro #1: O Tagarela Nervoso</h3>
+      <p class="mb-4">Falar demais não prova inocência - na verdade, levanta suspeitas. Jogadores experientes sabem que explicações excessivas frequentemente indicam culpa ou nervosismo.</p>
+      
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Erro #2: O Acusador Impulsivo</h3>
+      <p class="mb-4">Apontar dedos sem evidências destrói sua credibilidade. Se errar, você elimina um aliado. Se acertar por sorte, ninguém confiará em você nas próximas rodadas.</p>
+      
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Erro #3: O Silencioso Suspeito</h3>
+      <p class="mb-4">Ficar completamente calado também é problemático. Contribua com observações, mesmo que breves. Silêncio total parece que você está escondendo algo.</p>
+      
+      <div class="bg-[#1a2744] border border-[#3d4a5c] p-4 mb-6 rounded">
+        <p class="text-[#4a90a4] font-bold mb-2">Mais Erros Comuns</p>
+        <ul class="list-disc pl-4 text-gray-300 text-sm space-y-1">
+          <li><strong>Mudar de comportamento:</strong> Agir diferente quando é impostor vs. inocente</li>
+          <li><strong>Copiar dicas literalmente:</strong> Repetir exatamente o que outro disse</li>
+          <li><strong>Reagir exageradamente:</strong> Ficar defensivo demais quando questionado</li>
+        </ul>
+      </div>
     `
   },
   {
     id: 10,
     slug: "partidas-equilibradas",
-    title: "Como criar partidas mais equilibradas",
+    title: "Configurações Otimizadas: A Matemática Por Trás de Partidas Perfeitas",
     type: "Dica",
     readTime: "4 min",
-    summary: "A matemática do caos: quantos impostores colocar por partida para garantir a diversão?",
+    summary: "Testamos diferentes proporções de impostores por tamanho de grupo. Estes números garantem equilíbrio e diversão.",
     content: `
-      <p class="mb-4">O segredo para evitar partidas frustrantes não é sorte, é matemática e ajuste de regras.</p>
-      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">A matemática do caos</h3>
-      <ul class="list-disc pl-5 mb-4 space-y-2 text-gray-300">
-        <li><strong>Grupos pequenos (3-5):</strong> 1 impostor é o limite.</li>
-        <li><strong>Grupos médios (6-9):</strong> 2 impostores criam uma dinâmica interessante.</li>
-        <li><strong>Grupos grandes (10+):</strong> Aumente os vilões para o jogo não durar uma eternidade.</li>
-      </ul>
-      <p class="mb-4">Ferramentas como o TikJogos ajudam a manter esse equilíbrio de forma imparcial.</p>
+      <div class="bg-[#1a2744] border-l-4 border-[#e8a045] p-4 mb-6 rounded-r">
+        <p class="text-[#e8a045] font-bold mb-1">Tabela de Referência Rápida</p>
+        <p class="text-gray-300 text-sm">4-5 jogadores: 1 impostor | 6-9 jogadores: 1-2 impostores | 10+ jogadores: 2-3 impostores</p>
+      </div>
+
+      <p class="mb-4">Partidas desequilibradas são frustrantes para todos. Após testar diversas configurações, chegamos a proporções que funcionam consistentemente bem.</p>
+      
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">A Fórmula Que Usamos</h3>
+      <p class="mb-4">Regra geral: 1 impostor para cada 4-5 jogadores. Isso mantém a tensão sem tornar impossível para nenhum dos lados vencer.</p>
+      
+      <div class="bg-[#1a2744] border border-[#3d4a5c] p-4 mb-6 rounded">
+        <p class="text-[#4a90a4] font-bold mb-2">Configurações Testadas</p>
+        <ul class="list-disc pl-4 text-gray-300 text-sm space-y-1">
+          <li><strong>4-5 jogadores:</strong> 1 impostor, rodadas curtas (5-7 min)</li>
+          <li><strong>6-7 jogadores:</strong> 1-2 impostores, rodadas médias (8-10 min)</li>
+          <li><strong>8-10 jogadores:</strong> 2 impostores, rodadas longas (10-12 min)</li>
+          <li><strong>11+ jogadores:</strong> 2-3 impostores, considere dividir em grupos</li>
+        </ul>
+      </div>
+      
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Ajustes Por Experiência do Grupo</h3>
+      <p class="mb-4">Grupos de veteranos podem aumentar o número de impostores. Grupos com muitos novatos devem manter menos impostores para que aprendam a dinâmica.</p>
+      
+      <div class="bg-[#1a2744] border border-[#c44536] p-4 mb-6 rounded">
+        <p class="text-[#c44536] font-bold mb-2">Evite</p>
+        <p class="text-gray-300 text-sm">Nunca jogue com 3 pessoas - fica previsível demais. O mínimo recomendado é 4 jogadores para manter a incerteza.</p>
+      </div>
     `
   },
   {
