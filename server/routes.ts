@@ -9,11 +9,20 @@ import { setupAuth, isAuthenticated } from "./githubAuth";
 import { createPayment, createDonationPayment, getPaymentStatus, type ThemeData, type DonationData } from "./paymentController";
 import { randomBytes as cryptoRandomBytes } from "crypto";
 import { createAnalyticsRouter } from "./analyticsRoutes";
-import { createRequire } from "module";
 
-// Agora token generation (CommonJS module)
-const require = createRequire(import.meta.url);
-const { RtcTokenBuilder, RtcRole } = require('agora-token');
+// Agora token generation - dynamic import for CJS compatibility
+let RtcTokenBuilder: any;
+let RtcRole: any;
+
+async function initAgoraToken() {
+  try {
+    const agoraToken = await import('agora-token');
+    RtcTokenBuilder = agoraToken.RtcTokenBuilder;
+    RtcRole = agoraToken.RtcRole;
+  } catch (e) {
+    console.warn('[Agora] Token module not available:', e);
+  }
+}
 
 // Note: All pending themes are now stored directly in PostgreSQL database
 // This ensures persistence across server restarts and works in all deployment environments
@@ -1105,6 +1114,9 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+
+  // Initialize Agora token module
+  await initAgoraToken();
 
   // Serve version info
   app.get("/api/version", (_req, res) => {
@@ -3054,6 +3066,10 @@ export async function registerRoutes(
       
       if (!channelName) {
         return res.status(400).json({ error: "channelName is required" });
+      }
+
+      if (!RtcTokenBuilder || !RtcRole) {
+        return res.status(503).json({ error: "Agora token service not available" });
       }
 
       const AGORA_APP_ID = '0afca49f230e4f2b86c975ef2689c383';
