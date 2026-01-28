@@ -13,14 +13,19 @@ import { createAnalyticsRouter } from "./analyticsRoutes";
 // Agora token generation - dynamic import for CJS compatibility
 let RtcTokenBuilder: any;
 let RtcRole: any;
+let agoraInitialized = false;
 
 async function initAgoraToken() {
+  if (agoraInitialized) return;
+  
   try {
     const agoraToken = await import('agora-token');
     RtcTokenBuilder = agoraToken.RtcTokenBuilder;
     RtcRole = agoraToken.RtcRole;
+    agoraInitialized = true;
+    console.log('[Agora] Token module loaded successfully');
   } catch (e) {
-    console.warn('[Agora] Token module not available:', e);
+    console.error('[Agora] Failed to load token module:', e);
   }
 }
 
@@ -3060,7 +3065,7 @@ export async function registerRoutes(
   });
 
   // Agora.io token generation endpoint
-  app.post("/api/agora/token", (req, res) => {
+  app.post("/api/agora/token", async (req, res) => {
     try {
       const { channelName, uid } = req.body;
       
@@ -3068,7 +3073,13 @@ export async function registerRoutes(
         return res.status(400).json({ error: "channelName is required" });
       }
 
+      // Ensure Agora module is loaded
+      if (!agoraInitialized) {
+        await initAgoraToken();
+      }
+
       if (!RtcTokenBuilder || !RtcRole) {
+        console.error('[Agora] Token builders not available after init');
         return res.status(503).json({ error: "Agora token service not available" });
       }
 
