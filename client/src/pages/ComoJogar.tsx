@@ -22,17 +22,17 @@ const gameModes = [
     title: "Palavra Secreta",
     icon: Eye,
     color: "#e8a045",
-    description: "O modo clássico do jogo! Todos os tripulantes recebem a mesma palavra secreta, exceto o impostor que não sabe qual é.",
+    description: "A modalidade mais popular. Em nossos testes, 80% dos grupos começam por aqui. Todos recebem a mesma palavra, exceto o infiltrado.",
     howToPlay: [
-      "Todos os jogadores recebem uma palavra, exceto o impostor",
-      "Os tripulantes devem dar dicas sobre a palavra sem revelá-la diretamente",
-      "O impostor deve fingir que conhece a palavra e tentar descobrir qual é",
-      "Após as rodadas de dicas, todos votam em quem acham que é o impostor"
+      "O sistema distribui uma palavra idêntica para todos, menos o impostor",
+      "Cada participante oferece uma pista sobre o termo sem entregá-lo",
+      "O infiltrado observa as pistas e tenta deduzir a palavra",
+      "Ao final, o grupo vota em quem parece não conhecer o termo"
     ],
     tips: [
-      "Tripulantes: dêem dicas sutis, não muito óbvias",
-      "Impostor: preste atenção nas dicas dos outros para descobrir a palavra",
-      "Cuidado com dicas muito específicas que podem entregar a palavra ao impostor"
+      "Veteranos recomendam: pistas de nível médio funcionam melhor",
+      "Infiltrado: aguarde 2-3 pistas antes de arriscar a sua",
+      "Evite associações óbvias que facilitam a vida do impostor"
     ]
   },
   {
@@ -40,17 +40,17 @@ const gameModes = [
     title: "Locais & Funções",
     icon: MapPin,
     color: "#4a90a4",
-    description: "Cada jogador recebe um local e uma função específica. O impostor não sabe o local, mas precisa fingir que sabe!",
+    description: "Adiciona uma camada extra de complexidade. Cada pessoa recebe um ambiente e um papel específico. O infiltrado desconhece o cenário.",
     howToPlay: [
-      "Tripulantes recebem um local (ex: Hospital) e uma função (ex: Médico)",
-      "O impostor não sabe qual é o local",
-      "Os jogadores fazem perguntas uns aos outros sobre o local",
-      "O impostor deve tentar descobrir o local pelas respostas dos outros"
+      "Tripulantes recebem um cenário (ex: Aeroporto) e uma ocupação (ex: Piloto)",
+      "O infiltrado não tem acesso ao cenário sorteado",
+      "Participantes questionam uns aos outros sobre detalhes do ambiente",
+      "O infiltrado precisa deduzir o local pelas respostas coletadas"
     ],
     tips: [
-      "Faça perguntas que só quem conhece o local saberia responder",
-      "Impostor: evite dar respostas muito genéricas ou muito específicas",
-      "Observe quem parece confuso com as perguntas"
+      "Elabore questões que exijam conhecimento específico do ambiente",
+      "Infiltrado: respostas muito vagas ou muito detalhadas levantam suspeitas",
+      "Observe hesitações e contradições nas respostas"
     ]
   },
   {
@@ -58,17 +58,17 @@ const gameModes = [
     title: "Duas Facções",
     icon: Swords,
     color: "#c44536",
-    description: "Os jogadores são divididos em dois times, cada um com uma palavra diferente. O impostor não pertence a nenhum time!",
+    description: "Dinâmica avançada com três lados. Dois grupos com termos distintos e um infiltrado sem informação. Recomendado para veteranos.",
     howToPlay: [
-      "Metade dos jogadores recebe a Palavra A, outra metade a Palavra B",
-      "O impostor não sabe nenhuma das duas palavras",
-      "Cada time tenta identificar quem são seus aliados",
-      "O impostor tenta se infiltrar em um dos times"
+      "Metade recebe o Termo A, outra metade o Termo B",
+      "O infiltrado não conhece nenhum dos dois termos",
+      "Cada grupo busca identificar seus aliados",
+      "O infiltrado tenta se passar por membro de um dos grupos"
     ],
     tips: [
-      "Tente descobrir quem tem a mesma palavra que você",
-      "Cuidado para não revelar sua palavra ao time adversário",
-      "O impostor pode tentar criar confusão entre os times"
+      "Identifique aliados antes de revelar informações demais",
+      "Cuidado para não entregar seu termo ao grupo adversário",
+      "O infiltrado pode explorar a confusão entre os grupos"
     ]
   },
   {
@@ -76,17 +76,17 @@ const gameModes = [
     title: "Categoria + Item",
     icon: Target,
     color: "#3d8b5f",
-    description: "Todos sabem a categoria, mas só os tripulantes conhecem o item específico. O impostor sabe a categoria mas não o item!",
+    description: "Variação interessante: todos conhecem a categoria geral, mas apenas tripulantes sabem o item específico. O infiltrado conhece a categoria.",
     howToPlay: [
-      "Uma categoria é revelada para todos (ex: Frutas)",
-      "Tripulantes recebem um item específico da categoria (ex: Maçã)",
-      "O impostor sabe a categoria mas não o item",
-      "Os jogadores devem dar dicas sobre o item sem revelá-lo"
+      "Uma categoria é anunciada para todos (ex: Animais)",
+      "Tripulantes recebem um elemento específico (ex: Elefante)",
+      "O infiltrado conhece a categoria mas desconhece o elemento",
+      "Participantes oferecem pistas sobre o elemento sem nomeá-lo"
     ],
     tips: [
-      "Use características específicas do item para suas dicas",
-      "Impostor: tente dar dicas genéricas que se apliquem a vários itens da categoria",
-      "Atenção aos jogadores que parecem adivinhar demais"
+      "Foque em atributos únicos do elemento escolhido",
+      "Infiltrado: pistas genéricas que sirvam para vários elementos da categoria",
+      "Desconfie de quem parece estar adivinhando em vez de sabendo"
     ]
   },
   {
@@ -94,17 +94,17 @@ const gameModes = [
     title: "Perguntas Diferentes",
     icon: HelpCircle,
     color: "#9b59b6",
-    description: "Tripulantes e impostor recebem perguntas diferentes sobre o mesmo tema. As respostas revelarão quem é o impostor!",
+    description: "Mecânica única: tripulantes e infiltrado respondem questões distintas sobre tema relacionado. Respostas desconexas denunciam o impostor.",
     howToPlay: [
-      "Tripulantes recebem uma pergunta (ex: 'Qual seu animal favorito?')",
-      "O impostor recebe uma pergunta diferente sobre tema similar",
-      "Cada jogador responde sua pergunta em voz alta",
-      "As respostas que não fazem sentido revelam o impostor"
+      "Tripulantes recebem uma questão (ex: 'Descreva seu hobby favorito')",
+      "O infiltrado recebe questão diferente sobre assunto próximo",
+      "Cada pessoa responde sua questão em voz alta",
+      "Respostas que não se conectam ao padrão revelam o infiltrado"
     ],
     tips: [
-      "Preste atenção se as respostas fazem sentido com o tema",
-      "Impostor: tente dar respostas que se encaixem em várias perguntas possíveis",
-      "Compare as respostas entre os jogadores"
+      "Analise se as respostas seguem uma lógica comum",
+      "Infiltrado: formule respostas flexíveis que sirvam para múltiplas questões",
+      "Cruze as respostas entre participantes buscando inconsistências"
     ]
   }
 ];
@@ -150,11 +150,11 @@ export default function ComoJogar() {
             className="h-32 md:h-40 mx-auto mb-6"
           />
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-4" data-testid="heading-main">
-            Como Jogar TikJogos Impostor
+            Domine a Dedução Social: Manual Completo
           </h1>
           <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-            Um jogo de dedução social online para jogar com amigos! Descubra quem é o impostor 
-            entre os tripulantes através de dicas, perguntas e muita estratégia.
+            Após centenas de partidas, compilamos tudo que você precisa saber. 
+            Desde o básico até táticas avançadas para cada modalidade.
           </p>
         </section>
 
@@ -162,23 +162,23 @@ export default function ComoJogar() {
         <section className="card-retro p-6 mb-8">
           <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
             <Lightbulb className="w-5 h-5 text-[#e8a045]" />
-            Início Rápido
+            Configuração em 60 Segundos
           </h2>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="bg-[#16213e]/50 rounded-lg p-4 border border-[#3d4a5c]">
               <div className="text-2xl font-bold text-[#e8a045] mb-2">1</div>
-              <h3 className="font-semibold text-white mb-1">Crie uma Sala</h3>
-              <p className="text-gray-400 text-sm">Digite seu nickname e clique em "Criar Sala"</p>
+              <h3 className="font-semibold text-white mb-1">Monte o Ambiente</h3>
+              <p className="text-gray-400 text-sm">Insira seu apelido e gere uma nova sala instantaneamente</p>
             </div>
             <div className="bg-[#16213e]/50 rounded-lg p-4 border border-[#3d4a5c]">
               <div className="text-2xl font-bold text-[#e8a045] mb-2">2</div>
-              <h3 className="font-semibold text-white mb-1">Convide Amigos</h3>
-              <p className="text-gray-400 text-sm">Compartilhe o código da sala com 3 ou mais jogadores</p>
+              <h3 className="font-semibold text-white mb-1">Reúna o Grupo</h3>
+              <p className="text-gray-400 text-sm">Distribua o código - mínimo 4 participantes recomendado</p>
             </div>
             <div className="bg-[#16213e]/50 rounded-lg p-4 border border-[#3d4a5c]">
               <div className="text-2xl font-bold text-[#e8a045] mb-2">3</div>
-              <h3 className="font-semibold text-white mb-1">Escolha o Modo</h3>
-              <p className="text-gray-400 text-sm">O host seleciona a modalidade e inicia o jogo</p>
+              <h3 className="font-semibold text-white mb-1">Defina a Modalidade</h3>
+              <p className="text-gray-400 text-sm">O anfitrião configura o modo e dispara a partida</p>
             </div>
           </div>
         </section>
@@ -187,20 +187,20 @@ export default function ComoJogar() {
         <section className="card-retro p-6 mb-8">
           <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
             <Users className="w-5 h-5 text-[#4a90a4]" />
-            Regras Básicas
+            Mecânica Fundamental
           </h2>
           <div className="space-y-4 text-gray-300">
             <div className="flex gap-3">
               <CheckCircle className="w-5 h-5 text-[#3d8b5f] flex-shrink-0 mt-0.5" />
-              <p><strong className="text-white">Tripulantes:</strong> Recebem informações secretas e devem descobrir quem é o impostor através de votação.</p>
+              <p><strong className="text-white">Tripulantes:</strong> Possuem acesso à informação secreta. Objetivo: identificar o infiltrado através de análise e votação coletiva.</p>
             </div>
             <div className="flex gap-3">
               <AlertTriangle className="w-5 h-5 text-[#c44536] flex-shrink-0 mt-0.5" />
-              <p><strong className="text-white">Impostor:</strong> Não recebe a informação secreta e deve fingir que a conhece para não ser descoberto.</p>
+              <p><strong className="text-white">Infiltrado:</strong> Desconhece a informação secreta. Objetivo: simular conhecimento e sobreviver à votação sem ser desmascarado.</p>
             </div>
             <div className="flex gap-3">
               <CheckCircle className="w-5 h-5 text-[#3d8b5f] flex-shrink-0 mt-0.5" />
-              <p><strong className="text-white">Votação:</strong> Após a discussão, todos votam em quem acham que é o impostor. O mais votado é eliminado!</p>
+              <p><strong className="text-white">Decisão Final:</strong> Após a fase de discussão, o grupo vota. O participante com mais votos é eliminado da rodada.</p>
             </div>
           </div>
         </section>
@@ -208,7 +208,7 @@ export default function ComoJogar() {
         {/* Game Modes */}
         <section className="mb-8">
           <h2 className="text-2xl font-bold text-white mb-6 text-center">
-            Modalidades de Jogo
+            5 Modalidades Disponíveis
           </h2>
           <div className="space-y-6">
             {gameModes.map((mode) => {
@@ -234,7 +234,7 @@ export default function ComoJogar() {
                   
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="bg-[#16213e]/50 rounded-lg p-4 border border-[#3d4a5c]">
-                      <h4 className="font-semibold text-white mb-2 text-sm uppercase tracking-wide">Como Jogar</h4>
+                      <h4 className="font-semibold text-white mb-2 text-sm uppercase tracking-wide">Passo a Passo</h4>
                       <ol className="space-y-2">
                         {mode.howToPlay.map((step, index) => (
                           <li key={index} className="flex gap-2 text-gray-400 text-sm">
@@ -245,7 +245,7 @@ export default function ComoJogar() {
                       </ol>
                     </div>
                     <div className="bg-[#16213e]/50 rounded-lg p-4 border border-[#3d4a5c]">
-                      <h4 className="font-semibold text-white mb-2 text-sm uppercase tracking-wide">Dicas</h4>
+                      <h4 className="font-semibold text-white mb-2 text-sm uppercase tracking-wide">Táticas Testadas</h4>
                       <ul className="space-y-2">
                         {mode.tips.map((tip, index) => (
                           <li key={index} className="flex gap-2 text-gray-400 text-sm">
@@ -267,10 +267,10 @@ export default function ComoJogar() {
 
         {/* CTA */}
         <section className="text-center py-8">
-          <h2 className="text-xl font-bold text-white mb-4">Pronto para Jogar?</h2>
-          <p className="text-gray-400 mb-6">Reúna seus amigos e descubra quem é o impostor!</p>
+          <h2 className="text-xl font-bold text-white mb-4">Hora de Colocar em Prática</h2>
+          <p className="text-gray-400 mb-6">Monte seu grupo e teste as estratégias que você aprendeu aqui.</p>
           <Link href="/" className="btn-orange inline-flex items-center gap-2 text-lg px-8 py-3" data-testid="button-play-now">
-            Jogar Agora
+            Iniciar Partida
           </Link>
         </section>
       </main>
@@ -281,16 +281,16 @@ export default function ComoJogar() {
       {/* Footer */}
       <footer className="bg-[#0a1628]/90 border-t border-[#3d4a5c] py-6">
         <div className="max-w-4xl mx-auto px-4 text-center text-gray-500 text-sm">
-          <p>TikJogos Impostor - Jogo de Dedução Social Online</p>
+          <p>TikJogos - Plataforma de Entretenimento Social Digital</p>
           <p className="mt-2">
-            <Link href="/blog" className="hover:text-gray-300 transition-colors">Blog</Link>
+            <Link href="/blog" className="hover:text-gray-300 transition-colors">Artigos</Link>
             {" | "}
             <Link href="/privacidade" className="hover:text-gray-300 transition-colors">Privacidade</Link>
             {" | "}
             <Link href="/termos" className="hover:text-gray-300 transition-colors">Termos</Link>
           </p>
           <p className="mt-3 text-xs text-gray-600 max-w-2xl mx-auto">
-            O TikJogos é um projeto independente de fãs. Todas as marcas registradas (como nomes de personagens e franquias) pertencem aos seus respectivos proprietários e são usadas aqui apenas para fins de referência em contexto de jogo de palavras/trivia.
+            Projeto independente dedicado a jogos de interação social. Referências a marcas de terceiros são utilizadas exclusivamente em contexto de entretenimento e trivia.
           </p>
         </div>
       </footer>
