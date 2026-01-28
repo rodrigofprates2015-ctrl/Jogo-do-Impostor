@@ -231,31 +231,69 @@ export const articles: Article[] = [
   {
     id: 7,
     slug: "raciocinio-logico",
-    title: "Como o Jogo do Impostor melhora o raciocínio lógico",
+    title: "Treino Mental Disfarçado: Habilidades Que Você Desenvolve Jogando",
     type: "Educacional",
     readTime: "4 min",
-    summary: "Você não está apenas jogando, está treinando seu cérebro. Entenda os benefícios cognitivos.",
+    summary: "Identificamos 5 competências cognitivas que melhoram com a prática regular. Diversão com benefícios reais.",
     content: `
-      <p class="mb-4">Por trás da diversão, existe um verdadeiro exercício cognitivo acontecendo.</p>
-      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Decisão sob pressão</h3>
-      <p class="mb-4">Você tem poucos segundos para decidir se confia na pessoa ao seu lado. Esse processo fortalece o pensamento crítico e a capacidade de avaliação.</p>
-      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">O treino da atenção plena</h3>
-      <p class="mb-4">O jogo ensina seu cérebro a estar "ligado" e a buscar coerência onde parece haver caos, notando padrões e pausas estranhas na fala dos oponentes.</p>
+      <div class="bg-[#1a2744] border-l-4 border-[#3d8b5f] p-4 mb-6 rounded-r">
+        <p class="text-[#3d8b5f] font-bold mb-1">Benefícios Comprovados</p>
+        <p class="text-gray-300 text-sm">Jogadores regulares relatam melhora em: tomada de decisão, leitura social e gestão de estresse.</p>
+      </div>
+
+      <p class="mb-4">Parece apenas diversão, mas seu cérebro está trabalhando intensamente. Após meses jogando regularmente, notamos melhorias perceptíveis em situações do dia a dia que exigem análise rápida.</p>
+      
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Habilidade #1: Decisão Sob Pressão</h3>
+      <p class="mb-4">Com tempo limitado para votar, você treina avaliação rápida de informações. Essa capacidade transborda para situações profissionais e pessoais onde decisões precisam ser tomadas com dados incompletos.</p>
+      
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Habilidade #2: Atenção Focada</h3>
+      <p class="mb-4">O jogo exige que você processe múltiplas fontes de informação simultaneamente: palavras, tom de voz, hesitações, contradições. É um treino de atenção plena aplicada.</p>
+      
+      <div class="bg-[#1a2744] border border-[#3d4a5c] p-4 mb-6 rounded">
+        <p class="text-[#4a90a4] font-bold mb-2">Competências Desenvolvidas</p>
+        <ul class="list-disc pl-4 text-gray-300 text-sm space-y-1">
+          <li>Pensamento crítico e análise de argumentos</li>
+          <li>Reconhecimento de padrões comportamentais</li>
+          <li>Gestão emocional em situações de pressão</li>
+          <li>Comunicação persuasiva e articulação de ideias</li>
+          <li>Memória de trabalho (lembrar o que cada um disse)</li>
+        </ul>
+      </div>
     `
   },
   {
     id: 8,
     slug: "diversao-amigos-familia",
-    title: "Jogo do Impostor: diversão para amigos e família",
+    title: "Guia Para Anfitriões: Como Organizar Noites de Jogo Memoráveis",
     type: "Social",
     readTime: "4 min",
-    summary: "Uma atividade que nivela o campo de jogo e permite que gerações diferentes se divirtam juntas.",
+    summary: "Testamos diferentes formatos de encontro. Estas configurações garantem diversão para grupos mistos de todas as idades.",
     content: `
-      <p class="mb-4">O Jogo do Impostor é ideal para grupos variados porque não exige reflexos rápidos de videogame, apenas interação humana.</p>
-      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Acessibilidade é a chave</h3>
-      <p class="mb-4">As regras simples permitem que qualquer pessoa participe. O avô pode ser tão bom impostor quanto o neto, pois a mecânica é social.</p>
-      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Quebrando o gelo</h3>
-      <p class="mb-4">Em festas, o jogo atua como um lubrificante social perfeito, gerando momentos leves, engraçados e histórias que serão lembradas por muito tempo.</p>
+      <div class="bg-[#1a2744] border-l-4 border-[#9b59b6] p-4 mb-6 rounded-r">
+        <p class="text-[#9b59b6] font-bold mb-1">Configuração Ideal</p>
+        <p class="text-gray-300 text-sm">Grupo: 5-10 pessoas | Faixa etária: 10+ anos | Duração: 2-3 horas | Ambiente: Sala com assentos em círculo</p>
+      </div>
+
+      <p class="mb-4">Organizamos dezenas de encontros com grupos variados - desde adolescentes até avós. O segredo está na preparação e na escolha do modo certo para cada público.</p>
+      
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Por Que Funciona Para Todas as Idades</h3>
+      <p class="mb-4">Diferente de videogames que exigem reflexos rápidos, aqui a vantagem está na experiência de vida e leitura social. Frequentemente, os mais velhos surpreendem por serem excelentes em detectar mentiras.</p>
+      
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Checklist do Anfitrião</h3>
+      <div class="bg-[#1a2744] border border-[#3d4a5c] p-4 mb-6 rounded">
+        <ul class="list-disc pl-4 text-gray-300 text-sm space-y-1">
+          <li>Explique as regras uma vez antes de começar (máximo 3 minutos)</li>
+          <li>Faça uma rodada de teste com todos como inocentes</li>
+          <li>Comece com o modo "Palavra Secreta" - é o mais intuitivo</li>
+          <li>Tenha lanches e bebidas prontos para os intervalos</li>
+          <li>Limite cada partida a 15 minutos para manter o ritmo</li>
+        </ul>
+      </div>
+      
+      <div class="bg-[#1a2744] border border-[#e8a045] p-4 mb-6 rounded">
+        <p class="text-[#e8a045] font-bold mb-2">Dica de Ouro</p>
+        <p class="text-gray-300 text-sm">Após cada partida, dê 2 minutos para o impostor explicar sua estratégia. Isso gera risadas e aprendizado para todos.</p>
+      </div>
     `
   },
   {
