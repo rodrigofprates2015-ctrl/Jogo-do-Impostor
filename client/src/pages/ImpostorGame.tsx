@@ -4296,6 +4296,7 @@ export default function ImpostorGame() {
       <>
         <NotificationCenter />
         <HomeScreen />
+        <MiniPlayer />
       </>
     );
   }
