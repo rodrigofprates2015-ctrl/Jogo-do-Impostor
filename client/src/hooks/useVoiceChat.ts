@@ -35,7 +35,9 @@ async function fetchAgoraToken(channelName: string, uid: number): Promise<{ toke
   });
   
   if (!response.ok) {
-    throw new Error('Failed to fetch Agora token');
+    const errorText = await response.text();
+    console.error('[Agora] Token fetch failed:', response.status, errorText);
+    throw new Error(`Failed to fetch Agora token: ${response.status} - ${errorText}`);
   }
   
   return response.json();
