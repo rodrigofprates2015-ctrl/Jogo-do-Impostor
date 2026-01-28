@@ -370,33 +370,65 @@ export const articles: Article[] = [
   {
     id: 11,
     slug: "evolucao-jogos-sociais",
-    title: "A evolução dos jogos sociais online: do tabuleiro à tela",
+    title: "Do Tabuleiro ao Celular: Como a Tecnologia Transformou Jogos de Grupo",
     type: "Pilar",
     readTime: "10 min",
-    summary: "Uma análise histórica de como a tecnologia removeu barreiras e democratizou a diversão em grupo.",
+    summary: "Acompanhamos a evolução dos jogos sociais nas últimas décadas. O smartphone mudou tudo - e para melhor.",
     content: `
-      <h2 class="text-2xl font-bold text-white mb-4">A Era da Conexão e os Primeiros Passos</h2>
-      <p class="mb-4">Houve um tempo em que "jogar socialmente" exigia uma logística complexa. Com o avanço da internet, os jogos sociais ganharam novas possibilidades. O que antes era restrito ao espaço físico, agora rompe fronteiras geográficas.</p>
+      <div class="bg-[#1a2744] border-l-4 border-[#e8a045] p-4 mb-6 rounded-r">
+        <p class="text-[#e8a045] font-bold mb-1">Linha do Tempo</p>
+        <p class="text-gray-300 text-sm">Anos 90: Jogos de tabuleiro | Anos 2000: Primeiros jogos online | Anos 2010: Explosão mobile | Hoje: Híbrido presencial + digital</p>
+      </div>
+
+      <h2 class="text-2xl font-bold text-white mb-4">A Era Pré-Digital: Logística Complexa</h2>
+      <p class="mb-4">Lembramos de épocas onde organizar uma partida exigia: comprar o jogo físico, reunir pessoas no mesmo local, ter alguém que soubesse todas as regras. Muitas noites de jogo morriam antes de começar por falta de quórum ou material.</p>
       
-      <h2 class="text-2xl font-bold text-white mb-4 mt-8">A democratização pelo Mobile</h2>
-      <p class="mb-4">O grande salto veio com os smartphones. Ferramentas digitais tornaram as partidas mais acessíveis. Não é mais necessário comprar uma caixa de jogo cara; o tabuleiro está no bolso de todo mundo. Isso trouxe um novo público que nunca se considerou "gamer".</p>
+      <h2 class="text-2xl font-bold text-white mb-4 mt-8">A Revolução do Smartphone</h2>
+      <p class="mb-4">O celular democratizou o acesso. Não é mais necessário investir em caixas caras ou depender de quem tem o jogo. Qualquer pessoa com internet pode participar. Observamos grupos que nunca se consideraram "gamers" adotando jogos de dedução como atividade regular.</p>
       
-      <h2 class="text-2xl font-bold text-white mb-4 mt-8">O fim da "bagunça" logística</h2>
-      <p class="mb-4">Plataformas modernas automatizam o que é chato (regras, sorteios, tempo) e maximizam o que é legal (interação). O futuro é híbrido, onde a tecnologia remove obstáculos para que o contato humano aconteça com mais qualidade.</p>
+      <div class="bg-[#1a2744] border border-[#3d4a5c] p-4 mb-6 rounded">
+        <p class="text-[#4a90a4] font-bold mb-2">O Que a Tecnologia Automatizou</p>
+        <ul class="list-disc pl-4 text-gray-300 text-sm space-y-1">
+          <li>Sorteio de papéis (antes: cartas embaralhadas manualmente)</li>
+          <li>Controle de tempo (antes: alguém tinha que cronometrar)</li>
+          <li>Distribuição de informações secretas (antes: bilhetes de papel)</li>
+          <li>Contagem de votos (antes: levantamento de mãos)</li>
+        </ul>
+      </div>
+      
+      <h2 class="text-2xl font-bold text-white mb-4 mt-8">O Modelo Híbrido Atual</h2>
+      <p class="mb-4">Hoje, o melhor dos dois mundos: pessoas reunidas fisicamente usando ferramentas digitais para gerenciar a mecânica. A tecnologia cuida da burocracia enquanto humanos focam na interação.</p>
     `
   },
   {
     id: 12,
     slug: "nunca-repetitivo",
-    title: "Por que o Jogo do Impostor nunca fica repetitivo",
+    title: "O Segredo da Rejogabilidade Infinita: Por Que Nunca Enjoamos",
     type: "Curiosidade",
     readTime: "3 min",
-    summary: "O fator humano garante que nenhuma partida seja igual à anterior. Entenda o 'motor' do jogo.",
+    summary: "Jogamos centenas de partidas com o mesmo grupo e nenhuma foi igual. Entenda o mecanismo por trás dessa variedade.",
     content: `
-      <p class="mb-4">O "motor" do jogo são as pessoas, e o ser humano é, por natureza, inconsistente.</p>
-      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">A imprevisibilidade das decisões</h3>
-      <p class="mb-4">Em jogos sociais, a melhor jogada depende de quem está ouvindo. Decisões inesperadas criam novas situações constantemente. Às vezes, um inocente mente para testar o grupo, criando caos não planejado.</p>
-      <p class="mb-4">Isso mantém o jogo sempre interessante. Você não joga contra o jogo; você joga contra a psicologia dos seus amigos.</p>
+      <div class="bg-[#1a2744] border-l-4 border-[#9b59b6] p-4 mb-6 rounded-r">
+        <p class="text-[#9b59b6] font-bold mb-1">Fato Interessante</p>
+        <p class="text-gray-300 text-sm">Com 6 jogadores e 1 impostor, existem 6 configurações possíveis. Mas as variações de comportamento humano tornam cada uma dessas 6 completamente diferente.</p>
+      </div>
+
+      <p class="mb-4">O verdadeiro "motor" do jogo não são as regras - são as pessoas. E seres humanos são gloriosamente inconsistentes.</p>
+      
+      <h3 class="text-xl font-semibold text-[#4a90a4] mb-2">Variáveis Que Mudam Tudo</h3>
+      <p class="mb-4">Mesmo com as mesmas pessoas, cada partida é afetada por: humor do momento, cansaço, rivalidades recentes, quem está sentado ao lado de quem, e até o que aconteceu na partida anterior.</p>
+      
+      <div class="bg-[#1a2744] border border-[#3d4a5c] p-4 mb-6 rounded">
+        <p class="text-[#4a90a4] font-bold mb-2">Por Que Funciona</p>
+        <ul class="list-disc pl-4 text-gray-300 text-sm space-y-1">
+          <li>Você não joga contra regras fixas - joga contra mentes humanas</li>
+          <li>A mesma pessoa age diferente dependendo do papel sorteado</li>
+          <li>Alianças e desconfianças mudam a cada rodada</li>
+          <li>Memória de partidas anteriores influencia decisões atuais</li>
+        </ul>
+      </div>
+      
+      <p class="mb-4">Já vimos inocentes mentirem só para testar reações do grupo, criando caos inesperado. Essa imprevisibilidade é o que mantém o jogo fresco mesmo após centenas de partidas.</p>
     `
   },
   {
