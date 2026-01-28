@@ -11,119 +11,119 @@ export default function TermsOfUse() {
           Voltar ao jogo
         </Link>
 
-        <h1 className="text-3xl font-bold mb-6 text-[#00f2ea]">Termos de Uso</h1>
+        <h1 className="text-3xl font-bold mb-6 text-[#00f2ea]">Condições de Utilização</h1>
         
         <div className="space-y-6 text-gray-300 leading-relaxed">
           <p>
-            <strong className="text-white">Data de vigência:</strong> Outubro de 2024
+            <strong className="text-white">Vigência:</strong> Janeiro de 2025
           </p>
 
           <p>
-            Bem-vindo ao TikJogos! Ao acessar e usar este site, você concorda com os seguintes termos e condições.
+            Ao utilizar esta plataforma, você manifesta concordância com as condições descritas abaixo.
           </p>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">1. Aceitação dos Termos</h2>
+            <h2 className="text-xl font-bold text-white mb-3">1. Concordância</h2>
             <p>
-              Ao usar este site, você concorda em cumprir estes Termos de Uso e todas as leis e regulamentos aplicáveis. Se você não concorda com algum destes termos, não use este site.
+              O acesso a esta plataforma implica aceitação integral destas condições e da legislação vigente. Caso discorde de qualquer disposição, recomendamos não prosseguir com o uso.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">2. Descrição do Serviço</h2>
+            <h2 className="text-xl font-bold text-white mb-3">2. Natureza do Serviço</h2>
             <p>
-              O TikJogos é um jogo online gratuito de dedução social. O site oferece:
+              TikJogos é uma plataforma gratuita de entretenimento social digital. Recursos disponíveis:
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>5 modos de jogo diferentes</li>
-              <li>Suporte para 3-15 jogadores</li>
-              <li>Interface em português</li>
-              <li>Personalização de configurações</li>
+              <li>Cinco modalidades de interação distintas</li>
+              <li>Capacidade para 4 a 15 participantes por sessão</li>
+              <li>Interface localizada em português</li>
+              <li>Opções de personalização de partida</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">3. Uso Adequado</h2>
+            <h2 className="text-xl font-bold text-white mb-3">3. Conduta Esperada</h2>
             <p>
-              Você concorda em usar o site apenas para fins legais e de acordo com estes termos. É proibido:
+              O uso da plataforma deve respeitar a legislação aplicável. Condutas vedadas:
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Usar o site de forma que viole leis locais, nacionais ou internacionais</li>
-              <li>Tentar obter acesso não autorizado ao site ou sistemas relacionados</li>
-              <li>Interferir ou interromper o funcionamento do site</li>
-              <li>Transmitir vírus, malware ou qualquer código malicioso</li>
-              <li>Usar bots, scrapers ou ferramentas automatizadas sem permissão</li>
-              <li>Copiar, modificar ou distribuir o conteúdo do site sem autorização</li>
+              <li>Atividades que contrariem normas legais em qualquer jurisdição</li>
+              <li>Tentativas de acesso não autorizado a sistemas ou dados</li>
+              <li>Ações que comprometam a estabilidade ou disponibilidade do serviço</li>
+              <li>Distribuição de código malicioso ou prejudicial</li>
+              <li>Utilização de automação não autorizada</li>
+              <li>Reprodução ou distribuição de conteúdo sem permissão expressa</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">4. Propriedade Intelectual</h2>
+            <h2 className="text-xl font-bold text-white mb-3">4. Direitos Autorais</h2>
             <p>
-              Todo o conteúdo original do site, incluindo mas não se limitando a texto, gráficos, logos, ícones, imagens, código-fonte e software, é de propriedade do TikJogos ou de seus licenciadores e é protegido por leis de direitos autorais.
+              O conteúdo original desta plataforma, incluindo elementos visuais, textuais e código, pertence ao TikJogos ou licenciadores autorizados, sendo protegido pela legislação de propriedade intelectual.
             </p>
             <p className="mt-2">
-              Algumas palavras e termos utilizados nos modos de jogo podem fazer referência a marcas registradas de terceiros. Estas marcas pertencem aos seus respectivos proprietários e são usadas apenas para fins de referência em contexto de jogo de palavras/trivia.
+              Eventuais referências a marcas de terceiros nas dinâmicas de jogo são utilizadas exclusivamente em contexto de entretenimento e trivia, permanecendo a titularidade com seus respectivos detentores.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">5. Conteúdo do Usuário</h2>
+            <h2 className="text-xl font-bold text-white mb-3">5. Responsabilidade do Participante</h2>
             <p>
-              Ao jogar, você pode criar salas com nomes de jogadores. Você é responsável pelo conteúdo que fornece e concorda em não usar:
+              Ao criar sessões ou utilizar apelidos, o participante assume responsabilidade pelo conteúdo inserido. Não são permitidos:
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Conteúdo ofensivo, obsceno ou ilegal</li>
-              <li>Nomes que violem direitos de terceiros</li>
-              <li>Informações falsas ou enganosas</li>
+              <li>Conteúdo inadequado, ofensivo ou contrário à lei</li>
+              <li>Identificações que infrinjam direitos de terceiros</li>
+              <li>Dados falsos ou que induzam a erro</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">6. Disponibilidade do Serviço</h2>
+            <h2 className="text-xl font-bold text-white mb-3">6. Continuidade do Serviço</h2>
             <p>
-              Embora nos esforcemos para manter o site disponível 24/7, não garantimos que o serviço será ininterrupto ou livre de erros. Podemos suspender, descontinuar ou modificar o serviço a qualquer momento sem aviso prévio.
+              Embora busquemos manter disponibilidade contínua, não há garantia de funcionamento ininterrupto. Modificações, suspensões ou descontinuação podem ocorrer sem comunicação prévia.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">7. Limitação de Responsabilidade</h2>
+            <h2 className="text-xl font-bold text-white mb-3">7. Isenção de Responsabilidade</h2>
             <p>
-              O site é fornecido "como está" e "conforme disponível". Não nos responsabilizamos por:
+              A plataforma é disponibilizada no estado em que se encontra. Não há responsabilidade por:
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Danos diretos, indiretos, incidentais ou consequentes</li>
-              <li>Perda de dados ou lucros</li>
-              <li>Interrupção de negócios</li>
-              <li>Erros ou omissões no conteúdo</li>
+              <li>Prejuízos de qualquer natureza decorrentes do uso</li>
+              <li>Perda de informações ou oportunidades</li>
+              <li>Indisponibilidade temporária ou permanente</li>
+              <li>Imprecisões no conteúdo apresentado</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">8. Links Externos</h2>
+            <h2 className="text-xl font-bold text-white mb-3">8. Recursos Externos</h2>
             <p>
-              O site pode conter links para sites de terceiros. Não somos responsáveis pelo conteúdo ou práticas de privacidade desses sites.
+              Eventuais links para plataformas de terceiros não implicam endosso ou responsabilidade sobre seu conteúdo ou práticas.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">9. Anúncios</h2>
+            <h2 className="text-xl font-bold text-white mb-3">9. Sustentabilidade do Serviço</h2>
             <p>
-              O site exibe anúncios do Google AdSense para manter o serviço gratuito. Ao usar o site, você concorda com a exibição desses anúncios.
+              A exibição de publicidade digital viabiliza a gratuidade da plataforma. O uso implica concordância com esta prática.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">10. Doações</h2>
+            <h2 className="text-xl font-bold text-white mb-3">10. Contribuições Voluntárias</h2>
             <p>
-              Doações são voluntárias e não reembolsáveis. Não oferecem benefícios especiais ou vantagens no jogo.
+              Apoios financeiros são opcionais, não reembolsáveis e não conferem vantagens funcionais na plataforma.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">11. Contato</h2>
+            <h2 className="text-xl font-bold text-white mb-3">11. Canal de Atendimento</h2>
             <p>
-              Para dúvidas sobre estes termos, entre em contato conosco através do email:
+              Esclarecimentos podem ser solicitados através de:
             </p>
             <p className="mt-2">
               <a 
@@ -136,16 +136,16 @@ export default function TermsOfUse() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">12. Modificações dos Termos</h2>
+            <h2 className="text-xl font-bold text-white mb-3">12. Revisões</h2>
             <p>
-              Reservamo-nos o direito de modificar estes termos a qualquer momento. O uso contínuo do site após alterações constitui aceitação dos novos termos.
+              Estas condições podem ser atualizadas a qualquer momento. A continuidade de uso após modificações representa aceitação das novas disposições.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">13. Lei Aplicável</h2>
+            <h2 className="text-xl font-bold text-white mb-3">13. Jurisdição</h2>
             <p>
-              Estes termos são regidos pelas leis brasileiras. Qualquer disputa será resolvida nos tribunais competentes do Brasil.
+              Estas condições são regidas pela legislação brasileira, com foro na comarca competente do Brasil para resolução de eventuais controvérsias.
             </p>
           </section>
         </div>

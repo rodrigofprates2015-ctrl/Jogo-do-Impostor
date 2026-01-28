@@ -11,74 +11,73 @@ export default function PrivacyPolicy() {
           Voltar ao jogo
         </Link>
 
-        <h1 className="text-3xl font-bold mb-6 text-[#00f2ea]">Política de Privacidade</h1>
+        <h1 className="text-3xl font-bold mb-6 text-[#00f2ea]">Diretrizes de Privacidade</h1>
         
         <div className="space-y-6 text-gray-300 leading-relaxed">
           <p>
-            <strong className="text-white">Última atualização:</strong> {new Date().toLocaleDateString('pt-BR')}
+            <strong className="text-white">Revisão mais recente:</strong> {new Date().toLocaleDateString('pt-BR')}
           </p>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">1. Informações que Coletamos</h2>
+            <h2 className="text-xl font-bold text-white mb-3">1. Dados Pessoais</h2>
             <p>
-              Este jogo não coleta informações pessoais identificáveis. Os apelidos inseridos 
-              são temporários e não são armazenados permanentemente em nossos servidores.
+              Esta plataforma não armazena informações pessoais identificáveis. Apelidos utilizados 
+              durante as sessões são temporários e descartados automaticamente após o encerramento.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">2. Cookies e Tecnologias de Rastreamento</h2>
+            <h2 className="text-xl font-bold text-white mb-3">2. Tecnologias de Navegação</h2>
             <p>
-              Utilizamos cookies para melhorar a experiência do usuário e para fins de publicidade. 
-              Terceiros, incluindo o Google, podem usar cookies para exibir anúncios com base em 
-              visitas anteriores ao nosso site ou a outros sites.
+              Empregamos cookies para otimizar a experiência de uso e viabilizar a exibição de conteúdo publicitário. 
+              Parceiros externos, incluindo redes de anúncios, podem utilizar cookies para personalizar 
+              o conteúdo apresentado com base no histórico de navegação.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">3. Google AdSense</h2>
+            <h2 className="text-xl font-bold text-white mb-3">3. Publicidade Digital</h2>
             <p>
-              Este site utiliza o Google AdSense para exibir anúncios. O Google AdSense usa cookies 
-              para veicular anúncios com base nas visitas anteriores dos usuários ao nosso site e a 
-              outros sites na Internet.
+              A plataforma integra serviços de publicidade do Google para manutenção do serviço gratuito. 
+              Estes serviços utilizam cookies para adequar os anúncios ao perfil de navegação do visitante.
             </p>
             <p className="mt-2">
-              Você pode desativar a publicidade personalizada visitando as{" "}
+              A personalização pode ser desabilitada através das{" "}
               <a 
                 href="https://www.google.com/settings/ads" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-[#00f2ea] hover:underline"
               >
-                Configurações de Anúncios do Google
+                Preferências de Publicidade do Google
               </a>.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">4. Dados de Jogo</h2>
+            <h2 className="text-xl font-bold text-white mb-3">4. Informações de Sessão</h2>
             <p>
-              As salas de jogo e sessões são temporárias e armazenadas apenas na memória do servidor. 
-              Não mantemos registros permanentes de partidas, jogadores ou resultados.
+              Salas e partidas existem apenas em memória volátil durante a sessão ativa. 
+              Não há persistência de histórico de partidas, participantes ou resultados após o encerramento.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">5. Seus Direitos</h2>
+            <h2 className="text-xl font-bold text-white mb-3">5. Garantias do Usuário</h2>
             <p>
-              Você tem o direito de:
+              Você possui as seguintes garantias:
             </p>
             <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Acessar informações sobre quais dados coletamos</li>
-              <li>Solicitar a exclusão de seus dados</li>
-              <li>Optar por não receber publicidade personalizada</li>
+              <li>Transparência sobre dados eventualmente processados</li>
+              <li>Remoção de informações mediante solicitação</li>
+              <li>Controle sobre personalização de publicidade</li>
             </ul>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">6. Contato</h2>
+            <h2 className="text-xl font-bold text-white mb-3">6. Canal de Comunicação</h2>
             <p>
-              Para dúvidas sobre esta política de privacidade ou qualquer outro assunto, entre em contato conosco através do email:
+              Questões relacionadas a estas diretrizes podem ser encaminhadas para:
             </p>
             <p className="mt-2">
               <a 
@@ -91,10 +90,10 @@ export default function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-white mb-3">7. Alterações nesta Política</h2>
+            <h2 className="text-xl font-bold text-white mb-3">7. Atualizações</h2>
             <p>
-              Podemos atualizar esta política periodicamente. Recomendamos que você revise 
-              esta página regularmente para se manter informado sobre como protegemos suas informações.
+              Estas diretrizes podem ser revisadas periodicamente. Recomendamos consulta 
+              regular desta página para acompanhar eventuais modificações.
             </p>
           </section>
         </div>
