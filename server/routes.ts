@@ -9,25 +9,7 @@ import { setupAuth, isAuthenticated } from "./githubAuth";
 import { createPayment, createDonationPayment, getPaymentStatus, type ThemeData, type DonationData } from "./paymentController";
 import { randomBytes as cryptoRandomBytes } from "crypto";
 import { createAnalyticsRouter } from "./analyticsRoutes";
-
-// Agora token generation - dynamic import for CJS compatibility
-let RtcTokenBuilder: any;
-let RtcRole: any;
-let agoraInitialized = false;
-
-async function initAgoraToken() {
-  if (agoraInitialized) return;
-  
-  try {
-    const agoraToken = await import('agora-token');
-    RtcTokenBuilder = agoraToken.RtcTokenBuilder;
-    RtcRole = agoraToken.RtcRole;
-    agoraInitialized = true;
-    console.log('[Agora] Token module loaded successfully');
-  } catch (e) {
-    console.error('[Agora] Failed to load token module:', e);
-  }
-}
+import { RtcTokenBuilder, RtcRole } from 'agora-token';
 
 // Note: All pending themes are now stored directly in PostgreSQL database
 // This ensures persistence across server restarts and works in all deployment environments
@@ -1119,9 +1101,6 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-
-  // Initialize Agora token module
-  await initAgoraToken();
 
   // Serve version info
   app.get("/api/version", (_req, res) => {
@@ -3065,22 +3044,12 @@ export async function registerRoutes(
   });
 
   // Agora.io token generation endpoint
-  app.post("/api/agora/token", async (req, res) => {
+  app.post("/api/agora/token", (req, res) => {
     try {
       const { channelName, uid } = req.body;
       
       if (!channelName) {
         return res.status(400).json({ error: "channelName is required" });
-      }
-
-      // Ensure Agora module is loaded
-      if (!agoraInitialized) {
-        await initAgoraToken();
-      }
-
-      if (!RtcTokenBuilder || !RtcRole) {
-        console.error('[Agora] Token builders not available after init');
-        return res.status(503).json({ error: "Agora token service not available" });
       }
 
       const AGORA_APP_ID = '0afca49f230e4f2b86c975ef2689c383';
